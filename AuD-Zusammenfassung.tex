@@ -1,0 +1,254 @@
+\documentclass[ngerman,
+color=3b,
+% dark_mode, 
+load_common, % Loads a list of commonly used Packages
+boxarc,
+main,
+% manual_term,
+% solution=true,
+tikz,
+border=3mm
+]{article}
+
+
+
+\usepackage{lmodern}
+
+\usepackage{graphicx}
+\usepackage[margin=2cm]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[table,xcdraw,svgnames]{xcolor}
+\usepackage[]{amsmath,amsfonts,amsthm,amssymb} %Math & symbols
+\usepackage[]{booktabs}
+
+\usepackage[protrusion=true,expansion=true]{microtype}
+%-----------------------------------
+% Algorithms
+%-----------------------------------
+\usepackage[
+    linesnumbered,
+    lined,
+    %boxed,
+    commentsnumbered,
+    ]{algorithm2e}%Algortihms
+    
+\SetAlgoNlRelativeSize{-1}
+
+\usepackage{algpseudocode}
+\usepackage{algorithmicx}
+
+\SetKw{KwContinue}{continue}
+\SetKw{KwBreak}{break}
+\SetKw{KwDownTo}{down to}
+\SetKw{KwAnd}{and}
+\SetKw{KwOr}{or}
+\SetKw{KwError}{error}
+\SetKwProg{Fn}{Function}{:}{end}
+
+%-----------------------------------
+% Trees, Skip-Lists etc.
+%-----------------------------------
+\usepackage{tikz}
+\usepackage{tkz-graph}
+\usetikzlibrary{trees}
+\usetikzlibrary{shapes.geometric}
+\usetikzlibrary{calc}
+\usetikzlibrary{arrows}
+\usetikzlibrary{chains}
+
+%-------------------------------------
+% Captions
+%-------------------------------------
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up,labelformat=empty]{caption}
+% \captionsetup[figure]{name=Skip-List}
+
+\usepackage{caption}
+\usepackage[]{sectsty}
+\usepackage{titlesec}
+%------------------------
+% Footer and Header
+%------------------------
+\usepackage[]{fancyhdr} % For footers and header
+\pagestyle{fancy}
+\usepackage[]{lastpage} %For page reference: Page x out of y
+
+\lhead{} % Left Header
+\chead{} % Centre Header
+\rhead{} % Right Header
+
+\lfoot{} % Left Footer
+\cfoot{} % Centre Footer
+\rfoot{\footnotesize Seite \thepage\ von \pageref{LastPage}} % Right Footer - Page Reference
+
+\renewcommand{\headrulewidth}{0.0pt} % Sets size of header rule - here its not visible 
+\renewcommand{\footrulewidth}{0.4pt} % Sets size of footer rule
+%----------------------------------------------
+% Title
+%----------------------------------------------
+\usepackage{titling}
+\newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
+\newcommand{\TitleRule}{\color{Green} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
+%\newcommand{\TitleRule}{\color{Green} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt]}
+\newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
+
+\pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{Black}} % Horizontal rule before the title
+	
+	\title{AuD - Zusammenfassung} % The title
+	
+	\posttitle{\vskip 0.5em} % Whitespace under the title
+
+\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{} \color{Black}} % Author font configuration
+	
+	\author{Moritz Gerhardt } % Name
+	
+	\postauthor{% Anything you might want to add
+		\par\end{flushleft}} % Horizontal rule after the title
+
+\date{} % Add date or leave empty to not show any date !!!\today
+
+%-----------------------------
+% Section Style
+%-----------------------------
+
+\newcommand{\SectionFont}{\LARGE\bfseries}
+\titleformat{\section} % Type of heading to format
+%[] % Shape
+{\color{Green} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt] \SectionFont} % Format
+{\thesection} % Label
+{1em} % Seperator
+{\SectionFont} % Before-Code
+[{\titlerule[2pt]}] % After-Code
+
+\newcommand{\SubSectionFont}{\large\bfseries}
+\titleformat{\subsection} % Type of heading to format
+%[] % Shape
+{\SubSectionFont} % Format
+{\thesubsection} % Label
+{1em} % Seperator
+{\SubSectionFont} % Before-Code
+[{\titlerule[1pt]}] % After-Code
+
+\renewcommand{\thesection}{Sektion \space \arabic{section}}
+\renewcommand{\thesubsection}{\arabic{section}.\arabic{subsection}}
+
+\usepackage{parskip} % Removes the indentation of the first line of new section
+
+\begin{document}
+
+\thispagestyle{fancy}
+\maketitle
+
+\tableofcontents
+
+\newpage
+
+\section{Was ist ein Algorithmus?}
+Ein Algorithmus beschreibt eine Handlungsvorschrift zur Umwandlung von Eingaben in eine Ausgabe.\\
+Dabei sollte ein Algorithmus im allgemeinen folgende Vorraussetzungen erfüllen:
+\begin{enumerate}
+    \item Bestimmt:
+    \begin{itemize}
+        \item Determiniert: Bei gleicher Eingabe liefert der Algortihmus gleiche Ausgabe. \\$\implies$ Ausgabe nur von Eingabe abhängig, keine äußeren Faktoren.
+        \item Determinismus: Bei gleicher Eingabe läuft der Algorithmus immer gleich durch die Eingabe. \\$\implies$ Gleiche Schritte, Gleiche Zwischenstände.
+    \end{itemize}
+    \item Berechenbar:
+    \begin{itemize}
+        \item Finit: Der Algorithmus ist als endlich definiert. (Theoretisch)
+        \item Terminierbar: Der Algorithmus stoppt in endlicher Zeit. (Praktisch)
+        \item Effektiv: Der Algorithmus ist auf Maschine ausführbar.
+    \end{itemize}
+    \item Andwendbar:
+    \begin{itemize}
+        \item Allgemein: Der Algorithmus ist für alle Eingaben einer Klasse anwendbar, nicht nur für speziellen Fall.
+        \item Korrekt: Wenn der Algorithmus ohne Fehler terminiert, ist die Ausgabe korrekt.
+    \end{itemize}
+\end{enumerate}
+
+\section[]{Sortieren}
+\subsection{Sortierproblem}
+Sortieralgorithmen sind die wohl am häufigsten verwendeten Algorithmen. Hierbei wird als Eingabe eine Folge von Objekten gegeben, die nach einer bestimmten Eigenschaft sortiert werden. Der Algorithmus soll die Eingabe in der richtigen Reihenfolge (nach einer bestimmten Eigenschaft) zur Ausgabe umwandeln. Es wird hierbei meist von einer total geordneten Menge ausgegangen. (Alle Elemente sind miteinander vergleichbar). \\
+Eine Totale Ordnung wie folgt definiert:
+\begin{center}
+    Eine Relation $\leq$ auf $M$ ist eine totale Ordnung, wenn:
+    \begin{itemize}
+        \item Reflexiv: $\forall x \in M: x \leq x$ \\
+        (x steht in Relation zu x)
+        \item Transitiv: $\forall x,y,z \in M: x \leq y \wedge y \leq z \implies x \leq z$ \\
+        (Wenn x in Relation zu y steht und y in Relation zu z steht, so folgt, dass x in Relation zu z steht)
+        \item Antisymmetrisch: $\forall x,y \in M: x \leq y \wedge y \leq x \implies x = y$ \\
+        (Wenn x in Relation zu y steht und y in Relation zu x steht, so folgt, dass x = y)
+        \item Totalität: $\forall x,y \in M: x \leq y \vee y \leq x$ \\
+        (Alle Elemente müssen in einer Relation zueinander stehen)
+    \end{itemize}
+\end{center}
+
+\newpage
+\subsection{Insertion Sort}
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{inso}{insertion\_sort}
+
+    \Fn{\inso{A}} {
+        \For{i = 1 \KwTo A.length - 1}{
+            key = A[i] \Comment{Element zum Sortieren}\;
+            j = i - 1 \Comment{Einfügepunkt wird von hinten gesucht}\;
+            \While{j >= 0 \KwAnd A[j] > key}{
+                A[j + 1] = A[j] \Comment{Elemente nach Rechts verschieben}\;
+                j = j - 1\;
+            }
+            A[j + 1] = key \Comment{Element wird in den Einfügepunkt geschoben}\;
+        }
+    }
+\end{algorithm}
+Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element 
+
+\newpage
+\subsection[]{Merge Sort}
+
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{mS}{mergeSort}
+
+    \Fn{\mS{A, left, right}} {
+        \If{left < right}{
+            \Comment{Wenn Bereich ist nicht leer}
+            mid = floor((left + right) / 2) \Comment{Nach unten gerundet}\;
+            mergeSort(A, left, mid) \Comment{Sortiert von left zu mid}\;
+            mergeSort(A,mid + 1, right) \Comment{Sortiert von mid + 1 zu right}\;
+            merge{A, left, mid, right} \Comment{Fügt Hälften zusammen}
+        }
+    }
+\end{algorithm}
+
+\begin {algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{merge}{merge}
+
+    \Fn{\merge{A, left, mid, right}} {
+        B = new Array[right - left + 1] \Comment{Temp array}\;
+        p = left\;
+        q = mid + 1\;
+        \Comment{Array A wird mithilfe von zwei Pointern durchgegangen, von links und von mid + 1}\;
+
+        \For{i = 0 \KwTo right - left}{
+            \Comment{Läuft für jedes Element im Zielbereich}\;
+            \If{q > right \KwOr (p =< mid \KwAnd A[p] =< A[q])}{
+                \Comment{Wenn q > right, dann ist der rechte Teil durchlaufen. Wenn p =< mid ist, so ist der linke Teil noch nicht durchlaufen. Wenn das linke Element =< dem rechten ist, dann wird das Element dem temp array B hinzugefügt.}\;
+                B[i] = A[p]\;
+                p = p + 1\;
+            }
+            \Else{
+                \Comment{Wenn oben nicht zutrifft:}\;
+                B[i] = A[q]\;
+                q = q + 1\;
+            }
+        }
+        \For{i = 0 \KwTo right - left}{
+            \Comment{Läuft wieder für jedes Element im Zielbereich}\;
+            \Comment{Kopiert den jetzt sortierten temp array B zurück in den eigentlichen Array an der richtigen Stelle}\;
+            A[i + left] = B[i] \Comment{i + left, damit nicht am Anfang sondern an dem richtigen Teilbereich eingefügt wird.}\;
+        }
+    }
+\end {algorithm}
+
+\end{document}
