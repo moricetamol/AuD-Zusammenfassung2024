@@ -220,7 +220,7 @@ Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für je
     }
 \end{algorithm}
 
-\begin {algorithm}
+\begin{algorithm}
     \DontPrintSemicolon
     \SetKwFunction{merge}{merge}
 
@@ -249,6 +249,85 @@ Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für je
             A[i + left] = B[i] \Comment{i + left, damit nicht am Anfang sondern an dem richtigen Teilbereich eingefügt wird.}\;
         }
     }
-\end {algorithm}
+\end{algorithm}
+
+\newpage
+\subsection{Quicksort}
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{qs}{quicksort}
+
+    \Fn{\qs{A, left right }}{
+        \If{left < right}{
+            q = partition(A, left, right)\;
+            quicksort(A, left, q)\;
+            quicksort(A, q + 1, right)\;
+        }
+    }
+\end{algorithm}
+
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{parti}{partition}
+
+    \Fn{\parti{A, left, right}}{
+        pivot = A[left]\;
+        p = left - 1\;
+        q = right + 1\;
+        \While{p < q}{
+            \While{A[p] < pivot}{
+                p = p + 1\;
+            }
+            \While{A[q] > pivot}{
+                q = q - 1\;
+            }
+            \If{p < q}{
+                    temp = A[q]\;
+                    A[q] = A[p]\;
+                    A[p] = temp\;
+                }
+        }
+        \KwRet{q}
+    }
+\end{algorithm}
+
+\newpage
+\subsection{Radix Sort}
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{radSo}{radixSort}
+
+    keys = digits d in range [0, D-1]\Comment{possible digits}\;
+    B = new Array[0]\Comment{Buckets, initially empty}\;
+
+    \Fn{\radSo{A}}{
+        \For{i = 0 \KwTo d - 1}{ \Comment{From least to most significant}
+            \For{j = 0 \KwTo n - 1}{
+                putBucket(A, B, i, j)\;
+            }
+            a = 0\;
+            \For{k = 0 \KwTo D - 1}{
+                \For{b = 0 \KwTo B[k].size - 1}{
+                    A[a] = B[k][b] \Comment{Read bucket in order}\;
+                    a = a + 1\;
+                }
+                B[k].size = 0 \Comment{Clear Bucket}\;
+            }
+        }
+        \KwRet{A}
+    }
+\end{algorithm}
+
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{puBu}{putBucket}
+
+    \Fn{\puBu{A, B, i, j}}{
+        z = A[j].digit[i]\Comment{i-th digit of A[j]}\;
+        b = B[z].size\Comment{Size corresponds to next free spot}\;
+        B[z][b] = A[j]\;
+        B[z].size = B[z].size + 1\;
+    }
+\end{algorithm}
 
 \end{document}
