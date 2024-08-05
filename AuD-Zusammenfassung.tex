@@ -37,13 +37,14 @@ border=3mm
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
 
-\SetKw{KwContinue}{continue}
-\SetKw{KwBreak}{break}
+\SetKw{KwContinue}{\color{blue}continue}
+\SetKw{KwBreak}{\color{red}break}
 \SetKw{KwDownTo}{down to}
-\SetKw{KwAnd}{and}
-\SetKw{KwOr}{or}
-\SetKw{KwError}{error}
-\SetKwProg{Fn}{Function}{:}{end}
+\SetKw{KwAnd}{\color{teal}and}
+\SetKw{KwOr}{\color{teal}or}
+\SetKw{KwError}{\color{red}error}
+\SetKwProg{Fn}{\color{MediumSeaGreen}Function}{:}{}
+\SetKwProg{Cl}{\color{MediumSeaGreen}Class}{:}{}
 
 %-----------------------------------
 % Trees, Skip-Lists etc.
@@ -330,4 +331,103 @@ Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für je
     }
 \end{algorithm}
 
+\newpage
+\section{Grundlegende Datenstrukturen}
+\subsection{Stacks}
+Stacks operieren unter dem "First in - Last out" (FILO) Prinzip. Ähnlich zu einem Kartendeck, wo die unterste (Erste Karte) die ist, die als letztes gezogen wird. \\
+Stacks werden normalerweise mit den folgenden Funktionen erstellt:
+\begin{itemize}
+    \item \texttt{new}: Erstellt einen neuen Stack.
+    \item \texttt{isEmpty}: gibt an ob der Stack leer ist.
+    \item \texttt{pop}: gibt das oberste Element des Stacks zurück und enfernt es vom Stack.
+    \item \texttt{push(k)}: Fügt \texttt{k} auf den Stack hinzu
+\end{itemize}
+Eine mögliche Implementation auf Grundlage eines Arrays wäre:
+\begin{algorithm}
+    \SetKwFunction{new}{new}
+    \SetKwFunction{isEm}{isEmpty}
+    \SetKwFunction{pop}{pop}
+    \SetKwFunction{push}{push}
+    \DontPrintSemicolon
+
+    \Cl{\texttt{Stack}}{
+
+        arr = null\;
+        top = -1\;
+        \Fn{\new{n}}{
+            arr = new Array[n]\;
+            \KwRet{\texttt{this}}
+        }
+        \Fn{\isEm}{
+            \KwRet{top == -1}
+        }
+        \Fn{\pop}{
+            \KwRet{arr[top--]}
+        }
+        \Fn{\push{k}}{
+            arr[++top] = k\;
+        }
+    }
+\end{algorithm}
+Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Stack underflow und Stack overflow benannt. Hier wär es automatisch IndexOutOfBounds.\\ Oft werden Stacks auch mit variabler Größer implementiert. Dies kann über verschiedene Wege passieren, zum Beispiel Kopieren des arrays in einen größeren Array oder implementation über mehrere Arrays (z.B. über Linked List). Häufig wird das erstere so implementiert, dass der Array in einen Array mit doppelter Größer kopiert wird.
+
+\newpage
+\subsection{Linked List}
+Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer einen Wert und eine Referenz auf das nächste Element in der Liste haben. Eine einfache Linked List kann wie folgt implementiert werden:
+\begin{algorithm}
+    \DontPrintSemicolon
+    \SetKwFunction{new}{new}
+    \SetKwFunction{ins}{insert}
+    \SetKwFunction{search}{search}
+    \SetKwFunction{del}{delete}
+
+    \Cl{\texttt{LinkedElement}}{
+    key = null\;
+    next = null\;
+
+    \Fn{\new{k}}{
+        key = k\;
+        \KwRet{\texttt{this}}
+    }
+    }
+    \;
+    \Cl{\texttt{LinkedList}}{
+        head = null\;
+
+        \Fn{\ins{k}}{
+            elem = new(k)\;
+            \If {head == null}{
+                head = elem\;
+            }
+            \Else{
+                elem.next = head\;
+                head = elem\;
+            }
+        }
+        \Fn{\del{k}}{
+            prev = null\;
+            current = head\;
+            \While{current != null \KwAnd current.key != k}{
+                prev = current\;
+                current = current.next\;
+            }
+            \If{current == null}{
+                \KwError{Element not found}
+            }
+            \If{prev != null}{
+                prev.next = current.next\;
+            }
+            \Else{
+                head = current.next\;
+            }
+        }
+        \Fn{\search{k}}{
+            current = head\;
+            \While{current != null \KwAnd current.key != k}{
+                current = current.next\;
+            }
+            \KwRet{current}
+        }
+    }
+\end{algorithm}
 \end{document}
