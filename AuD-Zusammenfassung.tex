@@ -25,6 +25,33 @@ border=3mm
 %-----------------------------------
 % Algorithms
 %-----------------------------------
+\usepackage{listings}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+
+\lstset{style=mystyle}
+
 \usepackage[
     linesnumbered,
     lined,
@@ -185,151 +212,24 @@ Eine Totale Ordnung wie folgt definiert:
 
 \newpage
 \subsection{Insertion Sort}
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{inso}{insertion\_sort}
+\lstinputlisting[language=Java]{Code/InsertionSort.java}
 
-    \Fn{\inso{A}} {
-        \For{i = 1 \KwTo A.length - 1}{
-            key = A[i] \Comment{Element zum Sortieren}\;
-            j = i - 1 \Comment{Einfügepunkt wird von hinten gesucht}\;
-            \While{j >= 0 \KwAnd A[j] > key}{
-                A[j + 1] = A[j] \Comment{Elemente nach Rechts verschieben}\;
-                j = j - 1\;
-            }
-            A[j + 1] = key \Comment{Element wird in den Einfügepunkt geschoben}\;
-        }
-    }
-\end{algorithm}
 Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element 
 
 \newpage
 \subsection[]{Merge Sort}
 
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{mS}{mergeSort}
-
-    \Fn{\mS{A, left, right}} {
-        \If{left < right}{
-            \Comment{Wenn Bereich ist nicht leer}
-            mid = floor((left + right) / 2) \Comment{Nach unten gerundet}\;
-            mergeSort(A, left, mid) \Comment{Sortiert von left zu mid}\;
-            mergeSort(A,mid + 1, right) \Comment{Sortiert von mid + 1 zu right}\;
-            merge{A, left, mid, right} \Comment{Fügt Hälften zusammen}
-        }
-    }
-\end{algorithm}
-
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{merge}{merge}
-
-    \Fn{\merge{A, left, mid, right}} {
-        B = new Array[right - left + 1] \Comment{Temp array}\;
-        p = left\;
-        q = mid + 1\;
-        \Comment{Array A wird mithilfe von zwei Pointern durchgegangen, von links und von mid + 1}\;
-
-        \For{i = 0 \KwTo right - left}{
-            \Comment{Läuft für jedes Element im Zielbereich}\;
-            \If{q > right \KwOr (p =< mid \KwAnd A[p] =< A[q])}{
-                \Comment{Wenn q > right, dann ist der rechte Teil durchlaufen. Wenn p =< mid ist, so ist der linke Teil noch nicht durchlaufen. Wenn das linke Element =< dem rechten ist, dann wird das Element dem temp array B hinzugefügt.}\;
-                B[i] = A[p]\;
-                p = p + 1\;
-            }
-            \Else{
-                \Comment{Wenn oben nicht zutrifft:}\;
-                B[i] = A[q]\;
-                q = q + 1\;
-            }
-        }
-        \For{i = 0 \KwTo right - left}{
-            \Comment{Läuft wieder für jedes Element im Zielbereich}\;
-            \Comment{Kopiert den jetzt sortierten temp array B zurück in den eigentlichen Array an der richtigen Stelle}\;
-            A[i + left] = B[i] \Comment{i + left, damit nicht am Anfang sondern an dem richtigen Teilbereich eingefügt wird.}\;
-        }
-    }
-\end{algorithm}
+\lstinputlisting[language=Java]{Code/MergeSort.java}
 
 \newpage
 \subsection{Quicksort}
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{qs}{quicksort}
 
-    \Fn{\qs{A, left right }}{
-        \If{left < right}{
-            q = partition(A, left, right)\;
-            quicksort(A, left, q)\;
-            quicksort(A, q + 1, right)\;
-        }
-    }
-\end{algorithm}
-
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{parti}{partition}
-
-    \Fn{\parti{A, left, right}}{
-        pivot = A[left]\;
-        p = left - 1\;
-        q = right + 1\;
-        \While{p < q}{
-            \While{A[p] < pivot}{
-                p = p + 1\;
-            }
-            \While{A[q] > pivot}{
-                q = q - 1\;
-            }
-            \If{p < q}{
-                    temp = A[q]\;
-                    A[q] = A[p]\;
-                    A[p] = temp\;
-                }
-        }
-        \KwRet{q}
-    }
-\end{algorithm}
+\lstinputlisting[language=Java]{Code/Quicksort.java}
 
 \newpage
 \subsection{Radix Sort}
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{radSo}{radixSort}
 
-    keys = digits d in range [0, D-1]\Comment{possible digits}\;
-    B = new Array[0]\Comment{Buckets, initially empty}\;
-
-    \Fn{\radSo{A}}{
-        \For{i = 0 \KwTo d - 1}{ \Comment{From least to most significant}
-            \For{j = 0 \KwTo n - 1}{
-                putBucket(A, B, i, j)\;
-            }
-            a = 0\;
-            \For{k = 0 \KwTo D - 1}{
-                \For{b = 0 \KwTo B[k].size - 1}{
-                    A[a] = B[k][b] \Comment{Read bucket in order}\;
-                    a = a + 1\;
-                }
-                B[k].size = 0 \Comment{Clear Bucket}\;
-            }
-        }
-        \KwRet{A}
-    }
-\end{algorithm}
-
-\begin{algorithm}
-    \DontPrintSemicolon
-    \SetKwFunction{puBu}{putBucket}
-
-    \Fn{\puBu{A, B, i, j}}{
-        z = A[j].digit[i]\Comment{i-th digit of A[j]}\;
-        b = B[z].size\Comment{Size corresponds to next free spot}\;
-        B[z][b] = A[j]\;
-        B[z].size = B[z].size + 1\;
-    }
-\end{algorithm}
+\lstinputlisting[language=Java]{Code/RadixSort.java}
 
 \newpage
 \section{Grundlegende Datenstrukturen}
