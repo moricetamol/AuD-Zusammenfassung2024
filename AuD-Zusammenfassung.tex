@@ -125,7 +125,7 @@ border=3mm
 	
 	\posttitle{\vskip 0.5em} % Whitespace under the title
 
-\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{} \color{Black}} % Author font configuration
+\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{n} \color{Black}} % Author font configuration
 	
 	\author{Moritz Gerhardt } % Name
 	
@@ -192,7 +192,7 @@ Dabei sollte ein Algorithmus im allgemeinen folgende Vorraussetzungen erfüllen:
     \end{itemize}
 \end{enumerate}
 
-\section[]{Sortieren}
+\section{Sortieren}
 \subsection{Sortierproblem}
 Sortieralgorithmen sind die wohl am häufigsten verwendeten Algorithmen. Hierbei wird als Eingabe eine Folge von Objekten gegeben, die nach einer bestimmten Eigenschaft sortiert werden. Der Algorithmus soll die Eingabe in der richtigen Reihenfolge (nach einer bestimmten Eigenschaft) zur Ausgabe umwandeln. Es wird hierbei meist von einer total geordneten Menge ausgegangen. (Alle Elemente sind miteinander vergleichbar). \\
 Eine Totale Ordnung wie folgt definiert:
@@ -214,7 +214,8 @@ Eine Totale Ordnung wie folgt definiert:
 \subsection{Insertion Sort}
 \lstinputlisting[language=Java]{Code/InsertionSort.java}
 
-Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element 
+Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element startend bei i = 1 der Array von i bis 0 nach links durchlaufen, bis 0 erreicht ist oder key-Wert größer gleich dem i-ten Element ist. \\ 
+Während des durchlaufens nach links werden die Elemente so nach Rechts geschoben, so dass eine Einfügespalte ensteht. Nach dem Ende dieses Durchgangs ist der Wert 
 
 \newpage
 \subsection[]{Merge Sort}
@@ -265,5 +266,24 @@ Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer eine
 
 \lstinputlisting[language=Java]{Code/LinkedElement.java}
 \lstinputlisting[language=Java]{Code/LinkedList.java}
+
+
+\newpage
+\subsection{Binary Search Tree}
+\lstinputlisting[language=Java]{Code/BSTNode.java}
+\lstinputlisting[language=Java, lastline = 50]{Code/BSTree.java}
+\newpage
+\lstinputlisting[language=Java, firstline = 52]{Code/BSTree.java}
+
+
+
+\newpage
+\subsection{Red-Black Tree}
+\lstinputlisting[language=Java]{Code/RBNode.java}
+\lstinputlisting[language=Java, lastline = 38]{Code/RBTree.java}
+\newpage
+\lstinputlisting[language=Java, firstline = 39, lastline = 76]{Code/RBTree.java}
+\newpage
+\lstinputlisting[language=Java, firstline = 77]{Code/RBTree.java}
 
 \end{document}
