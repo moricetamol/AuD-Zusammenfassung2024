@@ -6,8 +6,5 @@ class BSTNode {
 
     BSTNode(Integer k) {
         key = k;
-        left = null;
-        right = null;
-        parent = null;
     }
 }

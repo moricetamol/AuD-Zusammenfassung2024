@@ -119,7 +119,7 @@ class RBTree {
     }
     
     void delete(RBNode z) {
-        RBNode a = z.parent; // a is the parent of z
+        RBNode a = z.parent; // a represent node with black depth imbalance
         int dbh = 0; // delta black height, -1 for right, 1 for left leaning
 
         if (z.left == null && z.right == null) { // If z is a leaf
@@ -143,12 +143,12 @@ class RBTree {
             RBNode y = z.right;
             a = y;
             boolean wentLeft = false;
-            while (y.left != null) {
+            while (y.left != null) { //
                 a = y;
                 y = y.left;
                 wentLeft = true;
             }
-            if (y.parent != z) {
+            if (y.parent != z) { // Loop didn't run
                 transplant(y, y.right);
                 y.right = z.right;
                 y.right.parent = y;
@@ -157,7 +157,7 @@ class RBTree {
             y.left = z.left;
             y.left.parent = y;
             if (y.color == Color.BLACK) {
-                if (wentLeft) {
+                if (wentLeft) { // Tree imbalanced depending on y location
                     dbh = -1;
                 } else {
                     dbh = 1;
@@ -165,7 +165,7 @@ class RBTree {
             }
             y.color = z.color;
         }
-        if (dbh != 0) {
+        if (dbh != 0) { // If black height imbalance
             fixColorsAfterDeletion(a, dbh);
         }
     }
@@ -176,10 +176,12 @@ class RBTree {
             RBNode b = a.right;
             RBNode c = b.left;
             RBNode d = b.right;
-            if (x != null && x.color == Color.RED) { // Easy case: x is red
+            if (x != null && x.color == Color.RED) {
+                // Easy case: x is red
                 x.color = Color.BLACK;
             } else if (a.color == Color.BLACK
-                    && b.color == Color.RED) { // Case 1: a black, b red
+                    && b.color == Color.RED) {
+                // Case 1: a black, b red
                 rotateLeft(a);
                 a.color = Color.RED;
                 b.color = Color.BLACK;
@@ -187,13 +189,15 @@ class RBTree {
             } else if (a.color == Color.RED
                     && b.color == Color.BLACK
                     && (c == null || c.color == Color.BLACK)
-                    && (d == null || d.color == Color.BLACK)) { // Case 2a: a red, b black, c and d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 2a: a red, b black, c and d black
                 a.color = Color.BLACK;
                 b.color = Color.RED;
             } else if (a.color == Color.BLACK
                     && b.color == Color.BLACK
                     && (c == null || c.color == Color.BLACK)
-                    && (d == null || d.color == Color.BLACK)) { // Case 2b: a black, b black, c and d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 2b: a black, b black, c and d black
                 b.color = Color.RED;
                 if (a == a.parent.left) {
                     dbh = 1;
@@ -205,12 +209,14 @@ class RBTree {
                 fixColorsAfterDeletion(a.parent, dbh);
             } else if (b.color == Color.BLACK
                     && c != null && c.color == Color.RED
-                    && (d == null || d.color == Color.BLACK)) { // Case 3: a either, b black, c red, d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 3: a either, b black, c red, d black
                 rotateRight(b);
                 c.color = Color.BLACK;
                 fixColorsAfterDeletion(a, dbh);
             } else if (b.color == Color.BLACK
-                    && d!= null && d.color == Color.RED) { // Case 4: a either, b black, c either, d red
+                    && d!= null && d.color == Color.RED) {
+                // Case 4: a either, b black, c either, d red
                 rotateLeft(a);
                 b.color = a.color;
                 a.color = Color.BLACK;
@@ -222,10 +228,12 @@ class RBTree {
             RBNode b = a.left;
             RBNode c = b.right;
             RBNode d = b.left;
-            if (x != null && x.color == Color.RED) { // Easy case: x is red
+            if (x != null && x.color == Color.RED) {
+                // Easy case: x is red
                 x.color = Color.BLACK;
             } else if (a.color == Color.BLACK
-                    && b.color == Color.RED) { // Case 1: a black, b red
+                    && b.color == Color.RED) {
+                // Case 1: a black, b red
                 rotateRight(a);
                 a.color = Color.RED;
                 b.color = Color.BLACK;
@@ -233,13 +241,15 @@ class RBTree {
             } else if (a.color == Color.RED
                     && b.color == Color.BLACK
                     && (c == null || c.color == Color.BLACK)
-                    && (d == null || d.color == Color.BLACK)) { // Case 2a: a red, b black, c and d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 2a: a red, b black, c and d black
                 a.color = Color.BLACK;
                 b.color = Color.RED;
             } else if (a.color == Color.BLACK
                     && b.color == Color.BLACK
                     && (c == null || c.color == Color.BLACK)
-                    && (d == null || d.color == Color.BLACK)) { // Case 2b: a black, b black, c and d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 2b: a black, b black, c and d black
                 b.color = Color.RED;
                 if (a == a.parent.right) {
                     dbh = 1;
@@ -251,12 +261,14 @@ class RBTree {
                 fixColorsAfterDeletion(a.parent, dbh);
             } else if (b.color == Color.BLACK
                     && c != null && c.color == Color.RED
-                    && (d == null || d.color == Color.BLACK)) { // Case 3: a either, b black, c red, d black
+                    && (d == null || d.color == Color.BLACK)) {
+                // Case 3: a either, b black, c red, d black
                 rotateLeft(b);
                 c.color = Color.BLACK;
                 fixColorsAfterDeletion(a, dbh);
             } else if (b.color == Color.BLACK
-                    && d!= null && d.color == Color.RED) { // Case 4: a either, b black, c either, d red
+                    && d!= null && d.color == Color.RED) {
+                // Case 4: a either, b black, c either, d red
                 rotateRight(a);
                 b.color = a.color;
                 a.color = Color.BLACK;

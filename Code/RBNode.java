@@ -7,9 +7,5 @@ class RBNode {
 
     RBNode(Integer k) {
         key = k;
-        left = null;
-        right = null;
-        parent = null;
-        color = null;
     }
 }
