@@ -1,0 +1,33 @@
+\documentclass[
+../../AuD-Zusammenfassung.tex,
+]
+{subfiles}
+
+\externaldocument[ext:]{../../AuD-Zusammenfassung}
+% Set Graphics Path, so pictures load correctly
+\graphicspath{{../../}}
+
+\begin{document}
+\section{Was ist ein Algorithmus?}
+Ein Algorithmus beschreibt eine Handlungsvorschrift zur Umwandlung von Eingaben in eine Ausgabe.\\
+Dabei sollte ein Algorithmus im allgemeinen folgende Vorraussetzungen erfüllen:
+\begin{enumerate}
+    \item Bestimmt:
+    \begin{itemize}
+        \item Determiniert: Bei gleicher Eingabe liefert der Algortihmus gleiche Ausgabe. \\$\implies$ Ausgabe nur von Eingabe abhängig, keine äußeren Faktoren.
+        \item Determinismus: Bei gleicher Eingabe läuft der Algorithmus immer gleich durch die Eingabe. \\$\implies$ Gleiche Schritte, Gleiche Zwischenstände.
+    \end{itemize}
+    \item Berechenbar:
+    \begin{itemize}
+        \item Finit: Der Algorithmus ist als endlich definiert. (Theoretisch)
+        \item Terminierbar: Der Algorithmus stoppt in endlicher Zeit. (Praktisch)
+        \item Effektiv: Der Algorithmus ist auf Maschine ausführbar.
+    \end{itemize}
+    \item Andwendbar:
+    \begin{itemize}
+        \item Allgemein: Der Algorithmus ist für alle Eingaben einer Klasse anwendbar, nicht nur für speziellen Fall.
+        \item Korrekt: Wenn der Algorithmus ohne Fehler terminiert, ist die Ausgabe korrekt.
+    \end{itemize}
+\end{enumerate}
+
+\end{document}

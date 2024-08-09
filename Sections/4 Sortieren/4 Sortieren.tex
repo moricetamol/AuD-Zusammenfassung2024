@@ -1,0 +1,52 @@
+\documentclass[
+../../AuD-Zusammenfassung.tex,
+]
+{subfiles}
+
+
+\externaldocument[ext:]{../../AuD-Zusammenfassung}
+% Set Graphics Path, so pictures load correctly
+\graphicspath{{../../}}
+
+\begin{document}
+\section{Sortieren}
+\subsection{Sortierproblem}
+Sortieralgorithmen sind die wohl am häufigsten verwendeten Algorithmen. Hierbei wird als Eingabe eine Folge von Objekten gegeben, die nach einer bestimmten Eigenschaft sortiert werden. Der Algorithmus soll die Eingabe in der richtigen Reihenfolge (nach einer bestimmten Eigenschaft) zur Ausgabe umwandeln. Es wird hierbei meist von einer total geordneten Menge ausgegangen. (Alle Elemente sind miteinander vergleichbar). \\
+Eine Totale Ordnung wird wie folgt definiert:
+\begin{center}
+    Eine Relation $\leq$ auf $M$ ist eine totale Ordnung, wenn:
+    \begin{itemize}
+        \item Reflexiv: $\forall x \in M: x \leq x$ \\
+        (x steht in Relation zu x)
+        \item Transitiv: $\forall x,y,z \in M: x \leq y \wedge y \leq z \implies x \leq z$ \\
+        (Wenn x in Relation zu y steht und y in Relation zu z steht, so folgt, dass x in Relation zu z steht)
+        \item Antisymmetrisch: $\forall x,y \in M: x \leq y \wedge y \leq x \implies x = y$ \\
+        (Wenn x in Relation zu y steht und y in Relation zu x steht, so folgt, dass x = y)
+        \item Totalität: $\forall x,y \in M: x \leq y \vee y \leq x$ \\
+        (Alle Elemente müssen in einer Relation zueinander stehen)
+    \end{itemize}
+\end{center}
+\newpage
+\subsection{Insertion Sort}
+\lstinputlisting[language=Java]{Code/InsertionSort.java}
+
+Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element startend bei i = 1 der Array von i bis 0 nach links durchlaufen, bis 0 erreicht ist oder key-Wert größer gleich dem i-ten Element ist. \\ 
+Während des durchlaufens nach links werden die Elemente so nach Rechts geschoben, so dass eine Einfügespalte ensteht. Nach dem Ende dieses Durchgangs ist der Spalt bei der position, bei der der Wert eingefügt werden soll. \\
+Dies wird dann wiederholt, bis für alle i der Array durchlaufen ist.
+
+\newpage
+\subsection{Merge Sort}
+
+\lstinputlisting[language=Java]{Code/MergeSort.java}
+
+\newpage
+\subsection{Quicksort}
+
+\lstinputlisting[language=Java]{Code/Quicksort.java}
+
+\newpage
+\subsection{Radix Sort}
+
+\lstinputlisting[language=Java]{Code/RadixSort.java}
+
+\end{document}
