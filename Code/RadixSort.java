@@ -43,7 +43,8 @@ class RadixSort {
             }
         }
         // Get the biggest number
-        return (int) Math.log10(max) + 1;
+        return (int) (Math.log(max)/Math.log(D) + 1);
         // Get the amount of digits of the number
+        // log(max)/log10(D) is equal to log_D(max)
     }
 }

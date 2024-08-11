@@ -30,23 +30,1091 @@ Eine Totale Ordnung wird wie folgt definiert:
 \subsection{Insertion Sort}
 \lstinputlisting[language=Java]{Code/InsertionSort.java}
 
-Prinzip: Die Eingabe wird von links nach rechts durchlaufen. Dafür wird für jedes Element startend bei i = 1 der Array von i bis 0 nach links durchlaufen, bis 0 erreicht ist oder key-Wert größer gleich dem i-ten Element ist. \\ 
-Während des durchlaufens nach links werden die Elemente so nach Rechts geschoben, so dass eine Einfügespalte ensteht. Nach dem Ende dieses Durchgangs ist der Spalt bei der position, bei der der Wert eingefügt werden soll. \\
-Dies wird dann wiederholt, bis für alle i der Array durchlaufen ist.
+\subsubsection{Vorgehensweise}
+Die Eingabe wird von links nach rechts durchlaufen startend bei $i = 1$. Das Element $i$ wird dann mit allen Element verglichen, die links von $i$ stehen, bis es 0 erreicht oder das die Einfügestelle gefunden wurde (Vor einem Element, das kleiner als das Element $i$ ist). Die Elemente, die im betrachteten Bereich liegen und größer sind werden während dem Durchlauf eins nach rechts verschoben.
+\subsubsection{Visuelle Darstellung}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
 
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{Anfangszustand}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt, current](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt, insert, anchor = south](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<->, bend right, orange, thick] (pos2.north) to (pos1.north);
+    \end{tikzpicture}
+    \captionof*{figure}{1. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt, current](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt, insert](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=50pt, text height = 45pt](5){5};
+
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[->, bend right, magenta, thick] (pos3.north) to (pos1.north);
+        \draw[->, bend left, codegreen, thick] (pos1.north) to (pos2.north);
+        \draw[->, bend left, codegreen, thick] (pos2.north) to (pos3.north);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{2. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3, lookedat](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt, current](4){4};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=50pt, text height = 45pt, insert](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<->, bend right, orange, thick] (pos4.north) to (pos3.north);
+    \end{tikzpicture}
+    \captionof*{figure}{3. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3, lookedat](pos4){};
+        \node[sortbackgroundnode, right =of pos4, lookedat](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt, current](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt, insert](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[->, bend right, magenta, thick] (pos5.north) to (pos1.north);
+        \draw[->, bend left, codegreen, thick] (pos1.north) to (pos2.north);
+        \draw[->, bend left, codegreen, thick] (pos2.north) to (pos3.north);
+        \draw[->, bend left, codegreen, thick] (pos3.north) to (pos4.north);
+        \draw[->, bend left, codegreen, thick] (pos4.north) to (pos5.north);
+    \end{tikzpicture}
+    \captionof*{figure}{4. Iteration}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos5.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{Endzustand}
+\end{minipage}
+Grün ist das momentan betrachte Element/Bereich. Magenta der Einfügepunkt des Elements.
+
+\newpage
+\subsubsection{Komplexität}
+\begin{itemize}
+    \item \textbf{Worst-Case:}
+    \begin{itemize}
+        \item Der Worst-Case ist ein array1, der in reverse order sortiert ist. 
+        \item Demnach muss jedes Element den kompletten array1 durchlaufen.
+        \item Dies ergibt eine Worst-Case Laufzeit von $\Theta(n^2)$
+    \end{itemize}
+    \item \textbf{Best-Case:}
+    \begin{itemize}
+        \item Der Best-Case ist ein array1, der schon sortiert ist.
+        \item Demnach muss kein Element verschoben werden, aber trotzdem muss bei jedem Element einmal geprüft werden, ob es größer als sein Vorgänger ist.
+        \item Dies ergibt eine Best-Case Laufzeit von $\Theta(n)$
+    \end{itemize}
+    \item \textbf{Average-Case:}
+    \begin{itemize}
+        \item Der Average-Case ist ein array1, der in random order sortiert ist.
+        \item Demnach muss für jedes Element der array1 durchschnittlich bis zur Hälfte durchlaufen werden.
+        \item Nach der quadratischen Steigerung für große Zahlen ist die Hälfte aber irrelevant, weswegen $\Theta(n^2)$ ist.
+    \end{itemize}
+\end{itemize}
+\newpage
+
+\subsection{Bubble Sort}
+\lstinputlisting[language=Java]{Code/BubbleSort.java}
+\subsubsection{Vorgehensweise}
+BubbleSort durchläuft die Eingabe umgekehrt zu InsertionSort: Während bei InsertionSort erst ein Element in einem Teil der Eingabe sortiert wird und der Bereich pro Iteration größer wird, wird bei BubbleSort zuerst der komplette array1 durchlaufen und beieinander liegende Elemente getauscht, wenn sie größer/kleiner sind und der Bereich mit Iteration weiter eingeschränkt. D.h., dass nach der ersten Iteration bereits das größte Elemente an richtiger Stelle steht, nach der zweiten das zweitgrößte etc.\\
+Hier in dem Beispiel handelt es sich schon um einen optimierten BubbleSort. Dafür wird zusätzlich der Boolean sorted erstellt, der angibt, ob die Eingabe nach dem ersten durchlauf schon sortiert ist, was der Fall ist, wenn kein Element vertauscht wurde. Ist dies der Fall müssen keine weitern Iteration mehr durchgeführt werden und der Algorithmus kann vorzeitig abgebrochen werden. Dies führt zu einem besseren Best-Case. \\
+Im Vergleich zu InsertionSort ist BubbleSort meist inefektiver als InsertionSort, obwohl sie die gleichen Komplexitäten haben. Das liegt daran, dass InsertionSort weniger Operationen ausführen muss.
+\newpage
+\subsubsection{Visuelle Darstellung}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+    \end{tikzpicture}
+    \captionof*{figure}{Anfangszustand}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!20},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3, lookedat](pos4){};
+        \node[sortbackgroundnode, right =of pos4, lookedat](pos5){};
+
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[->, bend left, codegreen, thick] (pos1.north) to (pos5.north);
+        \draw[->, bend right, magenta, thick] (pos2.north) to (pos1.north);
+        \draw[->, bend right, magenta, thick] (pos3.north) to (pos2.north);
+        \draw[->, bend right, magenta, thick] (pos4.north) to (pos3.north);
+        \draw[->, bend right, magenta, thick] (pos5.north) to (pos4.north);
+    \end{tikzpicture}
+    \captionof*{figure}{1. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!20},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3, lookedat](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos4.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos5.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<->, bend left, orange, thick] (pos1.north) to (pos2.north);
+        \draw[<->, bend left, orange, thick] (pos3.north) to (pos4.north);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{2. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!20},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2, lookedat](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos3.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos5.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<->, bend left, orange, thick] (pos2.north) to (pos3.north);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{3. Iteration}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!20},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode, lookedat](pos1){};
+        \node[sortbackgroundnode, right =of pos1, lookedat](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos2.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos5.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<->, bend left, orange, thick] (pos1.north) to (pos2.north);
+        
+    \end{tikzpicture}
+    \captionof*{figure}{4. Iteration}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!20},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+        \node[sortbackgroundnode, right =of pos4](pos5){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos5.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);        
+    \end{tikzpicture}
+    \captionof*{figure}{Endzustand}
+\end{minipage}
+Pfeile repräsentieren Bewegung über eine Iteration, nicht einzelne Schritte. Grün repräsentiert den bearbeiteten Bereich.
+\subsubsection{Komplexität}
+\begin{itemize}
+    \item \textbf{Worst-Case:}
+    \begin{itemize}
+        \item Die Eingabe liegt in reverse order vor. 
+        \item Das heißt, das jedes Element immer vom Anfang bis zum Ende des Bereichs durchgewechselt werden muss.
+        \item Die Komplexität beträgt also $\Theta(n^2)$
+    \end{itemize}
+    \item \textbf{Best-Case:}
+    \begin{itemize}
+        \item Die Eingabe ist bereits sortiert.
+        \item Das heißt der Algorithmus muss die Eingabe nur einmal durchlaufen um zu schauen, ob Elemente getauscht werden.
+        \item Die Komplexität beträgt also $\Theta(n)$
+        \item (Bei nicht optimierten BubbleSort, läuft der Algorithmus immer komplett durch $\implies$ $\Theta(n^2)$)
+    \end{itemize}
+    \item \textbf{Average-Case:}
+    \begin{itemize}
+        \item Die Eingabe ist zufällig sortiert.
+        \item Im Durchschnitt müssen die Elemente demnoch in den meisten Fällen getauscht werden.
+        \item Die Komplexität beträgt also $\Theta(n^2)$
+    \end{itemize}
+\end{itemize}
 \newpage
 \subsection{Merge Sort}
-
 \lstinputlisting[language=Java]{Code/MergeSort.java}
+\subsubsection{Vorgehensweise}
+Die Eingabe wird jeweils immer in der Mitte in zwei Teile aufgeteilt, die jeweils wieder aufgeteilt werden. Dies passiert so lange, bis alle Elemente einzeln vorhanden sind. Danach werden immer zwei dieser enstandenen Teillisten so zusammengeführt, dass sie geordnet sind. Dies wird dann wieder durchgeführt, bis alle Elemente in der Eingabe vorhanden sind und nun auch sortiert.
+Dieses Prinzip wird auch \textit{Divide-and-Conquer} genannt. Bei \textit{Divide} wird die Eingabe in zwei Teile aufgeteilt. Bei \textit{Conquer} werden diese Teile sortiert. Dies geschieht durch die Zusammenführung von den einelementigen Teillisten, die trivial sortiert sind.
+\newpage
+\subsubsection{Visuelle Darstellung}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
 
+        \node[sortforegroundnode, at=(pos4.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos4.south east);
+        \draw[<-] ++(pos1.west) ++(-2,-0.8) to (pos1.west);
+        \draw[<-] ++(pos4.east) ++(2,-0.8) to (pos4.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        %\node[sortforegroundnode, at=(pos4.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        %\node[sortforegroundnode, at=(pos3.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[<-] ++(pos1.west) ++(-1,-0.8) to (pos1.west);
+        \draw[<-] ++(pos2.east) ++(1,-0.8) to (pos2.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        \node[sortforegroundnode, at=(pos2.south), minimum height=10pt, text height = 5pt](1){1};
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[<-] ++(pos1.west) ++(-1,-0.8) to (pos1.west);
+        \draw[<-] ++(pos2.east) ++(1,-0.8) to (pos2.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        %\node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=10pt, text height = 5pt](1){1};
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        %\node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        %\node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=10pt, text height = 5pt](1){1};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        %\node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt](1){1};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt](3){3};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        %\node[sortforegroundnode, at=(pos4.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        %\node[sortforegroundnode, at=(pos3.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[->] ++(pos1.west) ++(-1,0.8) to (pos1.west);
+        \draw[->] ++(pos2.east) ++(1,0.8) to (pos2.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        %\node[sortbackgroundnode, right =of pos2](pos3){};
+        %\node[sortbackgroundnode, right =of pos3](pos4){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt](1){1};
+        %\node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt](2){2};
+        %\node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[->] ++(pos1.west) ++(-1,0.8) to (pos1.west);
+        \draw[->] ++(pos2.east) ++(1,0.8) to (pos2.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=42.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        lookedat/.style={fill = codegreen!15},
+        current/.style={fill = codegreen!80},
+        insert/.style={fill = magenta!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1](pos2){};
+        \node[sortbackgroundnode, right =of pos2](pos3){};
+        \node[sortbackgroundnode, right =of pos3](pos4){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=40pt, text height = 35pt](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos4.south east);
+        \draw[->] ++(pos1.west) ++(-2,0.8) to (pos1.west);
+        \draw[->] ++(pos4.east) ++(2,0.8) to (pos4.east);
+
+    \end{tikzpicture}
+\end{minipage}
+\subsubsection{Komplexität}
+\begin{itemize}
+    \item \textbf{Worst-Case:}
+    \begin{itemize}
+        \item Der Algorithmus funktioniert unabhängig von der Sortiertheit der Eingabe, demnach gibt es keine Worst-Case Eingabe. 
+        \item Die Eingabe kann $\log n$ ($\log_2 n$)mal in zwei aufgeteilt werden kann. Zusätzlich benötigt der Algorithmus zum Kombinieren von den Teillisten $n$
+        \item Es ergibt sich also die Komplexität von $\Theta(n\log n)$
+    \end{itemize}
+    \item \textbf{Best-Case:}
+    \begin{itemize}
+        \item Wie zuvor angesprochen, läuft der Algorithmus unabhängig von der Sortiertheit der Eingabe, demnach gibt es keine Best-Case Eingabe und der Best-Case ist gleich dem Worst-Case.
+        \item Es ergibt sich also $\Theta(n\log n)$
+    \end{itemize}
+    \item \textbf{Average-Case:}
+    \begin{itemize}
+        \item Wie oben, für alle Fälle gleich, also $\Theta(n\log n)$ 
+    \end{itemize}
+\end{itemize}
 \newpage
 \subsection{Quicksort}
-
 \lstinputlisting[language=Java]{Code/Quicksort.java}
+Quicksort funktioniert vom Prinzip ähnlich zu Mergesort. Auch hier wird die Eingabe in zwei Teillisten aufgeteilt und der rekursiv wiederholt. Hier findet die Sortierung allerdings anders statt. Anstatt die Sortierung durch die Zusammenführung zweier Listen zu realisieren, werden hier die einzelnen Elemente anhand des Vergleiches an einem anderen Elementes links oder rechts von diesem eingeordnet. Dies führt durch das \textit{Divide-and-Conquer} Prinzip dazu, dass die Eingabe die Element in die zwei Teile, größer und kleiner des Pivots einordnet. Diese beiden Teile werden dann wiederum genauso behandelt, bis schließlich der gesamte array1 geordnet ist.\\
+Bei der Implementation wird häufig anstatt den Pivot als erstes Element des Bereiches zu definieren, dieser zufällig gewählt, was zu einem besseren average-case führt, wenn die Eingabe bereits einigermaßen sortiert ist. 
+Quicksort ist zwar in der Theorie in den meisten Situationen nicht unbedingt besser als Merge sort auf die Komplexität bezogen, in der Praxis aber oft schneller, durch die Ineffizienz von Kopieroperationen, die für Quicksort wegfallen.
+\newpage
+\subsubsection{Visuelle Darstellung}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1, smallerp](pos2){};
+        \node[sortbackgroundnode, right =of pos2, smallerp](pos3){};
+        \node[sortbackgroundnode, right =of pos3, biggerp](pos4){};
+        \node[sortbackgroundnode, right =of pos4, smallerp](pos5){};
 
+        \node[sortforegroundnode, at=(pos5.south), minimum height=10pt, text height = 5pt](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt, pivot](4){4};
+        \node[sortforegroundnode, at=(pos4.south), minimum height=50pt, text height = 45pt](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos5.south east);
+        \draw[<-] ++(pos1.west) ++(-2,-0.9) to (pos1.west);
+        \draw[<-] ++(pos5.east) ++(2,-0.9) to (pos5.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1, biggerp](pos2){};
+        \node[sortbackgroundnode, right =of pos2, biggerp](pos3){};
+        
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt, pivot](1){1};
+        \node[sortforegroundnode, at=(pos3.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos2.south), minimum height=30pt, text height = 25pt](3){3};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos3.south east);
+        \draw[<-] ++(pos1.west) ++(-0.6,-0.9) to (pos1.west);
+        \draw[<-] ++(pos3.east) ++(0.6,-0.9) to (pos3.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1, smallerp](pos2){};
+        
+        \node[sortforegroundnode, at=(pos2.south), minimum height=40pt, text height = 35pt](4){4};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt, pivot](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[<-] ++(pos1.west) ++(-1,-0.9) to (pos1.west);
+        \draw[<-] ++(pos2.east) ++(1,-0.9) to (pos2.east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=10pt, anchor=south},
+    ]
+        \node[sortbackgroundnode, fill=white](pos1){};
+        \draw[<-] (pos1.south) to (pos1.north);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        \node[sortbackgroundnode, right =of pos1, smallerp](pos2){};
+        
+        \node[sortforegroundnode, at=(pos2.south), minimum height=20pt, text height = 15pt](2){2};
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt, pivot](3){3};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos2.south east);
+        \draw[<-] ++(pos1.west) ++(-0.3,-0.9) to (pos1.west);
+        \draw[<-] ++(pos2.east) ++(0.3,-0.9) to (pos2.east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=10pt, anchor=south},
+    ]
+        \node[sortbackgroundnode, fill=white](pos1){};
+        \draw[<-] (pos1.south) to (pos1.north);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=10pt, anchor=south},
+    ]
+        \node[sortbackgroundnode, fill=white](pos1){};
+        \draw[<-] (pos1.south) to (pos1.north);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=10pt, text height = 5pt, pivot](1){1};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.125\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        
+        \node[sortforegroundnode, at=(pos1.south), minimum height=20pt, text height = 15pt, pivot](2){2};
+        
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.125\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+        
+        \node[sortforegroundnode, at=(pos1.south), minimum height=30pt, text height = 25pt, pivot](3){3};
+        
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+        
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+    
+        \node[sortforegroundnode, at=(pos1.south), minimum height=40pt, text height = 35pt, pivot](4){4};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+    \end{tikzpicture}
+\end{minipage}
+\begin{minipage}[t]{0.25\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        node distance = 5pt,
+        sortbackgroundnode/.style={rectangle, fill=backcolour, minimum height=52.5pt, minimum width=25pt, anchor=south},
+        sortforegroundnode/.style={rectangle, fill=gray!60, minimum width=20pt, anchor=south, inner sep = 0},
+        biggerp/.style={fill = codegreen!15},
+        smallerp/.style={fill = red!15},
+        pivot/.style={fill = codegreen!80},
+    ]
+    
+        \node[sortbackgroundnode](pos1){};
+
+        \node[sortforegroundnode, at=(pos1.south), minimum height=50pt, text height = 45pt, pivot](5){5};
+        
+        \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
+    \end{tikzpicture}
+\end{minipage}
+\subsubsection{Komplexität}
+\begin{itemize}
+    \item \textbf{Worst-Case:}
+    \begin{itemize}
+        \item Im Worst-Case wird für pivot immer das größte oder kleinste Element verwendet, was sehr unausgeglichenen Partitionen erzeugt.
+        \item Dies würde eine Rekursionstiefe von $n$ bedeuten
+        \item Pro Rekursion muss dann der Bereich immernoch mit $n$ durchlaufen werden
+        \item Dies bedeutet eine Worst-Case Laufzeit von $\Theta(n^2)$
+    \end{itemize}
+    \item \textbf{Best-Case:}
+    \begin{itemize}
+        \item Im Best-Case wird immer das Element als pivot verwendet, das den Median der Liste bildet, was die Partitionen immer ausbalanciert.
+        \item Dies bedeutet eine Rekursionstiefe von $\log n$
+        \item Pro Rekursion muss dann der Bereich immernoch mit $n$ durchlaufen werden
+        \item Dies bedeutet eine Best-Case Laufzeit von $\Theta(n\log n)$
+    \end{itemize}
+    \item \textbf{Average-Case:}
+    \begin{itemize}
+        \item Im Average-Case wird ein zufälliges Element als pivot verwendet, wodurch die Partitionen im mittel gleich sind.
+        \item Dies bedeutet eine Rekursionstiefe von $\log n$
+        \item Pro Rekursion muss dann der Bereich immernoch mit $n$ durchlaufen werden
+        \item Dies bedeutet eine Average-Case Laufzeit von $\Theta(n\log n)$
+    \end{itemize}
+\end{itemize}
 \newpage
 \subsection{Radix Sort}
 
 \lstinputlisting[language=Java]{Code/RadixSort.java}
+\subsubsection{Vorgehensweise}
+Bei RadixSort wird die Eingabe für jede Dezimalstelle sortiert. D.h., dass die Eingabe zuerst anhand von der 1er-Stelle sortiert wird, dann der 10er-Stelle, und so weiter. \\
+Dies geschieht durch die Einordnung der Elemente in "Buckets", die jeweils einen möglichen Wert für die Dezimalstelle darstellen(z.B. \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}). Nachdem alle Werte in Buckets eingeordnet wurden, werden diese Buckets nun nach Signifikanz ausgelesen (0 ist kleiner als 9, also werden 0 zuerst ausgelesen) und nach der bearbeiteten Ziffer sortiert in die Eingabe zurückgefügt. Dadurch liegt der array1 für die Ziffer nun sortiert da.\\
+Dies wird nun für die nächste Dezimalstelle wiederholt, wodurch die Eingabe jetzt für die ersten beiden Dezimalstellen sortiert ist. Dies wird wiederholt, bis alle Dezimalstellen durchlaufen sind, wodurch dann alle Werte sortiert sind.
+\newpage
+\subsubsection{Visuelle Darstellung}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw, minimum width = 30pt, fill=backcolour}
+        },
+        bucket/.style={
+            matrix of nodes, nodes={draw, minimum width = 30pt,minimum height = 20pt, fill=backcolour}, 
+            %column sep = \pgflinewidth, 
+            row 1/.style={nodes={fill=codegreen!80}},
+        },
+        rar/.style={
+            codegreen,
+            thick
+        },
+        ar/.style={
+            black,
+            thick
+        },
+        lar/.style={
+            magenta,
+            thick
+        }
+    ]
+        \matrix[array] (array1) {
+            232 & 836 & 101 & 903 & 220 & 425 & 762 & 83 & 5 & 319\\
+        };
+        
+        \matrix[bucket, below =of array1] (buckets1) {
+            0   &   1 &   2 &   3 &   4 &   5 &   6 &   7 &   8 &   9\\
+            220 & 101 & 232 & 903 &     & 425 & 836 &     &     & 319\\
+                &     & 762 &  83 &     &   5 &     &     &     &    \\
+        };
+        
+        \draw[->, rar] (array1-1-1.south) to (buckets1-1-3.north);
+        \draw[->, rar] (array1-1-2.south) to (buckets1-1-7.north);
+        \draw[->, lar] (array1-1-3.south) to (buckets1-1-2.north);
+        \draw[->, ar] (array1-1-4.south) to (buckets1-1-4.north);
+        \draw[->, lar] (array1-1-5.south) to (buckets1-1-1.north);
+        \draw[->, ar] (array1-1-6.south) to (buckets1-1-6.north);
+        \draw[->, lar] (array1-1-7.south) to (buckets1-1-3.north);
+        \draw[->, lar] (array1-1-8.south) to (buckets1-1-4.north);
+        \draw[->, lar] (array1-1-9.south) to (buckets1-1-6.north);
+        \draw[->, ar] (array1-1-10.south) to (buckets1-1-10.north);
 
+        \matrix[array, below =of buckets1] (array2) {
+            220 & 101 & 232 & 762 & 903 & 83 & 425 & 5 & 836 & 319\\
+        };
+
+        \draw[->, ar] (buckets1-2-1.south) to (array2-1-1.north);
+        \draw[->, ar] (buckets1-2-2.south) to (array2-1-2.north);
+        \draw[->, ar, bend right] (buckets1-2-3.south west) to (array2-1-3.north);
+        \draw[->, ar] (buckets1-3-3.south) to (array2-1-4.north);
+        \draw[->, ar] (buckets1-2-4.east) to (array2-1-5.north);
+        \draw[->, ar] (buckets1-3-4.south) to (array2-1-6.north);
+        \draw[->, ar] (buckets1-2-6.south east) to (array2-1-7.north);
+        \draw[->, ar] (buckets1-3-6.south) to (array2-1-8.north);
+        \draw[->, ar] (buckets1-2-7.south) to (array2-1-9.north);
+        \draw[->, ar] (buckets1-2-10.south) to (array2-1-10.north);
+
+        \matrix[bucket, below =of array2] (buckets2) {
+            0   &   1 &   2 &   3 &   4 &   5 &   6 &   7 &   8 &   9\\
+            101 & 319 & 220 & 232 &     &     & 762 &     &  83 &    \\
+            903 &     & 425 & 836 &     &     &     &     &     &    \\
+            5   &     &     &     &     &     &     &     &     &    \\
+        };
+
+        \draw[->, rar] (array2-1-1.south) to (buckets2-1-3.north);
+        \draw[->, lar] (array2-1-2.south) to (buckets2-1-1.north);
+        \draw[->, rar] (array2-1-3.south) to (buckets2-1-4.north);
+        \draw[->, rar] (array2-1-4.south) to (buckets2-1-7.north);
+        \draw[->, lar] (array2-1-5.south) to (buckets2-1-1.north);
+        \draw[->, rar] (array2-1-6.south) to (buckets2-1-9.north);
+        \draw[->, lar] (array2-1-7.south) to (buckets2-1-3.north);
+        \draw[->, lar] (array2-1-8.south) to (buckets2-1-1.north);
+        \draw[->, lar] (array2-1-9.south) to (buckets2-1-4.north);
+        \draw[->, lar] (array2-1-10.south) to (buckets2-1-2.north);
+
+        \matrix[array, below =of buckets2] (array3) {
+            101 & 903 & 5 & 319 & 220 & 425 & 232 & 836 & 762 & 83\\
+        };
+        
+        \draw[->, ar, bend right=45] (buckets2-2-1.west) to (array3-1-1.north);
+        \draw[->, ar, bend right=60] (buckets2-3-1.west) to (array3-1-2.north);
+        \draw[->, ar] (buckets2-4-1.south) to (array3-1-3.north);
+        \draw[->, ar, bend right] (buckets2-2-2.south) to (array3-1-4.north);
+        \draw[->, ar, bend right=45] (buckets2-2-3.south west) to (array3-1-5.north);
+        \draw[->, ar] (buckets2-3-3.south) to (array3-1-6.north);
+        \draw[->, ar] (buckets2-2-4.east) to (array3-1-7.north);
+        \draw[->, ar] (buckets2-3-4.south) to (array3-1-8.north);
+        \draw[->, ar] (buckets2-2-7.south) to (array3-1-9.north);
+        \draw[->, ar] (buckets2-2-9.south) to (array3-1-10.north);
+
+        \matrix[bucket, below =of array3] (buckets3) {
+            0   &   1 &   2 &   3 &   4 &   5 &   6 &   7 &   8 &   9\\
+            5   & 101 & 220 & 319 & 425 &     &     & 762 & 836 & 903\\
+            83  &     & 232 &     &     &     &     &     &     &    \\
+        };
+        
+        \draw[->, rar] (array3-1-1.south) to (buckets3-1-2.north);
+        \draw[->, rar] (array3-1-2.south) to (buckets3-1-10.north);
+        \draw[->, lar] (array3-1-3.south) to (buckets3-1-1.north);
+        \draw[->, ar] (array3-1-4.south) to (buckets3-1-4.north);
+        \draw[->, lar] (array3-1-5.south) to (buckets3-1-3.north);
+        \draw[->, lar] (array3-1-6.south) to (buckets3-1-5.north);
+        \draw[->, lar] (array3-1-7.south) to (buckets3-1-3.north);
+        \draw[->, rar] (array3-1-8.south) to (buckets3-1-9.north);
+        \draw[->, lar] (array3-1-9.south) to (buckets3-1-8.north);
+        \draw[->, lar] (array3-1-10.south) to (buckets3-1-1.north);
+
+        \matrix[array, below =of buckets3] (array4) {
+            5 & 83 & 101 & 220 & 232 & 319 & 425 & 762 & 836 & 903\\
+        };
+
+        \draw[->, ar, bend right=30] (buckets3-2-1.west) to (array4-1-1.north);
+        \draw[->, ar] (buckets3-3-1.south) to (array4-1-2.north);
+        \draw[->, ar] (buckets3-2-2.south) to (array4-1-3.north);
+        \draw[->, ar] (buckets3-2-3.south east) to (array4-1-4.north);
+        \draw[->, ar] (buckets3-3-3.south) to (array4-1-5.north);
+        \draw[->, ar] (buckets3-2-4.south) to (array4-1-6.north);
+        \draw[->, ar] (buckets3-2-5.south) to (array4-1-7.north);
+        \draw[->, ar] (buckets3-2-8.south) to (array4-1-8.north);
+        \draw[->, ar] (buckets3-2-9.south) to (array4-1-9.north);
+        \draw[->, ar] (buckets3-2-10.south) to (array4-1-10.north);        
+    \end{tikzpicture}
+\end{minipage}
+Die Farben haben keine spezielle Bedeutung und dienen nur der Visualisierung.
+\subsubsection{Komplexität}
+\begin{itemize}
+    \item Da bei RadixSort die Eingabe nur von der Anzahl der möglichen Ziffernvariationen $D$, der Eingabelänge $n$ und die maximale Anzahl der Ziffern $d$ abhängig ist, ist der Algorithmus für \textbf{Best-, Worst- und Average-case} gleich.
+    \item Dieser beträgt im Allgemeinen $O(d \cdot (n + D))$
+    \item $D$ wird aber oft als Konstant angesehen, weshalb $O(d \cdot n)$ oft verwendet wird.
+    \item Wenn man zusätzlich noch $d$ als konstant ansieht so ergibt sich lineare Laufzeit $O(n)$
+    \item \color{magenta} Nähert sich $D$ $n$ an, so ergibt sich allerdings eine Laufzeit von $O(n \log n)$, da $d = \Theta(\log_D n)$ gilt.
+\end{itemize}
 \end{document}

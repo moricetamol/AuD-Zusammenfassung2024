@@ -22,7 +22,24 @@ Eine mögliche Implementation auf Grundlage eines Arrays wäre:
 \lstinputlisting[language=Java]{Code/Stack.java}
 
 Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Stack underflow und Stack overflow benannt. Hier wär es automatisch IndexOutOfBounds.\\ Oft werden Stacks auch mit variabler Größer implementiert. Dies kann über verschiedene Wege passieren, zum Beispiel Kopieren des arrays in einen größeren Array oder implementation über mehrere Arrays (z.B. über Linked List). Häufig wird das erstere so implementiert, dass der Array in einen Array mit doppelter Größe kopiert wird.
+\subsubsection{Visuelle Darstellung}
+\textbf{}
+\begin{minipage}[t]{0.33\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        every node/.style={draw,minimum width=30pt, minimum height=20pt, rectangle, rounded corners, text centered},
+        invis/.style={draw=none},
+    ]
+        \node[invis](bottom){};
+        \node[invis, above =of bottom](mid){};
+        \node[invis, above =of mid](top){};
+        \node[at=bottom.center](4){4};
+        \node[at=mid](6){6};
+        \node[at=top](8){8};
 
+        \draw[ultra thick] ++(top.north west) ++(-0.5, 0.5) to ++(bottom.south west) ++(-0.5, -0.5);
+    \end{tikzpicture}
+\end{minipage}
 \newpage
 \subsection{Queues}
 Queues werden normalerweise mit den folgenden Funktionen erstellt:
@@ -42,7 +59,6 @@ Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer eine
 \lstinputlisting[language=Java]{Code/LinkedElement.java}
 \lstinputlisting[language=Java]{Code/LinkedList.java}
 
-
 \newpage
 \subsection{Binary Search Tree}
 \lstinputlisting[language=Java]{Code/BSTNode.java}
@@ -53,15 +69,5 @@ Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer eine
 \lstinputlisting[language=Java, firstline = 50, lastline = 62]{Code/BSTree.java}
 \lstinputlisting[language=Java, firstline = 63, lastline = 89]{Code/BSTree.java}
 \lstinputlisting[language=Java, firstline = 90]{Code/BSTree.java}
-
-\newpage
-\subsection{Red-Black Tree}
-\lstinputlisting[language=Java]{Code/RBNode.java}
-\lstinputlisting[language=Java, lastline = 42]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 43, lastline = 82, firstnumber = 43]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 83, lastline = 119, firstnumber = 83]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 121, lastline = 171, firstnumber = 121]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 173, lastline = 278, firstnumber = 173]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 280, firstnumber = 280]{Code/RBTree.java}
 
 \end{document}

@@ -2,7 +2,7 @@ class MergeSort {
     void mergeSort(int[] arr, int left, int right) {
         if (left < right) {
             // left < right, otherwise the region has no elements
-            int mid = (left + right) / 2;
+            int mid = (left + right) / 2; // Integer division -> round down
             // Split the region into two halves and do the recursive calls
             mergeSort(arr, left, mid);
             mergeSort(arr, mid + 1, right);

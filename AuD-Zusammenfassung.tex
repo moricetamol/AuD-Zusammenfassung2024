@@ -90,6 +90,9 @@ border=3mm
 %-----------------------------------
 \usepackage{tikz}
 \usepackage{tkz-graph}
+\usetikzlibrary{matrix}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{positioning}
 \usetikzlibrary{trees}
 \usetikzlibrary{shapes.geometric}
 \usetikzlibrary{calc}
@@ -127,7 +130,7 @@ border=3mm
 %----------------------------------------------
 \usepackage{titling}
 \newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
-\newcommand{\TitleRule}{\color{Green} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
+\newcommand{\TitleRule}{\color{codegreen} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
 %\newcommand{\TitleRule}{\color{Green} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt]}
 \newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
 
@@ -153,7 +156,7 @@ border=3mm
 \newcommand{\SectionFont}{\LARGE\bfseries}
 \titleformat{\section} % Type of heading to format
 %[] % Shape
-{\color{Green} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt] \SectionFont} % Format
+{\color{codegreen} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt] \SectionFont} % Format
 {\thesection} % Label
 {1em} % Seperator
 {\SectionFont} % Before-Code
@@ -192,6 +195,10 @@ border=3mm
 \subfile{Sections/4 Sortieren/4 Sortieren.tex}
 \newpage
 \subfile{Sections/5 Grundlegende Datenstrukturen/5 Grundlegende Datenstrukturen.tex}
-
-
+\newpage
+\subfile{Sections/6 Fortgeschrittene Datenstrukturen/6 Fortgeschrittene Datenstrukturen.tex}
+\newpage
+\subfile{Sections/7 Probabilistische Datenstrukturen/7 Probabilistische Datenstrukturen.tex}
+\newpage
+\subfile{Sections/8 Graphen Algorithmen/8 Graphen Algorithmen.tex}
 \end{document}
