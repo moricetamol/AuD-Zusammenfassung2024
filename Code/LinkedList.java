@@ -1,18 +1,20 @@
 class LinkedList {
-    LinkedElement head = null;
+    LinkedElement head = null; // First element in list
+    LinkedElement tail = null; // Last element in list
 
-    void insert(int k) {
+    void insert(int k) { // O(1)
         LinkedElement elem = new LinkedElement(k);
         if (head == null) {
             head = elem;
+            tail = elem;
         }
         else {
-            head.next = elem;
-            head = elem;
+            tail.next = elem;
+            tail = elem;
         }
     }
 
-    void delete(int k) {
+    void delete(int k) { // O(n)
         LinkedElement prev = null;
         LinkedElement curr = head;
         while (curr != null && curr.key != k) {
@@ -24,13 +26,16 @@ class LinkedList {
         }
         if (prev != null) {
             prev.next = curr.next;
+            if (curr == tail) {
+                tail = prev;
+            }
         }
         else {
             head = curr.next;
         }
     }
 
-    LinkedElement search(int k) {
+    LinkedElement search(int k) { // O(n)
         LinkedElement curr = head;
         while (curr != null && curr.key != k) {
             curr = curr.next;

@@ -20,7 +20,7 @@ class Queue {
         // Modulo makes this usable for cyclic arrays
     }
 
-    void enqueue(int k) {
+    void enqueue(int k) { // O(1)
         if (isFull()) {
             throw new UException("Queue is full");
         }
@@ -34,7 +34,7 @@ class Queue {
         }
     }
 
-    int dequeue() {
+    int dequeue() { // O(1)
         if (isEmpty()) {
             throw new UException("Queue is empty");
         }

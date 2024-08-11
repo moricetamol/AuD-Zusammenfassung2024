@@ -2,7 +2,7 @@ class BSTree {
 
     BSTNode root = null;
 
-    void insert(BSTNode z) {
+    void insert(BSTNode z) { // Omega(1), O(h), Theta(h)
         BSTNode x = root; // Traversal starting from the root
         BSTNode px = null; // Parent of x, initially null
 
@@ -26,7 +26,7 @@ class BSTree {
         // May add the same node twice as it doesn't check for duplicates
     }
 
-    void delete(BSTNode z) {
+    void delete(BSTNode z) { // Omega(1), O(h), Theta(log n)
         if (z.left == null) { // If z has no left child, transplants the right child to z's position
             transplant(z, z.right);
         } else if (z.right == null) { // If z has no right child, transplants the left child to z's position
@@ -47,7 +47,7 @@ class BSTree {
         }
     }
 
-    void transplant(BSTNode u, BSTNode v) {
+    void transplant(BSTNode u, BSTNode v) { // O(1)
         // Transplants v to the parent of u
         if (u.parent == null) { // If u is the root, v becomes the new root
             root = v;
@@ -60,7 +60,7 @@ class BSTree {
             v.parent = u.parent;
         }
     }
-    BSTNode iterativeSearch(int k) {
+    BSTNode iterativeSearch(int k) { // O(h), Omega(1), Theta(log n)
         BSTNode curr = root;
         while (curr != null && curr.key != k) {
             if (k < curr.key) {
@@ -73,7 +73,7 @@ class BSTree {
         // Returns null if element not found
     }
 
-    BSTNode recursiveSearch(int k, BSTNode curr) {
+    BSTNode recursiveSearch(int k, BSTNode curr) {// O(h), Omega(1), Theta(log n)
         if (curr == null) {
             return null;
         }
@@ -87,7 +87,7 @@ class BSTree {
         // Returns null if element not found
     }
 
-    void traversal(BSTNode curr) {
+    void traversal(BSTNode curr) { // O(n)
         if (curr != null) {
             return;
         }
