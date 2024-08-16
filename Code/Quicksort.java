@@ -15,8 +15,8 @@ class Quicksort {
         int p = left - 1;
         int q = right + 1;
         while (p < q) {
-            do { p++; } while (arr[p] < pivot);
-            do { q--; } while (arr[q] > pivot);
+            do p++; while (arr[p] < pivot);
+            do q--; while (arr[q] > pivot);
             // Increase / decrease p and q until the elements are bigger/smaller-equal pivot
             if (p < q) {
                 /* p < q here means that theres a number bigger equal pivot on the left side

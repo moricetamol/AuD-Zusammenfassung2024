@@ -210,8 +210,9 @@ Hier ist die Implementation für Queues wie folgt:
 \subsection{Linked List}
 Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer einen Wert und eine Referenz auf das nächste Element in der Liste haben. Diese Struktur hat den Vorteil, dass sie keine festgelegte Größe hat, das Einfügen in $O(1)$ stattfindet, einfach zu implementieren ist und im Speicher nicht als Block, sondern einzelne Referenzen steht. Eine einfache Linked List kann wie folgt implementiert werden:
 
-\lstinputlisting[language=Java]{Code/LinkedElement.java}
 \lstinputlisting[language=Java]{Code/LinkedList.java}
+Diese Implementation benutzt einen Head und Tail, hat aber nur Referenz für das nächste Element in der Liste. Eine alternative Implementation wäre Tail wegzulassen und den Nodes eine previous-Referenz zu geben. Damit könnte man beim Einfügen das Element vorne an den Head anzuhängen und die neue Node als Head zuzuweisen. \texttt{search} bleibt gleich, bei \texttt{delete} muss lediglich die previous Referenz angepasst werden.
+\newpage
 \begin{minipage}[t]{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -317,8 +318,9 @@ Die 3 Node wird zwar nicht wirklich "gelöscht", allerdings wird die Referenz au
 Ein Binary Search Tree ist eine Datenstruktur, die aus mehreren Nodes besteht, die jeweils pointer zu drei Nodes besitzt: Left, Right und Parent. \\
 Hierbei repräsentiert Left und Right die Nodes, die unter der current Node stehen und Parent die, die über der current Node steht. Dabei ist im Binary Search Tree (Im Gegensatz zum normalen Search Tree) Left immer kleiner als die Node und Right immer größer gleich der Node. \\
 Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente durchlaufen werden müssen, sondern immer nur ein Pfad, bei dem das Element größer/kleiner ist. \\
-\lstinputlisting[language=Java]{Code/BSTNode.java}
-\lstinputlisting[language=Java, lastline = 27]{Code/BSTree.java}
+Ein idealer Binary Search Tree ist so balanziert, dass beide Seiten des Baumes die selbe Anzahl an Knoten besitzen. Dies wäre eine ideale Höhe von $h = \log n$.
+Ein schlechter Binary Search Tree allerdings ist unbalanziert, so dass der Worst-Case so aussieht, dass alle Nodes jeweils maximal ein Kind haben. Dies wäre effektiv gleich einer LinkedList.
+\lstinputlisting[language=Java, lastline = 30]{Code/BSTree.java}
 \begin{minipage}[t]{0.5\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -379,7 +381,7 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
     \captionof*{figure}{Insert 5}
 \end{minipage}
 \newpage
-\lstinputlisting[language=Java, firstline = 29, lastline = 62]{Code/BSTree.java}
+\lstinputlisting[language=Java, firstline = 31, lastline = 61]{Code/BSTree.java}
 \begin{minipage}[t]{0.33\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -468,7 +470,7 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
     \node[](6){6};
     
     \node[below left =of 6](4){4};
-        \node[below left =of 4, xshift=13pt, magenta](2){2};
+        \node[below left =of 4, xshift=13pt](2){2};
 
     \node[below right =of 6](8){8};
         \node[below left =of 8, xshift=13pt](7){7};
@@ -477,7 +479,7 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
 
     \draw[->, thick] (6) to (4);
     \draw[->, thick] (6) to (8);
-    \draw[->, thick, magenta] (4) to (2);
+    \draw[->, thick] (4) to (2);
     \draw[->, thick] (8) to (7);
     \draw[->, thick] (8) to (9);
     \end{tikzpicture}
@@ -546,7 +548,7 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
     \node[](6){6};
     
     \node[below left =of 6](4){4};
-        \node[below left =of 4, xshift=13pt, magenta](2){2};
+        \node[below left =of 4, xshift=13pt](2){2};
 
     \node[below right =of 6](8){8};
         \node[below left =of 8, xshift=13pt](7){7};
@@ -555,7 +557,7 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
 
     \draw[->, thick] (6) to (4);
     \draw[->, thick] (6) to (8);
-    \draw[->, thick, magenta] (4) to (2);
+    \draw[->, thick] (4) to (2);
     \draw[->, thick] (8) to (7);
     \draw[->, thick] (8) to (9);
     \end{tikzpicture}
@@ -615,7 +617,61 @@ Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente d
 \end{minipage}
 Leaves werden gelöscht, Half-Leaves durch Kind ersetzt, Complete Node durch Nachfolger (nächstgrößtes Element, kleinstes Element im rechten Teilbaum der Node) ersetzt.
 \newpage
-\lstinputlisting[language=Java, firstline = 63, lastline = 89]{Code/BSTree.java}
-\lstinputlisting[language=Java, firstline = 90]{Code/BSTree.java}
+\lstinputlisting[language=Java, firstline = 62, lastline = 80]{Code/BSTree.java}
+\lstinputlisting[language=Java, firstline = 81]{Code/BSTree.java}
 
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        every node/.style={draw,minimum size=15pt, circle, text centered, thick},
+        node distance = 22pt,
+        invis/.style={draw=none},
+    ]
+
+    \node[](6){6};
+    
+    \node[below left =of 6](4){4};
+        \node[below left =of 4, xshift=13pt](2){2};
+        \node[below right =of 4, xshift=-13pt](5){5};
+
+    \node[below right =of 6](8){8};
+        \node[below left =of 8, xshift=13pt](7){7};
+        \node[below right =of 8, xshift=-13pt](9){9};
+        
+
+    \draw[->, thick] (6) to (4);
+    \draw[->, thick] (4) to (2);
+    \draw[->, thick] (6) to (8);
+    \draw[->, thick] (8) to (7);
+    \draw[->, thick] (8) to (9);
+    \draw[->, thick] (4) to (5);
+    \end{tikzpicture}
+    \captionof*{figure}{Ideal balanzierter BST ($h = \log n$)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        every node/.style={draw,minimum size=15pt, circle, text centered, thick},
+        node distance = 15pt,
+        invis/.style={draw=none},
+    ]
+
+    \node[](2){2};
+    \node[below right=of 2](4){4};
+    \node[below right=of 4](5){5};
+    \node[below right =of 5](6){6};
+    \node[below right =of 6](7){7};
+    \node[below right =of 7](8){8};
+    \node[below right =of 8](9){9};
+        
+
+    \draw[->, thick] (2) to (4);
+    \draw[->, thick] (4) to (5);
+    \draw[->, thick] (5) to (6);
+    \draw[->, thick] (6) to (7);
+    \draw[->, thick] (7) to (8);
+    \draw[->, thick] (8) to (9);
+    \end{tikzpicture}
+    \captionof*{figure}{Worst-Case unbalanzierter BST($h = n$)}
+\end{minipage}
 \end{document}

@@ -1,4 +1,12 @@
 class LinkedList {
+    class LinkedElement {
+        Integer key = null;
+        LinkedElement next = null;
+
+        LinkedElement(Integer key) {
+            this.key = key;
+        }
+    }
     LinkedElement head = null; // First element in list
     LinkedElement tail = null; // Last element in list
 
@@ -21,28 +29,24 @@ class LinkedList {
             prev = curr;
             curr = curr.next;
         }
-        if (curr == null) {
+        if (curr == null)
             throw new UException("Element not found");
-        }
+
         if (prev != null) {
             prev.next = curr.next;
-            if (curr == tail) {
+            if (curr == tail)
                 tail = prev;
-            }
-        }
-        else {
+        } else {
             head = curr.next;
         }
     }
 
     LinkedElement search(int k) { // O(n)
         LinkedElement curr = head;
-        while (curr != null && curr.key != k) {
+        while (curr != null && curr.key != k)
             curr = curr.next;
-        }
-        if (curr == null) {
+        if (curr == null)
             throw new UException("Element not found");
-        }
         return curr;
     }
 }

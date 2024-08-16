@@ -1,5 +1,4 @@
 class Queue {
-
     private int[] arr;
     private int front;
     private int back;
@@ -23,11 +22,9 @@ class Queue {
     void enqueue(int k) { // O(1)
         if (isFull()) {
             throw new UException("Queue is full");
-        }
-        else{
-            if (isEmpty()) {
+        } else{
+            if (isEmpty())
                 front = 0;
-            }
             back = (back + 1) % arr.length;
             // Modulo so that cyclic arrays work
             arr[back] = k;
@@ -37,8 +34,7 @@ class Queue {
     int dequeue() { // O(1)
         if (isEmpty()) {
             throw new UException("Queue is empty");
-        }
-        else {
+        } else {
             int temp = arr[front];
             front = (front + 1) % arr.length;
             // Modulo so that cyclic arrays work

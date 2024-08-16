@@ -33,9 +33,8 @@ class MergeSort {
             }
         }
         // Copy the merged elements from the temporary array back to the original array
-        for (int i = 0; i < right - left + 1; i++) {
+        for (int i = 0; i < right - left + 1; i++)
             arr[left + i] = temp[i];
             // left + 0 is the start of the region
-        }
     }
 }

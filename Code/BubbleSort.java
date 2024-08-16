@@ -16,9 +16,8 @@ class BubbleSort {
                     sorted = false;
                 }
             }
-            if(sorted) {
+            if(sorted)
                 break;
-            }
         }
     }
 }

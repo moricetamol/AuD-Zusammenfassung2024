@@ -9,9 +9,8 @@ class RadixSort {
         d = amountDigits(arr);
         for (int i = 0; i < d; i++) {
             // for each digit in the array, 0 least significant
-            for (int j = 0; j < arr.length; j++) {
+            for (int j = 0; j < arr.length; j++)
                 putBucket(arr, i, j);
-            }
             // Sorts the numbers into their buckets
             int a = 0;
             for (int k = 0; k < D; k++) {
@@ -38,9 +37,8 @@ class RadixSort {
     private int amountDigits(int[] arr) {
         int max = arr[0];
         for (int i = 1; i < arr.length; i++) {
-            if (arr[i] > max) {
+            if (arr[i] > max)
                 max = arr[i];
-            }
         }
         // Get the biggest number
         return (int) (Math.log(max)/Math.log(D) + 1);

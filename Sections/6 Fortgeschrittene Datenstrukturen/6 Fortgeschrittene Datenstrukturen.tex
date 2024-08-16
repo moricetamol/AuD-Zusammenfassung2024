@@ -10,12 +10,1639 @@
 \begin{document}
 \section{Fortgeschrittene Datenstrukturen}
 \subsection{Red-Black Tree}
-\lstinputlisting[language=Java]{Code/RBNode.java}
-\lstinputlisting[language=Java, lastline = 42]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 43, lastline = 82, firstnumber = 43]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 83, lastline = 119, firstnumber = 83]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 121, lastline = 171, firstnumber = 121]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 173, lastline = 278, firstnumber = 173]{Code/RBTree.java}
-\lstinputlisting[language=Java, firstline = 280, firstnumber = 280]{Code/RBTree.java}
+Ein Red-Black Tree ist eine Art Binary-Search Tree. Zusätzlich zu diesem besitzen die Nodes in einem RB Tree noch das Attribut \texttt{color}. Die Nodes werden also entweder als \texttt{red} oder \texttt{black} definiert. Dies dient zur Einhaltung der Red-Black-Regeln, durch die die Effizienz der Datenstruktur im Vergleich zum BST verbessert wird.\\
+Die Regeln sind:
+\begin{enumerate}
+    \item \textbf{Jeder Knoten ist entweder schwarz oder rot}
+    \item \textbf{Die Wurzel ist schwarz}
+    \item \textbf{Rote Knoten haben keine Roten Kinder}
+    \item \textbf{Jeder Pfad von einem Knoten zu seinen Nachkommen besitzt die selbe Anzahl an schwarzen Knoten}
+\end{enumerate}
+\begin{center}
+    $\implies$ Hat ein Knoten nur ein Kind, so muss dieses Kind Rot sein, ansonsten ist die Anzahl an schwarzen Knoten auf dem Pfad unterschiedlich zu den anderen Pfaden.
+\end{center}
+Der Vorteil von RBT zu BST ist, dass während ein BST unausgewogen sein kann, was in einem Worst-Case von $h = n$ resultiert, im RBT durch die Regeln eine maximale Höhe von $h = \log n$ sichergestellt, was die Worst-Case Laufzeit der Algorithmen deutlich verbessert.
+\lstinputlisting[language=Java, lastline=22]{Code/RBTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Richtig Konstruierter RBT}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=22pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[redn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[blackn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[blackn](52){52}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Falsch Konstruierter RBT}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=23, lastline=44]{Code/RBTree.java}
+Einfügen funktioniert grundlegend gleich zu BST, allerdings wird am Ende die Farbe des neuen Knotens auf rot gesetzt und anschließend die Regeln des RBTs (falls verletzt) wieder hergestellt.
+\\\vspace{20pt}\\
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](37){37}}
+        } 
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \draw[->, codegreen, thick] (root) to (8);
+    \draw[->, codegreen, thick] (8) to (23);
+    \draw[->, codegreen, thick] (23) to (37);
 
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 37 (No colorfix needed)}
+\end{minipage}
+\\\vspace{20pt}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}
+                child{node[invis]{} edge from parent [draw=none]}
+                child{node[redn](55){55}}
+            }
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \draw[->, codegreen, thick] (root) to (68);
+    \draw[->, codegreen, thick] (68) to (50);
+    \draw[->, codegreen, thick] (50) to (52);
+    \draw[->, codegreen, thick] (52) to (55);
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 55 (Colorfix needed)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=45, lastline=83]{Code/RBTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[redn](52){52}
+                child{node[invis]{} edge from parent [draw=none]}
+                child{node[redn](55){55}}
+            }
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Fix needed at 55}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[blackn](root){48}
+    child{node[redn](8){8}
+        child{node[blackn](7){7}}
+        child{node[blackn](23){23}}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](52){52}
+            child{node[redn](50){50}}
+            child{node[redn](55){55}}
+        }
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Fixed (Case 4)}
+\end{minipage}
+\newpage
+Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert werden.
+\lstinputlisting[language=Java, firstline=84, lastline=114]{Code/RBTree.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        level distance=25pt,
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[](root){48}
+    child{node[](8){8}
+        child{node[](7){7}}
+        child{node[](23){23}}
+    }
+    child{node[](68){68}
+        child{node[](52){52}}
+        child{node[](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        level distance=25pt,
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[](root){48}
+    child{node[](8){8}
+        child{node[](7){7}}
+        child{node[](23){23}}
+    }
+    child{node[](68){68}
+        child{node[](52){52}}
+        child{node[](71){71}}
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (8);
+    \draw[->, codegreen, thick] (52) to (23);
+    \draw[->, codegreen, thick, bend right] (71) to (68);
+    \draw[->, codegreen, thick, bend right] (68) to (root);
+    \end{tikzpicture}
+    \captionof*{figure}{rotateLeft(root)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        level distance=25pt,
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[](root){68}
+    child{node[](48){48}
+        child{node[](8){8}
+            child{node[](7){7}}
+            child{node[](23){23}}
+        }
+        child{node[](52){52}}
+    }
+    child{node[](71){71}}
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{rotateLeft(root) result}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        level distance=25pt,
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[](root){48}
+    child{node[](8){8}
+        child{node[](7){7}}
+        child{node[](23){23}}
+    }
+    child{node[](68){68}
+        child{node[](52){52}}
+        child{node[](71){71}}
+    }
+    ;
+    \draw[->, codegreen, thick, bend left] (root) to (68);
+    \draw[->, codegreen, thick] (23) to (52);
+    \draw[->, codegreen, thick, bend left] (7) to (8);
+    \draw[->, codegreen, thick, bend left] (8) to (root);
+    \end{tikzpicture}
+    \captionof*{figure}{rotateRight(root)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        level distance=25pt,
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+    ]
+    \node[](root){8}
+    child{node[](7){7}}
+    child{node[](48){48}
+        child{node[](23){23}}
+        child{node[](68){68}
+            child{node[](52){52}}
+            child{node[](71){71}}
+        }
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{rotateRight(root) result}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=115, lastline=161]{Code/RBTree.java}
+\begin{minipage}[t]{1\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[blackn](root){48}
+    child{node[blackn](8){8}
+        child{node[redn](7){7}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    child{node[redn](68){68}
+        child{node[blackn](50){50}}
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[blackn](root){48}
+    child{node[blackn](7){7}}
+    child{node[redn](68){68}
+        child{node[blackn](50){50}}
+        child{node[blackn](71){71}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 8 (No colorfix needed, Case 3)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[blackn](root){48}
+    child{node[blackn](8){8}
+        child{node[redn](7){7}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    child{node[redn](71){71}
+        child{node[blackn](50){50}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 68 (Colorfix needed, Case 4, $dbh = 1$, skewed left)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=162, lastline=212]{Code/RBTree.java}
+\newpage
+\lstinputlisting[language=Java, firstline=213, lastline=266, firstnumber=52]{Code/RBTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[blackn](root){48}
+    child{node[blackn](8){8}
+        child{node[redn](7){7}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    child{node[redn](71){71}
+        child{node[blackn](50){50}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before fix}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        redn/.style={fill=red!30},
+        blackn/.style={fill=black!30},
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[blackn](root){48}
+    child{node[blackn](8){8}
+        child{node[redn](7){7}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    child{node[blackn](71){71}
+        child{node[redn](50){50}}
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Fixed (Case 2a)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=267]{Code/RBTree.java}
+
+
+
+
+
+\newpage
+\subsection{AVL Trees}
+Ein \textbf{A}delson-\textbf{V}elsky \textbf{L}andis Tree ist ein BST, der sich selbst balanziert um eine Höhe von $h = \log n$ zu garantieren. Er wird so definiert, \textbf{dass die Höhendifferenz von zwei Teilbäumen unter einem Knoten jeweils maximal $1$ ist}.\\
+Im Vergleich zu RBT ist der AVLT in der Höhe strikter. So ist die maximale Höhe im AVL $h = 1.44 \cdot \log n$, während er im RBT nur $2 \cdot \log n$. So haben AVLTs zwar die bessere Effizienz in Suchvorgängen, jedoch benötigen sie beim Insert oder Delete meist mehr Rotationen. Demnach bieten sich AVLTs eher bei Fällen an, wo mehr Suchvorgänge stattfinden im Vergleich zu den Insert/Delete Vorgängen. Muss der Baum oft modifiziert werden so bietet sich ein RBT besser an.\\
+\lstinputlisting[language=Java, lastline=22]{Code/AVLTree.java}
+Visuell gleich zu einem Best-Case ausgewogenen BST. \\
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](9){9}
+        child{node[invis]{} edge from parent [draw=none]}
+        child{node[](11){11}}
+    }
+    child{node[](23){23}
+        child{node[](22){22}}
+        child{node[](32){32}}
+    }
+    ;
+    \node[left= 0pt of 11, invis]{0};
+    \node[left= 0pt of 22, invis]{0};
+    \node[left= 0pt of 9, invis]{+1};
+    \node[above= 0pt of root, invis]{-1};
+    \node[right= 0pt of 23, invis]{0};
+    \node[right= 0pt of 32, invis]{0};
+
+    \end{tikzpicture}
+    \captionof*{figure}{Balanced Tree}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){23}
+    child{node[](17){17}
+        child{node[](9){9}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[](11){11}}
+        }
+        child{node[](22){22}}
+    }
+    child{node[](32){32}}
+    ;
+    \node[left= 0pt of 11, invis]{0};
+    \node[left= 0pt of 22, invis]{0};
+    \node[left= 0pt of 9, invis]{+1};
+    \node[left= 0pt of 17, invis]{-1};
+    \node[above= 0pt of root, invis, red]{-2};
+    \node[right= 0pt of 32, invis]{0};
+
+    \end{tikzpicture}
+    \captionof*{figure}{Unbalanced Tree}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=23, lastline=44]{Code/AVLTree.java}
+Während die Function ein wenig abgeändert ist, ist das Endergebnis bei richtiger Anwendung (nicht inPlace) gleich.
+\newpage
+\lstinputlisting[language=Java, firstline=45, lastline=56]{Code/AVLTree.java}
+Funktioniert prinzipiell gleich zu den anderen Trees, aber ist nicht in-place und muss zusätzlich noch alle subtrees balanzieren.
+\newpage
+\lstinputlisting[language=Java, firstline= 57, lastline=77]{Code/AVLTree.java}
+Wie bei rotate und insert, prinzipiell gleich zu den anderen Trees, aber ist nicht in-place und muss zusächlich alle subtrees balanzieren.
+\newpage
+\lstinputlisting[language=Java, firstline=78]{Code/AVLTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){23}
+    child{node[](17){17}
+        child{node[](9){9}
+            child{node[invis]{} edge from parent [draw=none]}
+            child{node[](11){11}}
+        }
+        child{node[](22){22}}
+    }
+    child{node[](32){32}}
+    ;
+    \node[left= 0pt of 11, invis]{0};
+    \node[left= 0pt of 22, invis]{0};
+    \node[left= 0pt of 9, invis]{+1};
+    \node[left= 0pt of 17, invis]{-1};
+    \node[above= 0pt of root, invis, red]{-2};
+    \node[right= 0pt of 32, invis]{0};
+
+    \end{tikzpicture}
+    \captionof*{figure}{Unbalanced Tree after insert of 11}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](9){9}
+        child{node[invis]{} edge from parent [draw=none]}
+        child{node[](11){11}}
+    }
+    child{node[](23){23}
+        child{node[](22){22}}
+        child{node[](32){32}}
+    }
+    ;
+    \node[left= 0pt of 11, invis]{0};
+    \node[left= 0pt of 22, invis]{0};
+    \node[left= 0pt of 9, invis]{+1};
+    \node[above= 0pt of root, invis]{-1};
+    \node[right= 0pt of 23, invis]{0};
+    \node[right= 0pt of 32, invis]{0};
+
+    \end{tikzpicture}
+    \captionof*{figure}{Balanced Tree after fixup}
+\end{minipage}
+\newpage
+\subsection{Splay Trees}
+Splay Trees sind BSTs, die sich mit jedem Aufruf neu reorganisieren. Dies tun sie indem sie das betrachtete Element an die Wurzel verschieben. So ist der Splay Tree nicht unbedingt wie RBT und AVLT gut balanziert, jedoch besonders effektiv, wenn einige Elemente öfters gesucht werden als andere. Da diese Bäume sich nicht wirklich selbst balanzieren, sind Splay Trees ungeeignet für Fälle wo alle Werte ungefähr gleich viel gesucht werden, da im Durchschnitt mehr Zeit gebraucht wird ein Wert zu finden und diesen an die Wurzel zu verschieben als in anderen Trees.
+\lstinputlisting[language=Java, lastline=39]{Code/SplayTree.java}
+Sieht visuell praktisch wie ein normaler BST aus.
+\newpage
+\lstinputlisting[language=Java, firstline=70, lastline=82]{Code/SplayTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](9){9}
+        child{node[invis]{} edge from parent [draw=none]}
+        child{node[](11){11}}
+    }
+    child{node[](23){23}
+        child{node[](22){22}}
+        child{node[](32){32}}
+    }
+    ;
+    \draw[->, codegreen, thick] (root) to (9);
+    \draw[->, codegreen, thick] (9) to (11);
+
+    \end{tikzpicture}
+    \captionof*{figure}{Search for 11}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){11}
+    child{node[](9){9}}
+    child{node[](17){17}
+        child{node[invis]{} edge from parent [draw=none]}
+        child{node[](23){23}
+            child{node[](22){22}}
+            child{node[](32){32}}
+        }
+    }
+    ;
+
+    \end{tikzpicture}
+    \captionof*{figure}{Splay 11 (zigzag)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=83, lastline=86]{Code/SplayTree.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](9){9}
+        child{node[](6){6}}
+        child{node[](11){11}}
+    }
+    child{node[](23){23}
+        child{node[](22){22}}
+        child{node[](32){32}}
+    }
+    ;
+    \draw[->, codegreen, thick] (root) to (9);
+    \draw[->, codegreen, thick] (9) to (6);
+
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 6}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){6}
+    child{node[invis]{} edge from parent [draw=none]}
+    child{node[](9){9}
+        child{node[invis]{} edge from parent [draw=none]}
+        child{node[](17){17}
+            child{node[](11){11}}
+            child{node[](23){23}
+                child{node[](22){22}}
+                child{node[](32){32}}
+            }
+        }
+    }
+    ;
+
+    \end{tikzpicture}
+    \captionof*{figure}{Splay 6 (zigzig)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=87]{Code/SplayTree.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](9){9}
+        child{node[](6){6}}
+        child{node[](11){11}}
+    }
+    child{node[](23){23}
+        child{node[](22){22}}
+        child{node[](32){32}}
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (9);
+    \draw[->, codegreen, thick, bend right] (23) to (root);
+    \draw[->, codegreen, thick] (22) to (11);
+    \end{tikzpicture}
+    \captionof*{figure}{Before delete 23}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[magenta](root){23}
+    child{node[](17){17}
+        child{node[](9){9}
+            child{node[](6){6}}
+            child{node[](11){11}}
+        }
+        child{node[](22){22}}
+    }
+    child{node[](32){32}}
+    ;
+    
+    \end{tikzpicture}
+    \captionof*{figure}{Splay 23 (zig)}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[invis](root){}
+    child{node[](17){17} edge from parent [draw=none]
+        child{node[](9){9}
+            child{node[](6){6}}
+            child{node[](11){11}}
+        }
+        child{node[](22){22}}
+    }
+    child{node[](32){32} edge from parent [draw=none]}
+    ;
+    \draw[->, codegreen, thick, bend right] (22) to (17);
+    \draw[->, codegreen, thick, bend right] (17) to (9);
+    \draw[->, codegreen, thick, bend right, out=290] (22) to (32);
+    \end{tikzpicture}
+    \captionof*{figure}{delete 23}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){22}
+    child{node[](17){17}
+        child{node[](9){9}
+            child{node[](6){6}}
+            child{node[](11){11}}
+        }
+        child{node[invis]{} edge from parent [draw=none]}
+    }
+    child{node[](32){32}}
+    ;
+
+    \end{tikzpicture}
+    \captionof*{figure}{Splay biggest node in left subtree (22) and append right subtree}
+\end{minipage}
+\newpage
+\subsection{Binary Heap Trees}
+Im Allgemeinen ist ein Binary Heap wie folgt definiert:
+\begin{itemize}
+    \item Bis auf das unterste Level ist der Baum vollständig gefüllt und im untersten Level ist er von links befüllt.
+    \item $\forall x \not= root: x.parent.key \geq x.key$
+\end{itemize}
+Binary Heaps unterscheiden sich von den anderen hier behandelten Trees insofern, dass sie keine BSTs sind. Das heißt, dass rechte Kinder eines Knotens nicht unbedingt größer als dieser sind und linke Kinder dieses Knotens nicht unbedingt kleiner. Sie sind so organiesiert, dass sie Werte nach Ebenen sortieren. Bei Max heaps zum Beispiel steht der größte Wert in der Wurzel und der kleinste Wert irgendwo in der untersten Ebene. So ergibt sich bei Max heaps also die Eigenschaft, dass die parent node einer node immer größer ist als die node selber. Dies erlaubt einen sehr schnellen Zugriff auf das größte Element. Diese Eigenschaft kann sehr gut genutzt werden um Werte zu sortieren. Zudem sind Binary Heaps anders konstruiert als andere Trees, sie besitzen nämlich keine Nodes perse, sondern sind nur über Positionen in einem array gespeichert. Die Beziehungen zwischen den Nodes ergeben sich durch Formeln:
+\begin{itemize}
+    \item \textbf{Parent}: $parent(i) = \lceil i / 2 \rceil -1$
+    \item \textbf{Left Child}: $left(i) = 2 \cdot (i + 1) - 1$
+    \item \textbf{Right Child}: $right(i) = 2 \cdot (i + 1)$
+\end{itemize}
+\lstinputlisting[language=Java, lastline=30]{Code/BinaryMaxHeap.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](14){14}
+        child{node[](9){9}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](8){8}}
+        child{node[](4){4}}
+    }
+    ;
+    \end{tikzpicture}
+\end{minipage}\\
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw, minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={draw=none, fill=none},
+        },
+    ]
+    \matrix[array](heap){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & ...\\
+        17 & 14 & 11 & 9  & 7  & 8  & 4  & 1  & 3  & 6  & 2  & nil\\
+    };
+    \end{tikzpicture}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=31, lastline=41]{Code/BinaryMaxHeap.java}
+Für min Heaps muss lediglich das Ungleichheitszeichen umgedreht werden. \\
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](14){14}
+        child{node[](9){9}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](8){8}
+            child{node[](15){15}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 15, before fixup}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](14){14}
+        child{node[](9){9}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](15){15}
+        child{node[](11){11}
+            child{node[](8){8}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{After fixup}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=42, lastline=60]{Code/BinaryMaxHeap.java}
+Tut essenziell das selbe wie der zweite Teil von Insert, nur in umgekehrter Reihenfolge (oben nach unten) und rekursiv.\\ 
+Für Min heap muss wieder das Gleichheitszeichen umgedreht werden.\\
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){9}
+    child{node[](14){14}
+        child{node[](17){17}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](6){6}
+            child{node[](7){7}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](8){8}
+            child{node[](15){15}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){14}
+    child{node[](17){17}
+        child{node[](9){9}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](6){6}
+            child{node[](7){7}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](8){8}
+            child{node[](15){15}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \draw[<->, orange, thick] (root) to (17);
+    \draw[<->, orange, thick] (17) to (9);
+    \end{tikzpicture}
+    \captionof*{figure}{Heapify root}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, firstline=61]{Code/BinaryMaxHeap.java}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){9}
+    child{node[](14){14}
+        child{node[](17){17}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](6){6}
+            child{node[](7){7}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](8){8}
+            child{node[](15){15}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{Before heapsort}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){9}
+    child{node[](14){14}
+        child{node[](17){17}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](11){11}
+        child{node[](15){15}
+            child{node[](8){8}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \draw[<->, orange, thick] (6) to (7);
+    \draw[<->, orange, thick] (15) to (8);
+    \end{tikzpicture}
+    \captionof*{figure}{heapify second to last level}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){9}
+    child{node[](17){17}
+        child{node[](14){14}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](15){15}
+        child{node[](11){11}
+            child{node[](8){8}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \draw[<->, orange, thick] (17) to (14);
+    \draw[<->, orange, thick] (15) to (11);
+    \end{tikzpicture}
+    \captionof*{figure}{heapify third to last level}
+\end{minipage}
+\begin{minipage}[t]{0.5\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        invis/.style={draw=none},
+        every node/.style={draw, circle, minimum size=20pt, text centered, thick},
+        edge from parent/.style ={draw, ->},
+        level 1/.style={sibling distance=120pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=30pt,
+    ]
+    \node[](root){17}
+    child{node[](14){14}
+        child{node[](9){9}
+            child{node[](1){1}}
+            child{node[](3){3}}
+        }
+        child{node[](7){7}
+            child{node[](6){6}}
+            child{node[](2){2}}
+        }
+    }
+    child{node[](15){15}
+        child{node[](11){11}
+            child{node[](8){8}}
+            child{node[invis]{} edge from parent [draw=none]}
+        }
+        child{node[](4){4}}
+    }
+    ;
+    \draw[<->, orange, thick] (root) to (14);
+    \draw[<->, orange, thick] (14) to (9);
+    \end{tikzpicture}
+    \captionof*{figure}{heapify last level}
+\end{minipage}\\
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw, minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={draw=none, fill=none},
+        },
+    ]
+    \matrix[array](heap){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11\\
+        17 & 15 & 14 & 11 & 9  & 8  & 7  & 6  & 4  & 3  & 2  & 1 \\
+    };
+    \end{tikzpicture}
+    \captionof*{figure}{Extracted array}
+\end{minipage}
+
+\newpage
+\subsection{B-Tree}
+B-Trees (B hat keine festgelegte Bedeutung) unterscheiden sich sehr von den anderen Trees. Erstens sind sie keine Binary Trees. Ein B-Tree vom Grad $t$ wird so definiert, dass
+\begin{itemize}
+    \item Jede Node besitzt minimal $t - 1$ Werte und $t$ Kinder (Außer root)
+    \item Jede Node besitzt maximal $2\cdot t - 1$ Werte und $2\cdot t$ Kinder
+    \item Die Werte innerhalb eines Knotens sind aufsteigend sortiert
+    \item Alle Blätter haben die gleiche Höhe
+    \item Jeder innere Knoten mit m Werten hat m + 1 Kinder \\ $\implies$ für alle Werte $k_j$ in j-ten Kind gilt: $k_0 \leq key[0] \leq k_1 \leq key[1] \leq \ldots \leq key[m-1] \leq k_m $
+\end{itemize}
+Ein B-Tree kann somit in einem Knoten mehr als einen Wert und mehr als zwei Kinder besitzen. B-Trees balanzieren sich zudem auch selber, wodurch sie sehr effektiv Operationen in logarithmischer Laufzeit ausführen. Zudem ist durch die Anzahl der Werte die in einem Knoten gespeichert werden können und die Anzahl an Kinder die ein Knoten haben kann die Höhe des Baumes deutlich niedriger. B-Trees bieten sich so sehr für Disk-Based Operationen an, da sie die Anzahl an Disk-Access reduziert im Vergleich zu anderen Trees. Sie bieten sich also besonders für sehr große Datenbanken auf Festplatten an, sind aber im Vergleich zu den anderen Trees bei kleineren Eingaben weniger effizient.
+\lstinputlisting[language=Java, linerange={1-7, 189-195}]{Code/BTree.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](){
+            5 \& 13\\
+        }
+        child{node[array](){
+            1 \& 2 \& 4\\
+            }
+        }
+        child{node[array](){
+            6 \& 7\\
+            }
+        }
+        child{node[array](){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](){
+            53\\
+        }
+        child{node[array](){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \end{tikzpicture}
+    \captionof*{figure}{B-Tree example (Degree $t = 2$)}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, linerange={1-2,15-22,140-147,189,227-233,238}]{Code/BTree.java}
+Der Suchalgorithmus ist relativ simpel. Er durchläuft die key-Werte der Wurzel, bis es beim Element angelangt, das größer oder gleich dem Suchwert ist. Ist der Wert gleich, so gibt es den Knoten zurück. Andernfalls, wenn der Knoten keine Kinder hat, existiert der Wert nicht, ansonsten durchsucht der Algorithmus das Kind, das den Wert beinhalten sollte rekursiv.
+\\
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            5 \& 13\\
+        }
+        child{node[array](ll){
+            1 \& 2 \& 4\\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7\\
+            }
+        }
+        child{node[array](lr){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (l-1-1.north);
+    \draw[->, codegreen, thick, bend left=45] (l-1-1.north) to (l-1-2.north);
+    \draw[->, codegreen, thick, bend left] (l-1-2.east) to (lr-1-1.north);
+    \draw[->, codegreen, thick, bend left=45] (lr-1-1.north) to (lr-1-2.north);
+
+    \end{tikzpicture}
+    \captionof*{figure}{Search 21}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, linerange={1-2, 15-22, 93-130, 189, 196-213,238}]{Code/BTree.java}
+Prinzipiell folgt dieser Algorithmus einfach der Folge: 
+\begin{enumerate}
+    \item Finde Einfügepunkt
+    \item Wenn Node schon $2 \cdot t -1 $ Werte besitzt, splitte es
+    \begin {itemize}
+        \item Teile Node in zwei Nodes mit je $ t - 1 $ Werten
+        \item Der mittlere Knoten wird in den Elternknoten eingefügt
+        \item Wenn dadurch der Elternknoten $2 \cdot t - 1 $ Werte besitzt, splitte diesen rekursiv nach oben 
+    \end {itemize}
+    \item Wert am Einfügepunkt einfügen
+\end{enumerate}
+
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=70pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            5 \& 13\\
+        }
+        child{node[array](ll){
+            1 \& 2 \& 4\\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7 \& 9\\
+            }
+        }
+        child{node[array](lr){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (l-1-2.north);
+    \draw[->, codegreen, thick, bend right=45] (l-1-2.north) to (l-1-1.north);
+    \draw[->, codegreen, thick, bend left=45] (l-1-1.south east) to (lm-1-2.north);
+    \draw[->, codegreen, thick, bend left=45] (lm-1-2.north) to (lm-1-3.north);
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 9 (Simple Case)}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=70pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            5 \& 13\\
+        }
+        child{node[array](ll){
+            1 \& 2 \& 4\\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7\\
+            }
+        }
+        child{node[array](lr){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (l-1-2.north);
+    \draw[->, codegreen, thick, bend left] (l-1-2.east) to (lr-1-3.north);
+    \draw[->, codegreen, thick, bend right=45] (lr-1-3.north) to (lr-1-2.north);
+
+    \end{tikzpicture}
+    \captionof*{figure}{Before Insert 22 (Needs splitting)}
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=55pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            5 \& 13 \& 21\\
+        }
+        child{node[array](ll){
+            1 \& 2 \& 4\\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7\\
+            }
+        }
+        child{node[array](ml){
+            17\\
+            }
+        }
+        child{node[array](lr){
+            22 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    %\draw[->, codegreen, thick, bend right] (root) to (l-1-2.north);
+    
+
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 22}
+\end{minipage}
+\newpage
+\lstinputlisting[language=Java, linerange={1-2, 15-22, 23-92, 148-188, 189, 214-226, 238}]{Code/BTree.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            5 \& 13\\
+        }
+        child{node[array](ll){
+            1 \& 2\\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7\\
+            }
+        }
+        child{node[array](lr){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (l-1-1.north);
+    \draw[->, codegreen, thick, bend right] (l-1-1.west) to (ll-1-1.north);
+    \draw[->, codegreen, thick, bend left=45] (ll-1-1.north) to (ll-1-2.north);
+    \draw[->, magenta, thick, bend left=45] (ll-1-2.north) to +(20pt,0);
+
+
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 4 (Simple Case)}
+    Wenn der Knoten in einem Blatt steht kann er einfach rausgenommen werden.
+\end{minipage}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix, matrix of nodes, ampersand replacement=\&, grow= right, nodes={draw, minimum width = 20pt, minimum height = 15pt, fill=backcolour, anchor=center,},
+        },
+        edge from parent/.style ={draw, ->, thick},
+        level 1/.style={sibling distance=170pt},
+        level 2/.style={sibling distance=60pt},
+        level 3/.style={sibling distance=30pt},
+        level distance=40pt,
+    ]
+    \node[array](root){34\\}
+    child{node[array](l){
+            4 \& 13\\
+        }
+        child{node[array](ll){
+            1 \& 2 \\
+            }
+        }
+        child{node[array](lm){
+            6 \& 7\\
+            }
+        }
+        child{node[array](lr){
+            17 \& 21 \& 23\\
+            }
+        }
+    }
+    child{node[array](r){
+            53\\
+        }
+        child{node[array](rl){
+            37 \& 42 \& 44\\
+            }
+        }
+        child{node[array](rr){
+            59 \& 67\\
+            }
+        }
+    }
+    ;
+    \draw[->, codegreen, thick, bend right] (root) to (l-1-1.north);
+    \draw[->, codegreen, thick, bend left] (ll-1-2.north) + (20pt,0) to (l-1-1.west);
+
+
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 5 (Replace with predecessor in child)}
+    Im Fall, dass der Wert in einem inneren Knoten steht, geht der Algorithmus so vor:
+    \begin{enumerate}
+        \item Ersetze den Wert mit dem Vorgänger im Kind (Wenn Kind mindestens $t$ Werte besitzt).
+        \item Wenn es nicht genug Werte besitzt, ersetze den Wert mit dem Nachfolger im Kind (Wenn Kind mindestens $t$ Werte besitzt).
+        \item Wenn beide Kinder weniger als $t$ Werte besitzen, verbinde die beiden Knoten und den zu löschenden Wert zu einem Knoten und lösche nun den Wert aus dem Knoten
+    \end{enumerate}
+    Da dieser Algorithmus bereits beim Suchen den Baum umorganisiert um unnötioge Operationen zu sparen gilt zudem, dass beim Suchen, wenn die Wurzel des Unterbaums, der den Wert beinhalten muss $t - 1$ Werte besitzt und ein unmittelbares Geschwisternode mit mindestens $t$ Werten besitzt, man einen Wert vom Parent in den Knoten tut und diesen mit dem Wert aus dem Geschwisternode ersetzt.\\
+    Wenn beide Nodes, also die Wurzel des Unterbaumes und die Geschwisternode $t - 1$ Werte haben, verbinde sie.
+\end{minipage}
 \end{document}

@@ -14,6 +14,7 @@ border=3mm
 \usepackage{xr-hyper}
 %\usepackage{standalone}
 \usepackage{lmodern}
+\usepackage{multicol}
 
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
@@ -30,6 +31,7 @@ border=3mm
 % Table of Contents
 %-----------------------------------
 \usepackage{tocloft}
+\setcounter{tocdepth}{2} % Exclude subsubsections
 \addtolength{\cftsecnumwidth}{0pt} % Set width between title of section and number of section
 \renewcommand{\contentsname}{\vspace{-20pt}}
 
@@ -43,7 +45,7 @@ border=3mm
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.95}
 
-\lstdefinestyle{mystyle}{
+\lstdefinestyle{mystyle}{ 
     backgroundcolor=\color{backcolour},   
     commentstyle=\color{codegreen},
     keywordstyle=\color{magenta},
@@ -59,10 +61,13 @@ border=3mm
     showspaces=false,                
     showstringspaces=false,
     showtabs=false,                  
-    tabsize=2
+    tabsize=2,
+    firstnumber=auto,
+    frame=topline,
+    frameround=tttt,
 }
 
-\lstset{style=mystyle}
+\lstset{style=mystyle,}
 
 \usepackage[
     linesnumbered,
@@ -179,10 +184,14 @@ border=3mm
 
 \begin{document}
 
-\thispagestyle{fancy}
 \maketitle
+\thispagestyle{fancy}
+
+\begin{multicols*}{2}[
 \section{Inhaltsverzeichnis}
+]
 \tableofcontents
+\end{multicols*}
 
 \newpage
 
