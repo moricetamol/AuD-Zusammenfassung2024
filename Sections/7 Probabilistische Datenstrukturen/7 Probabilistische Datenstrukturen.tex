@@ -9,4 +9,697 @@
 
 \begin{document}
 \section{Probabilistische Datenstrukturen}
+\subsection{Deterministisch und Probabilistisch}
+Bisher waren alle Datenstrukturen deterministisch, d.h., dass für die selben Eingaben das Verhalten immer gleich sein wird.\\
+Bei probabilistischen Datenstrukturen ist das Verhalten nicht nur von Eingaben abhängig, sondern auch von zufälligen Faktoren. 
+\begin{longtable}{| p{4cm} | p{6cm} | p{6cm} |}
+    \hline
+    \rowcolor{backcolour}\textbf{Aspekt} & \textbf{Deterministische Datenstrukturen} & \textbf{Probabilistische (Randomisierte) Datenstrukturen} \\
+    \hline
+    \rowcolor{codegreen!30}\textbf{Vorteile} & & \\
+    \hline
+    \textbf{Leistungsgarantien} & Bietet garantierte Worst-Case-Zeitkomplexität. & Bietet gute durchschnittliche Leistung, oft schneller in der Praxis. \\
+    \hline
+    \textbf{Vorhersehbarkeit} & Verhalten ist für die gleichen Eingaben vorhersehbar und konsistent. & Flexibler und vermeidet Worst-Case-Szenarien unter typischen Bedingungen. \\
+    \hline
+    \textbf{Worst-Case-Behandlung} & Speziell entwickelt, um Worst-Case-Szenarien zu handhaben. & Vermeidet Worst-Case-Szenarien durch probabilistische Methoden. \\
+    \hline
+    \textbf{Einfachheit} & Konzeptuell einfach mit klaren Regeln (z.B. AVL-Baum-Rotationen). & Oft einfacher in der Implementierung, ohne komplexe Ausgleichsoperationen. \\
+    \hline
+    \textbf{Stabilität} & Deterministisches Verhalten führt zu stabilen und wiederholbaren Ergebnissen. & Flexibel und widerstandsfähig gegenüber unterschiedlichen Eingabemustern. \\
+    \hline
+    \rowcolor{magenta!30}\textbf{Nachteile} & & \\
+    \hline
+    \textbf{Komplexität in der Implementierung} & Erfordert oft komplexe Ausgleichslogik (z.B. Rot-Schwarz-Bäume, AVL-Bäume). & Einfacher, aber schwerer probabilistisch zu analysieren. \\
+    \hline
+    \textbf{Speicherbedarf} & Kann zusätzlichen Speicher für die Speicherung von Ausgleichsinformationen erfordern. & Kann speichereffizient sein, aber einige Strukturen (z.B. Bloom-Filter) können eine geringe Fehlerquote aufweisen. \\
+    \hline
+    \textbf{Handhabung spezifischer Eingaben} & Kann bei bestimmten Eingabemustern schlecht abschneiden (z.B. Quicksort mit sortierten Eingaben). & Vermeidet schlechte Leistung bei bestimmten Eingaben durch Zufälligkeit. \\
+    \hline
+    \textbf{Vorhersehbarkeit} & Vorhersehbar und kann von einem Gegner ausgenutzt werden (z.B. Hash-Kollisionsangriffe). & Weniger vorhersehbar, wodurch die Wahrscheinlichkeit sinkt, dass gegnerische Eingaben zu einer Worst-Case-Leistung führen. \\
+    \hline
+    \textbf{Komplexität in der Analyse} & Einfacher zu analysieren und zu verstehen in Bezug auf Worst-Case-Verhalten. & Erfordert probabilistische Analyse, um Leistungsgarantien zu verstehen. \\
+    \hline
+    \rowcolor{orange!30}\textbf{Wesentliche Unterschiede} & & \\
+    \hline
+    \textbf{Leistungsgarantien} & Strikte Worst-Case-Leistungsgarantien. & Konzentriert sich auf erwartete durchschnittliche Leistung. \\
+    \hline
+    \textbf{Verhalten unter adversen Bedingungen} & Kann unter adversen Bedingungen erheblich nachlassen (z.B. bestimmte Hashing-Methoden). & Robuster gegenüber adversen Bedingungen aufgrund von Zufälligkeit. \\
+    \hline
+    \textbf{Implementierungskomplexität} & Kann mehr Aufwand erfordern, um eine optimale Leistung zu gewährleisten (z.B. Ausbalancierung von Bäumen). & Typischerweise einfacher zu implementieren mit guter durchschnittlicher Leistung. \\
+    \hline
+    \textbf{Anwendungsfälle} & Geeignet für Anwendungen, bei denen Worst-Case-Leistung entscheidend ist. & Ideal für Anwendungen, bei denen die durchschnittliche Leistung wichtiger ist. \\
+    \hline
+\end{longtable}
+\subsection{Skip-Lists}
+Skip-Lists sind eine Datenstruktur, die einer Linked-List sehr ähnelt. Sie baut auf der selben grundlegenden Struktur auf, erweitert diese jedoch noch zusätzlich. So haben Elemente in einer Skip-List nicht nur \texttt{next} (und eventuell \texttt{prev}) sondern auch noch \texttt{up} und \texttt{down}. \\
+Die Struktur einer Skip-List ähnelt sogesehen mehreren aufeinandergestapelten Linked-Lists. Beim Aufbau der Skip-List wird für jedes Element zufällig ausgesucht, auf wie vielen Ebenen es abgebildet ist. Dies ergibt den Vorteil, dass diese Struktur beim \texttt{insert}, \texttt{delete} und \texttt{search} eine average time complexity von $O(\log n)$ besitzt, was sie mit balanzierten Bäumen (AVLT, RBT...) vergleichbar macht. Der Vorteil von Skip-Lists über Bäume sind unter anderem, dass sie einfacherer zu implementieren sind und weniger Speicher brauchen. Die Nachteile bilden hierbei die schlechte Worst-Case Performance von $O(n)$.\\
+Skip-Lists werden oft in Datenbanken genutzt um Daten nach einer spezifierten Ordnung zu speichern, aber auch für Datensätze, die oft modifiziert werden müssen, da das anwenden von anderen Algorithmen auf Skip-Lists oft relativ einfach ist.\\
+\lstinputlisting[language=java, linerange={1-18}]{Code/SkipList.java}
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-37)[box]{37}
+        node(0-42)[box]{42}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+            \node[c,alias=2-0]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37]{37};
+            \node[box,alias=2-37]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-84)
+        (2-0) edge (2-37)
+        ;
+        
+        %\path[abc, color=codegreen]
+        %(3-0) edge (2-0)
+        %(2-0) edge (2-15)
+        %(2-15) edge (1-15)
+        %(1-15) edge (1-30);
+        \node[draw=none, codegray, right =of 0-98](elements0){$n$ Elemente};
+        \node[draw=none, codegray, above =of elements0](elements1){ca. $pn$ Elemente};
+        \node[draw=none, codegray, above =of elements1](elements2){ca. $p^2n$ Elemente};
+    \end{tikzpicture}
+    \captionof*{figure}{Example}
+\end{minipage}
+\begin{center}
+    Die Anzahl der Elemente auf einer Ebene nimmt ungefähr nach dem Schema $p^h\cdot n$ ab, wobei $p$ die Wahrscheinlichkeit und $h$ die Höhe ist. 
+\end{center}
+\newpage
+Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten des Starts) und durchläuft jedes Level in order, bis der nächste Knoten größer ist als der gesuchte Knoten / \texttt{null} ist. Dann geht er an dem Knoten nach unten und durchsucht diese Liste weiter. Dies geschieht, bis er entweder den Wert gefunden hat, in welchem Fall er den gefundenen Knoten zurück gibt, oder bis er null erreicht, was bedeutet, dass der Wert nicht in der Liste ist. 
+\lstinputlisting[language=java, linerange={19-30}]{Code/SkipList.java}
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-37)[box]{37}
+        node(0-42)[box, codegreen]{42}
+        node(0-51)[box, fill=codegreen!30]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+            \node[c,alias=2-0, codegreen]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37,codegreen]{37};
+            \node[box,alias=2-37,codegreen]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42, codegreen]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-84)
+        (2-0) edge (2-37)
+        ;
+        
+        \path[abc, color=codegreen]
+        (2-0) edge (2-37)
+        (2-37) edge (1-37)
+        (1-37) edge (1-42)
+        (1-42) edge (0-42)
+        (0-42) edge (0-51);
+    \end{tikzpicture}
+    \captionof*{figure}{Search 51}
+\end{minipage}\\[20pt]
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-37)[box]{37}
+        node(0-42)[box]{42}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0,codegreen]{-$\infty$};
+            \node[c,alias=2-0,codegreen]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15,fill=codegreen!30]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37]{37};
+            \node[box,alias=2-37]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-84)
+        (2-0) edge (2-37)
+        ;
+        
+        \path[abc, color=codegreen]
+        (2-0) edge (1-0)
+        (1-0) edge (1-15);
+    \end{tikzpicture}
+    \captionof*{figure}{Search 15}
+\end{minipage}\\[20pt]
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-37)[box,codegreen]{37}
+        node(0-42)[box]{42}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+            \node[c,alias=2-0,codegreen]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37,codegreen]{37};
+            \node[box,alias=2-37,codegreen]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-84)
+        (2-0) edge (2-37)
+        ;
+        
+        \path[abc, color=codegreen]
+        (2-0) edge (2-37)
+        (2-37) edge (1-37)
+        (1-37) edge (0-37);
+        \draw[->, thick, color=magenta] (0-37) to ++(0,-25pt);
+    \end{tikzpicture}
+    \captionof*{figure}{Search 40}
+\end{minipage}\\[20pt]
+\newpage
+Einfügen in die Skip-List ist ein wenig komplizierter, aber auch grundlegend simpel. Erst einmal muss ermittelt werden auf wie viele Ebenen der Wert hinzugefügt werden muss. Dies kann über eine vom Element abhängige Formel oder auch andere Methoden zum erzeugen einer zufälligen Zahl geschehen. Nachdem dieses Level ermittelt wurde, muss, falls notwendig die Liste um die noch nicht vorhandenen Ebenen ergänzt werden. Dies geschieht dadurch, dass man die \texttt{Head} Node nach oben erweitert, den \texttt{height}-Counter erhöht und den Head auf den neuen Head aktualisiert.\\
+Nachdem dies geschehen ist wird nun die Liste wie beim \texttt{search}-Algorithmus durchgangen um die Einfügestelle zu ermitteln. Beim Durchlauf werden zusätzlich noch die zukünftigen Vorgängerknoten in einem Array vermerkt.\\
+Nachdem werden nun die Knoten auf den bestimmten Ebenen eingefügt.
+\lstinputlisting[language=java, linerange={31-73}]{Code/SkipList.java}
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-37)[box]{37}
+        node(0-42)[box]{42}
+        node(0-45)[box,fill=codegreen!30]{45}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+            \node[c,alias=2-0]{-$\infty$};
+            \node[c,alias=3-0,fill=codegreen!30]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37]{37};
+            \node[box,alias=2-37]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b45 going above] 
+            \chainin(0-45);
+            \node[box,alias=1-45,fill=codegreen!30]{45};
+            \node[box,alias=2-45,fill=codegreen!30]{45};
+            \node[box,alias=3-45,fill=codegreen!30]{45};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2,3} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-45) (1-45) edge (1-84)
+        (2-0) edge (2-37) (2-37) edge (2-45)
+        (3-0) edge (2-0) edge (3-45)
+        ;
+    \end{tikzpicture}
+    \captionof*{figure}{Insert 45 with randomLevel = 3}
+\end{minipage}\\[20pt]
+\newpage
+Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht. Nachdem muss lediglich die Referenzen von den Vor- und Nachgängern abgeändert werden, sodass das Element selbst nichtmehr in der Liste ist. Dies muss nun lediglich nur für jede Ebene wiederholt werden.
+\lstinputlisting[language=java, linerange={74-91,105}]{Code/SkipList.java}
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-37)[box]{37}
+        node(0-42)[box]{42}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+            \node[c,alias=2-0]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b37 going above] 
+            \chainin(0-37);
+            \node[box,alias=1-37]{37};
+            \node[box,alias=2-37]{37};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1,2} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0) edge (2-0)
+        (1-0) edge (1-15) (1-15) edge (1-37) (1-37) edge (1-42) (1-42) edge (1-84)
+        (2-0) edge (2-37)
+        ;
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 30}
+\end{minipage}\\[20pt]
+\begin{minipage}{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
+        c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
+        node distance=1.5em,
+        abc/.style={<->, thick},
+        ]
+        
+        \path[abc,start chain=going right]
+        node(0-0)[c]{-$\infty$}
+        node(0-7)[box]{7}
+        node(0-15)[box]{15}
+        node(0-30)[box]{30}
+        node(0-42)[box]{42}
+        node(0-51)[box]{51}
+        node(0-76)[box]{76}
+        node(0-84)[box]{84}
+        node(0-98)[box]{98};
+        \begin{scope}[start branch=b0 going above] 
+            \chainin(0-0);
+            \node[c,alias=1-0]{-$\infty$};
+        \end{scope}
+        \begin{scope}[start branch=b15 going above] 
+            \chainin(0-15);
+            \node[box,alias=1-15]{15};
+        \end{scope}
+        \begin{scope}[start branch=b42 going above] 
+            \chainin(0-42);
+            \node[box,alias=1-42]{42};
+        \end{scope}
+        \begin{scope}[start branch=b84 going above] 
+            \chainin(0-84);
+            \node[box,alias=1-84]{84};
+        \end{scope}
+        \path foreach \X in {0,1} {(\X-0) node[left=1em, codegray]{$h=\X$}};
+        \path[abc] 
+        (1-0) edge (0-0)
+        (1-0) edge (1-15) (1-15) edge (1-42) (1-42) edge (1-84)
+        ;
+    \end{tikzpicture}
+    \captionof*{figure}{Delete 37}
+\end{minipage}\\[20pt]
+
+\newpage
+\subsection{Hash Tables}
+Hash Tables sind eine sehr effiziente Datenstruktur, die Einfügen, Löschen und Suchen in Konstanter Zeit erlaubt. Sie funktioniert dadurch, dass sie keine Datenstruktur zum Suchen durchlaufen muss, sondern anhand des gesuchten Elements eine sogennante Hash-Funktion berechnet. Diese wird dann auf die Länge der grundlegenden Array-Struktur komprimiert und als Index genutzt um ein Element einzufügen/zu finden. \\
+Zwar sind die Hash-Funktionen meist so groß, dass es sehr unwahrscheinlich ist, dass zwei Objekte den gleichen Hash-Code haben, jedoch wird dieses mit der Komprimierung schwierig. Deshalb werden bei der Implementation von Hash Tables oft verschiedene Taktiken genutzt um Double Hashing einzubinden. Die wohl bekannteste ist es den Hash Table mit einer Linked List zu implementieren. \\
+Normal sind die Aufrufe in konstanter Zeit, durch die Implementation mit Linked List verschlechtert sich dies aber im Worst-Case zu $O(n)$.
+
+\lstinputlisting[language=java, linerange={1-26}]{Code/HashTable.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        table/.style={minimum width=25pt, minimum height=15pt, draw, rectangle, anchor=south},
+        linked/.style={minimum width = 20pt, minimum height = 12.5pt, draw, rectangle, rounded corners},
+        0th/.style ={fill=red!40},
+        1st/.style ={fill=magenta!40},
+        2nd/.style ={fill=teal!40},
+        3rd/.style ={fill=codegreen!40},
+        4th/.style ={fill=yellow!40},
+        5th/.style ={fill=orange!40},
+    ]
+    \node[table](0){0};
+    \node[table, below = 0 of 0](1){1};
+    \node[table, below = 0 of 1](2){2};
+    \node[table, below = 0 of 2](3){3};
+    \node[table, below = 0 of 3](4){4};
+    \node[table, below = 0 of 4](5){5};
+
+
+    \node[linked, 0th, right =of 0](0-0){};
+    \node[linked, 0th, right =15pt of 0-0](0-1){};
+
+    \node[linked, 1st, right= of 1](1-0){};
+
+    \node[linked, 2nd, right= of 2](2-0){};
+    \node[linked, 2nd, right=15pt of 2-0](2-1){};
+    \node[linked, 2nd, right=15pt of 2-1](2-2){};
+
+    \node[linked, 3rd, right= of 3](3-0){};
+    \node[linked, 3rd, right=15pt of 3-0](3-1){};
+
+    \node[linked, 4th, right= of 4](4-0){};
+
+    \node[linked, 5th, right= of 5](5-0){};
+    \node[linked, 5th, right=15pt of 5-0](5-1){};
+    \node[linked, 5th, right=15pt of 5-1](5-2){};
+    \node[linked, 5th, right=15pt of 5-2](5-3){};
+
+    \path[->, very thick, codegreen]
+    (0) edge (0-0)
+    (1) edge (1-0)
+    (2) edge (2-0)
+    (3) edge (3-0)
+    (4) edge (4-0)
+    (5) edge (5-0)
+    ;
+
+    \path[->, thick]
+    (0-0) edge (0-1)
+
+    (2-0) edge (2-1) (2-1) edge (2-2)
+    (3-0) edge (3-1)
+
+    (5-0) edge (5-1) (5-1) edge (5-2) (5-2) edge (5-3)
+    ;
+    
+    \node[draw=none, codegray, above =0 of 0](desc){hash buckets};
+    \node[draw=none, codegray, right = 5pt of desc]{values $\rightarrow$};
+    \end{tikzpicture}
+    \captionof*{figure}{Example structure}
+\end{minipage}
+\newpage
+Einfügen, Suchen und Löschen funktionieren Prinzipiell gleich zu dem in LinkedLists, nachdem der korrekte Hash Bucket gefunden wurde.
+\lstinputlisting[language=java, firstline=27]{Code/HashTable.java}
+
+\newpage
+\subsection{Bloom Filter}
+Ein Bloom-Filter ist eine Datenstruktur, die benutzt wird um schnell herauszufinden, ob ein Element in einer Datenstruktur vorkommt. Sie ist ideal für große Datensätze, bei denen \textit{false-positives} akzeptabel sind, \textit{false-negatives} nicht. D.h. sie können zuverlässig sagen, ob ein Element vorkommt, können aber auch anschlagen, wenn ein Element nicht explizit eingefügt wurde. \\
+Bloom Filter sind sehr effizient, da sie zum einem nicht die Elemente selbst speichern, sondern nur ihre Anwesenheit, zum anderen, da das Einfügen und Auslesen auch sehr schnell ist mit $O(k)$ mit $k$ die Anzahl der Funktionen.\\
+Nachteile von Bloom Filtern sind die \textit{false-positives}, die sehr komplizierte deletion (Ein Element rauslöschen kann auch anderes rauslöschen, was \textit{false-negatives} erzeugt) und die festgelegte Größe. \\
+Sie werden häufig genutzt um Caches und Spam zu filtern, aber auch um bspw. zu schauen, ob ein Passwort häufig verwendet wird.
+\lstinputlisting[language=java, linerange={1-16}]{Code/BloomFilter.java}
+Bei diesen Beispielfunktionen, könnte man z.B. \textbf{Dance} einfügen, was aber die gleichen bits wie \textbf{Dodge} belegt. Demnach würde bei der Suche für \textbf{Dodge} ein \textit{false-positive} erzeugt werden. False-Positives werden immer wahrscheinlicher je mehr Elemente eingefügt werden und je kleiner der Bloom Filter ist. Natürlich sind sie aber auch grundlegend von den Functions, bezüglich der Komplexität, Probabilistik und Anzahl, abhängig. Diese Beispielfunktionen sind relativ schlecht, da sie simpel sind, was im Endeffekt in mehr \textit{false-positives} resultiert. Abstraktere, komplexere Funktionen funktionieren hierbei meist besser, da sie nicht an Adjezenz der Eingaben festhalten.
+\newpage
+Einfügen ist sehr simpel. Es müssen lediglich die Funktionen auf die Eingabe angewendet werden und die entsprechenden Bits danach umgestellt werden.
+\lstinputlisting[language=java, linerange={17-21}]{Code/BloomFilter.java}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+    ]
+    \matrix[array](heap){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0  & 0 \\
+    };
+        
+    \end{tikzpicture}
+    \captionof*{figure}{Before (bloomSize = 16)}
+\end{minipage}
+
+\textbf{Insert "hello":}
+\begin{itemize}
+    \item $ x_0 = "hello".length() \:\% \: 16 = 5$
+    \item $ x_1 = (int)\: 'h' = 104  \:\% \: 16 = 8$ 
+    \item $ x_2 = (int)\: 'o' = 111  \:\% \: 16 = 15$
+\end{itemize}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+        invis/.style={draw=none},
+    ]
+    \node[invis](x_1){$x_1$};
+    \node[invis, left =of x_1](x_0){$x_0$};
+    \node[invis, right =of x_1](x_2){$x_2$};
+
+    \matrix[array, below =of x_1](bloom){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 0  & 1  & 0  & 0  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 1 \\
+    };
+    \draw[->, thick, color=codegreen] (x_0) to (bloom-2-6.north);
+    \draw[->, thick, color=codegreen] (x_1) to (bloom-2-9.north);
+    \draw[->, thick, color=codegreen] (x_2) to (bloom-2-16.north);
+        
+    \end{tikzpicture}
+\end{minipage}
+\textbf{Insert "world":}
+\begin{itemize}
+    \item $ x_0 = "world".length() \:\% \: 16 = 5$
+    \item $ x_1 = (int)\: 'w' = 119  \:\% \: 16 = 7$ 
+    \item $ x_2 = (int)\: 'd' = 100  \:\% \: 16 = 4$
+\end{itemize}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+        invis/.style={draw=none},
+    ]
+    \node[invis](x_1){$x_1$};
+    \node[invis, left =of x_1](x_0){$x_0$};
+    \node[invis, right =of x_1](x_2){$x_2$};
+
+    \matrix[array, below =of x_1](bloom){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 1  & 1  & 0  & 1  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 1 \\
+    };
+    \draw[->, thick, color=orange] (x_0) to (bloom-2-6.north);
+    \draw[->, thick, color=codegreen] (x_1) to (bloom-2-8.north);
+    \draw[->, thick, color=codegreen] (x_2) to (bloom-2-5.north);
+    
+    \end{tikzpicture}
+\end{minipage}
+\newpage
+Das Durchsuchen des Bloom-Filters läuft fast identisch zum Einfügen ab. Es müssen wieder mittels der Funktionen die passenden Werte der Eingabe gefunden werden. Diese werden dann verwendet um zu schauen, ob alle benötigten Bits im Bloom-Filter vorhanden sind. Wenn alle da sind ist das Element im Bloom-Filter enthalten, allerdings kann dies auch wahr für Werte sein, die nicht explizit eingefügt wurden (false-positive).
+\lstinputlisting[language=java, linerange={22-29}]{Code/BloomFilter.java}
+\textbf{Check if "hello" exists: (true-positive)}\\
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+        invis/.style={draw=none},
+    ]
+    \node[invis](x_1){$x_1$};
+    \node[invis, left =of x_1](x_0){$x_0$};
+    \node[invis, right =of x_1](x_2){$x_2$};
+
+    \matrix[array, below =of x_1](bloom){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 1  & 1  & 0  & 1  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 1 \\
+    };
+    \draw[<-, thick, color=codegreen] (x_0) to (bloom-2-6.north);
+    \draw[<-, thick, color=codegreen] (x_1) to (bloom-2-9.north);
+    \draw[<-, thick, color=codegreen] (x_2) to (bloom-2-16.north);
+    
+    \end{tikzpicture}
+\end{minipage}
+$\implies$ Existenz im Bloom Filter\\[20pt]
+\textbf{Check if "harassed" exists: (false-positive)}\\
+\begin{itemize}
+    \item $ x_0 = "harassed".length() \:\% \: 16 = 8$
+    \item $ x_1 = (int)\: 'h' = 104  \:\% \: 16 = 8$ 
+    \item $ x_2 = (int)\: 'd' = 100  \:\% \: 16 = 4$
+\end{itemize}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+        invis/.style={draw=none},
+    ]
+    \node[invis](x_1){$x_1$};
+    \node[invis, left =of x_1](x_0){$x_0$};
+    \node[invis, right =of x_1](x_2){$x_2$};
+
+    \matrix[array, below =of x_1](bloom){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 1  & 1  & 0  & 1  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 1 \\
+    };
+    \draw[<-, thick, color=codegreen] (x_0) to (bloom-2-9.north);
+    \draw[<-, thick, color=codegreen] (x_1) to (bloom-2-9.north);
+    \draw[<-, thick, color=codegreen] (x_2) to (bloom-2-5.north);
+    
+    \end{tikzpicture}
+\end{minipage}
+$\implies$ Existenz im Bloom Filter obwohl nicht spezifisch eingefügt\\[20pt]
+\textbf{Check if "misunderstanding" exists: (true-negative)}\\
+\begin{itemize}
+    \item $ x_0 = "misunderstanding".length() \:\% \: 16 = 0$
+    \item $ x_1 = (int)\: 'm' = 109  \:\% \: 16 = 13$ 
+    \item $ x_2 = (int)\: 'g' = 103  \:\% \: 16 = 7$
+\end{itemize}
+\begin{minipage}[t]{\textwidth}
+    \centering
+    \begin{tikzpicture}[
+        array/.style={
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
+        },
+        invis/.style={draw=none},
+    ]
+    \node[invis](x_1){$x_1$};
+    \node[invis, left =of x_1](x_0){$x_0$};
+    \node[invis, right =of x_1](x_2){$x_2$};
+
+    \matrix[array, below =of x_1](bloom){
+        0  & 1  & 2  & 3  & 4  & 5  & 6  & 7  & 8  & 9  & 10 & 11 & 12 & 13 & 14 & 15\\
+        0  & 0  & 0  & 0  & 1  & 1  & 0  & 1  & 1  & 0  & 0  & 0  & 0  & 0  & 0  & 1 \\
+    };
+    \draw[<-, thick, color=magenta] (x_0) to (bloom-2-1.north);
+    \draw[<-, thick, color=magenta] (x_1) to (bloom-2-14.north);
+    \draw[<-, thick, color=codegreen] (x_2) to (bloom-2-8.north);
+    
+    \end{tikzpicture}
+\end{minipage}
+$\implies$ keine Existenz im Bloom Filter\\
+\newpage
 \end{document}

@@ -188,7 +188,7 @@ class BTree {
         }
     }
     BNode root;
-    int t;
+    final int t;
     BTree(int t) {
         root = null;
         this.t = t;

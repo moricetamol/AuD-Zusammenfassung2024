@@ -538,10 +538,6 @@ Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert w
 \newpage
 \lstinputlisting[language=Java, firstline=267]{Code/RBTree.java}
 
-
-
-
-
 \newpage
 \subsection{AVL Trees}
 Ein \textbf{A}delson-\textbf{V}elsky \textbf{L}andis Tree ist ein BST, der sich selbst balanziert um eine Höhe von $h = \log n$ zu garantieren. Er wird so definiert, \textbf{dass die Höhendifferenz von zwei Teilbäumen unter einem Knoten jeweils maximal $1$ ist}.\\
@@ -683,6 +679,7 @@ Wie bei rotate und insert, prinzipiell gleich zu den anderen Trees, aber ist nic
     \end{tikzpicture}
     \captionof*{figure}{Balanced Tree after fixup}
 \end{minipage}
+
 \newpage
 \subsection{Splay Trees}
 Splay Trees sind BSTs, die sich mit jedem Aufruf neu reorganisieren. Dies tun sie indem sie das betrachtete Element an die Wurzel verschieben. So ist der Splay Tree nicht unbedingt wie RBT und AVLT gut balanziert, jedoch besonders effektiv, wenn einige Elemente öfters gesucht werden als andere. Da diese Bäume sich nicht wirklich selbst balanzieren, sind Splay Trees ungeeignet für Fälle wo alle Werte ungefähr gleich viel gesucht werden, da im Durchschnitt mehr Zeit gebraucht wird ein Wert zu finden und diesen an die Wurzel zu verschieben als in anderen Trees.
@@ -905,6 +902,7 @@ Sieht visuell praktisch wie ein normaler BST aus.
     \end{tikzpicture}
     \captionof*{figure}{Splay biggest node in left subtree (22) and append right subtree}
 \end{minipage}
+
 \newpage
 \subsection{Binary Heap Trees}
 Im Allgemeinen ist ein Binary Heap wie folgt definiert:
@@ -952,8 +950,8 @@ Binary Heaps unterscheiden sich von den anderen hier behandelten Trees insofern,
     \centering
     \begin{tikzpicture}[
         array/.style={
-            matrix of nodes, nodes={draw, minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
-            row 1/.style={draw=none, fill=none},
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
         },
     ]
     \matrix[array](heap){
@@ -1247,8 +1245,8 @@ Für Min heap muss wieder das Gleichheitszeichen umgedreht werden.\\
     \centering
     \begin{tikzpicture}[
         array/.style={
-            matrix of nodes, nodes={draw, minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
-            row 1/.style={draw=none, fill=none},
+            matrix of nodes, nodes={draw ,minimum width = 30pt, minimum height = 15pt, fill=backcolour, anchor=center},
+            row 1/.style={nodes={draw=none, fill=none, color=codegray}},
         },
     ]
     \matrix[array](heap){
@@ -1258,7 +1256,7 @@ Für Min heap muss wieder das Gleichheitszeichen umgedreht werden.\\
     \end{tikzpicture}
     \captionof*{figure}{Extracted array}
 \end{minipage}
-
+\newpage
 \newpage
 \subsection{B-Tree}
 B-Trees (B hat keine festgelegte Bedeutung) unterscheiden sich sehr von den anderen Trees. Erstens sind sie keine Binary Trees. Ein B-Tree vom Grad $t$ wird so definiert, dass
