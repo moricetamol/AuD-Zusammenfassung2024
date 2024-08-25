@@ -538,7 +538,8 @@ Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert w
 \newpage
 \lstinputlisting[language=Java, firstline=267]{Code/RBTree.java}
 
-\newpage
+\includepdf[pages={15,19-20,133-}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
+
 \subsection{AVL Trees}
 Ein \textbf{A}delson-\textbf{V}elsky \textbf{L}andis Tree ist ein BST, der sich selbst balanziert um eine Höhe von $h = \log n$ zu garantieren. Er wird so definiert, \textbf{dass die Höhendifferenz von zwei Teilbäumen unter einem Knoten jeweils maximal $1$ ist}.\\
 Im Vergleich zu RBT ist der AVLT in der Höhe strikter. So ist die maximale Höhe im AVL $h = 1.44 \cdot \log n$, während er im RBT nur $2 \cdot \log n$. So haben AVLTs zwar die bessere Effizienz in Suchvorgängen, jedoch benötigen sie beim Insert oder Delete meist mehr Rotationen. Demnach bieten sich AVLTs eher bei Fällen an, wo mehr Suchvorgänge stattfinden im Vergleich zu den Insert/Delete Vorgängen. Muss der Baum oft modifiziert werden so bietet sich ein RBT besser an.\\
@@ -680,7 +681,7 @@ Wie bei rotate und insert, prinzipiell gleich zu den anderen Trees, aber ist nic
     \captionof*{figure}{Balanced Tree after fixup}
 \end{minipage}
 
-\newpage
+\includepdf[pages={63}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
 \subsection{Splay Trees}
 Splay Trees sind BSTs, die sich mit jedem Aufruf neu reorganisieren. Dies tun sie indem sie das betrachtete Element an die Wurzel verschieben. So ist der Splay Tree nicht unbedingt wie RBT und AVLT gut balanziert, jedoch besonders effektiv, wenn einige Elemente öfters gesucht werden als andere. Da diese Bäume sich nicht wirklich selbst balanzieren, sind Splay Trees ungeeignet für Fälle wo alle Werte ungefähr gleich viel gesucht werden, da im Durchschnitt mehr Zeit gebraucht wird ein Wert zu finden und diesen an die Wurzel zu verschieben als in anderen Trees.
 \lstinputlisting[language=Java, lastline=39]{Code/SplayTree.java}
@@ -903,7 +904,7 @@ Sieht visuell praktisch wie ein normaler BST aus.
     \captionof*{figure}{Splay biggest node in left subtree (22) and append right subtree}
 \end{minipage}
 
-\newpage
+\includepdf[pages={73,79}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
 \subsection{Binary Heap Trees}
 Im Allgemeinen ist ein Binary Heap wie folgt definiert:
 \begin{itemize}
@@ -1257,7 +1258,8 @@ Für Min heap muss wieder das Gleichheitszeichen umgedreht werden.\\
     \captionof*{figure}{Extracted array}
 \end{minipage}
 \newpage
-\newpage
+\includepdf[pages={92,94,96,101}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
+
 \subsection{B-Tree}
 B-Trees (B hat keine festgelegte Bedeutung) unterscheiden sich sehr von den anderen Trees. Erstens sind sie keine Binary Trees. Ein B-Tree vom Grad $t$ wird so definiert, dass
 \begin{itemize}
@@ -1643,4 +1645,6 @@ Prinzipiell folgt dieser Algorithmus einfach der Folge:
     Da dieser Algorithmus bereits beim Suchen den Baum umorganisiert um unnötioge Operationen zu sparen gilt zudem, dass beim Suchen, wenn die Wurzel des Unterbaums, der den Wert beinhalten muss $t - 1$ Werte besitzt und ein unmittelbares Geschwisternode mit mindestens $t$ Werten besitzt, man einen Wert vom Parent in den Knoten tut und diesen mit dem Wert aus dem Geschwisternode ersetzt.\\
     Wenn beide Nodes, also die Wurzel des Unterbaumes und die Geschwisternode $t - 1$ Werte haben, verbinde sie.
 \end{minipage}
+\includepdf[pages={114,121,130}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
+
 \end{document}

@@ -94,7 +94,7 @@ Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Sta
     \end{tikzpicture}
     \captionof*{figure}{Push}
 \end{minipage}
-\newpage
+\includepdf[pages={9,14}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/03BasicDataStructures.pdf}
 \subsection{Queues}
 Queues funktionieren entgegengesetzt zu Stacks. Sie funktionieren nach dem FIFO-Prinzip (First in - First out). Kann als Warteschleife dargestellt werden. Die Person, die sich als erstes anstellt, kommt auch als erstes dran.
 Queues werden normalerweise mit den folgenden Funktionen erstellt:
@@ -206,7 +206,7 @@ Hier ist die Implementation für Queues wie folgt:
     \includegraphics[scale=0.5]{Pics/CyclicQueue.png}
     \captionof*{figure}{Cyclic Queue}
 \end{minipage}
-\newpage
+\includepdf[pages={35,37}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/03BasicDataStructures.pdf}
 \subsection{Linked List}
 Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer einen Wert und eine Referenz auf das nächste Element in der Liste haben. Diese Struktur hat den Vorteil, dass sie keine festgelegte Größe hat, das Einfügen in $O(1)$ stattfindet, einfach zu implementieren ist und im Speicher nicht als Block, sondern einzelne Referenzen steht. Eine einfache Linked List kann wie folgt implementiert werden:
 
@@ -313,7 +313,7 @@ Die 3 Node wird zwar nicht wirklich "gelöscht", allerdings wird die Referenz au
     \captionof*{figure}{Insert of 8}
 \end{minipage}
 8 wird an tail angehängt und wird dann zum tail
-\newpage
+\includepdf[pages={22,23,25,26,27}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/03BasicDataStructures.pdf}
 \subsection{Binary Search Tree}
 Ein Binary Search Tree ist eine Datenstruktur, die aus mehreren Nodes besteht, die jeweils pointer zu drei Nodes besitzt: Left, Right und Parent. \\
 Hierbei repräsentiert Left und Right die Nodes, die unter der current Node stehen und Parent die, die über der current Node steht. Dabei ist im Binary Search Tree (Im Gegensatz zum normalen Search Tree) Left immer kleiner als die Node und Right immer größer gleich der Node. \\
@@ -674,4 +674,6 @@ Leaves werden gelöscht, Half-Leaves durch Kind ersetzt, Complete Node durch Nac
     \end{tikzpicture}
     \captionof*{figure}{Worst-Case unbalanzierter BST($h = n$)}
 \end{minipage}
+\includepdf[pages={47,51,70,71,75,79}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/03BasicDataStructures.pdf}
+
 \end{document}

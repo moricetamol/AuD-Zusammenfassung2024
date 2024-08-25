@@ -232,7 +232,7 @@ Grün ist das momentan betrachte Element/Bereich. Magenta der Einfügepunkt des 
         \item Nach der quadratischen Steigerung für große Zahlen ist die Hälfte aber irrelevant, weswegen $\Theta(n^2)$ ist.
     \end{itemize}
 \end{itemize}
-\newpage
+\includepdf[pages={10}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/02Sorting.pdf}
 
 \subsection{Bubble Sort}
 \lstinputlisting[language=Java]{Code/BubbleSort.java}
@@ -439,7 +439,7 @@ Pfeile repräsentieren Bewegung über eine Iteration, nicht einzelne Schritte. G
         \item Die Komplexität beträgt also $\Theta(n^2)$
     \end{itemize}
 \end{itemize}
-\newpage
+\includepdf[pages={50}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/02Sorting.pdf}
 \subsection{Merge Sort}
 \lstinputlisting[language=Java]{Code/MergeSort.java}
 \subsubsection{Vorgehensweise}
@@ -722,7 +722,7 @@ Dieses Prinzip wird auch \textit{Divide-and-Conquer} genannt. Bei \textit{Divide
         \item Wie oben, für alle Fälle gleich, also $\Theta(n\log n)$ 
     \end{itemize}
 \end{itemize}
-\newpage
+\includepdf[pages={53,55}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/02Sorting.pdf}
 \subsection{Quicksort}
 \lstinputlisting[language=Java]{Code/Quicksort.java}
 Quicksort funktioniert vom Prinzip ähnlich zu Mergesort. Auch hier wird die Eingabe in zwei Teillisten aufgeteilt und der rekursiv wiederholt. Hier findet die Sortierung allerdings anders statt. Anstatt die Sortierung durch die Zusammenführung zweier Listen zu realisieren, werden hier die einzelnen Elemente anhand des Vergleiches an einem anderen Elementes links oder rechts von diesem eingeordnet. Dies führt durch das \textit{Divide-and-Conquer} Prinzip dazu, dass die Eingabe die Element in die zwei Teile, größer und kleiner des Pivots einordnet. Diese beiden Teile werden dann wiederum genauso behandelt, bis schließlich der gesamte array1 geordnet ist.\\
@@ -972,7 +972,7 @@ Quicksort ist zwar in der Theorie in den meisten Situationen nicht unbedingt bes
         \item Dies bedeutet eine Average-Case Laufzeit von $\Theta(n\log n)$
     \end{itemize}
 \end{itemize}
-\newpage
+\includepdf[pages={89}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/02Sorting.pdf}
 \subsection{Radix Sort}
 
 \lstinputlisting[language=Java]{Code/RadixSort.java}
@@ -1117,4 +1117,6 @@ Die Farben haben keine spezielle Bedeutung und dienen nur der Visualisierung.
     \item Wenn man zusätzlich noch $d$ als konstant ansieht so ergibt sich lineare Laufzeit $O(n)$
     \item \color{magenta} Nähert sich $D$ $n$ an, so ergibt sich allerdings eine Laufzeit von $O(n \log n)$, da $d = \Theta(\log_D n)$ gilt.
 \end{itemize}
+\includepdf[pages={143}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/02Sorting.pdf}
+
 \end{document}
