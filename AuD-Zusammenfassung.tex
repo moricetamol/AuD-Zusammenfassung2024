@@ -1,27 +1,26 @@
-\documentclass[ngerman,
+\documentclass[
+ngerman,
 color=3b,
-% dark_mode, 
 load_common, % Loads a list of commonly used Packages
 boxarc,
 main,
-% manual_term,
-% solution=true,
 tikz,
 border=3mm
 ]{article}
 
-\usepackage[]{pdfpages}
-\usepackage{subfiles}
-\usepackage{xr-hyper}
+\usepackage[]{pdfpages} % To include pdf files
+\usepackage{subfiles} % To split big projects into smaller files for faster compilation
+\usepackage{xr-hyper} 
 %\usepackage{standalone}
 \usepackage{lmodern}
-\usepackage{multicol}
+\usepackage{multicol} % To make multiple columns on one page
 
+\usepackage{tcolorbox}
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage[table,xcdraw,svgnames]{xcolor}
-\usepackage{amsmath,amsfonts,amsthm,amssymb} %Math & symbols
+\usepackage[table,xcdraw,dvipsnames,svgnames]{xcolor} % More colours
+\usepackage{amsmath,amsfonts,amsthm,amssymb} % Math & symbols
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref} % For hyperlinks, automatically created for table of contents
 \usepackage{longtable}
@@ -40,7 +39,7 @@ border=3mm
 %-----------------------------------
 % Algorithms
 %-----------------------------------
-\usepackage{listings}
+\usepackage{listings} % Mostly for actual code
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
 \definecolor{codepurple}{rgb}{0.58,0,0.82}
@@ -73,23 +72,38 @@ border=3mm
 \usepackage[
     linesnumbered,
     lined,
+    ruled,
+    vlined,
     %boxed,
     commentsnumbered,
-    ]{algorithm2e}%Algortihms
+    ]{algorithm2e}% Mostly Pseudocode
     
 \SetAlgoNlRelativeSize{-1}
 
+
+
 \usepackage{algpseudocode}
 \usepackage{algorithmicx}
+\newcommand\mycommfont[1]{\small\ttfamily\textcolor{codegreen}{#1}}
+\SetCommentSty{mycommfont}
 
-\SetKw{KwContinue}{\color{blue}continue}
-\SetKw{KwBreak}{\color{red}break}
+\SetKw{KwFalse}{\color{magenta}false}
+\SetKw{KwTrue}{\color{magenta}true}
+\SetKw{KwRet}{\color{magenta}return}
+\SetKw{KwContinue}{\color{magenta}continue}
+\SetKw{KwBreak}{\color{magenta}break}
 \SetKw{KwDownTo}{down to}
-\SetKw{KwAnd}{\color{teal}and}
-\SetKw{KwOr}{\color{teal}or}
+\SetKw{KwAnd}{\color{magenta}and}
+\SetKw{KwOr}{\color{magenta}or}
 \SetKw{KwError}{\color{red}error}
-\SetKwProg{Fn}{\color{MediumSeaGreen}Function}{:}{}
-\SetKwProg{Cl}{\color{MediumSeaGreen}Class}{:}{}
+\SetKw{KwNil}{\color{magenta}NIL}
+\SetKw{KwPrint}{\color{magenta}print}
+\SetKwFor{For}{\color{magenta}For}{\color{magenta}do}{\color{magenta}end}
+\SetKwFor{ForEach}{\color{magenta}ForEach}{\color{magenta}do}{\color{magenta}end}
+\SetKwFor{While}{\color{magenta}While}{\color{magenta}do}{\color{magenta}end}
+\SetKwIF{If}{ElseIf}{Else}{\color{magenta}If}{\color{magenta}then}{\color{magenta}Else If}{\color{magenta}Else}{\color{magenta}end}
+\SetKwProg{Fn}{\color{magenta}Function}{:}{}
+\SetKwProg{Cl}{\color{magenta}Class}{:}{}
 
 %-----------------------------------
 % Trees, Skip-Lists etc.
@@ -111,7 +125,6 @@ border=3mm
 \usepackage[hang, small,labelfont=bf,up,textfont=it,up,labelformat=empty]{caption}
 % \captionsetup[figure]{name=Skip-List}
 
-\usepackage{caption}
 \usepackage[]{sectsty}
 \usepackage{titlesec}
 %------------------------
