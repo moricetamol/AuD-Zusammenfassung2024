@@ -199,4 +199,41 @@ Die Berechnung der Konstanten ist allerding ein klein wenig komplizierter, da es
     \item Da hier für alle $n > 0$ der mittlere Term positiv ist, kann man $n_0 = 1$ wählen. 
     \item Dadurch erhalten wir $c_1 \leq 5 + \frac{2}{1} = 7 \leq c_2$, wodurch man hier die Konstanten dann z.B. $c_1 = 7$ und $c_2 = 7$ für $n_0 = 1$ auswählen kann.
 \end{itemize}
+
+\newpage
+\subsection{Rekursiongleichungen}
+Im Allgemeinen wird $T(n)$ als die maximale Anzahl von Schritten für Eingaben der Größe n angenommen. \\
+So gilt als allgemeine Form für Rekursiongleichungen: 
+\begin{center}
+    $T(n) = a\cdot T(\frac{n}{b}) + f(n)$\\
+    mit a $\geq 1$ und b $> 1$ und $f(n)$ asymptotisch positiv.
+\end{center}
+Dies ist so anzunehmen, dass das Problem in $a$ Teilprobleme der Größe $\frac{n}{b}$ aufgeteilt wird.\\
+Demnach benötigt das Lösen jedes Teilproblems immer $T(\frac{n}{b})$ Zeit\\
+Die Funktion f(n) umfasst hierbei dann die Kosten der anderen Operation wie Aufteilen und Zusammenfügen.
+\subsubsection{Mastertheorem}
+Das Mastertheorem bietet eine einfache Weise an die Laufzeit von verschiedene Rekursionsgleichungen abzuschätzen. Dabei wird die oben genannte Form vorrausgesetzt. \\
+So gibt es im Mastertheorem grundsätzlich drei verschiedene Fälle:
+\begin{enumerate}
+    \item $f(n) = O(n^{log_b a-\epsilon})$ für ein $\epsilon > 0$\\
+    Wenn f(n) polynomiell kleiner ist als $n^{\log_b a}$
+    \begin{itemize}
+        \item Hier ist die Rekursion wichtiger als die sonstigen Operationen. 
+        \item Demnach: $T(n) = \Theta(n^{log_b a})$
+    \end{itemize}
+    \item $f(n) = \Theta(n^{log_b a})$\\
+    Wenn f(n) und $n^{\log_b a}$ gleiche Größenordnung haben
+    \begin{itemize}
+        \item Hier tragen Rekursion und sonstige Operationen die selbe Signifikanz 
+        \item Demnach: $T(n) = \Theta(n^{log_b a}\cdot \log n)$
+    \end{itemize}
+    \item $f(n) = \Omega(n^{log_b a+\epsilon})$ für ein $\epsilon > 0$\\
+    Wenn f(n) polynomiell größer ist als $n^{\log_b a}$
+    \begin{itemize}
+        \item Hier sind die anderen Operationen dominanter.
+        \item (Unter der Bedingung: $a\cdot f(\frac{n}{b})\leq c \cdot f(n)$ für ein $c < 1$)\\
+        (Anders: Der rekursive Teil der Funktion $a\cdot f(\frac{n}{b})$ ist proportional, aber kleiner als der nicht-rekursive Teil $f(n)$. Skalar von c < 1 impliziert ähnlichen, aber kleineren Wachstum für n \rightarrow $\infty$)
+        \item Demnach: $T(n) = \Theta(n^{log_b a})$
+    \end{itemize}
+\end{enumerate}
 \end{document}
