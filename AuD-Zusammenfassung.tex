@@ -1,7 +1,6 @@
 \documentclass[
 ngerman,
 color=3b,
-load_common, % Loads a list of commonly used Packages
 boxarc,
 main,
 tikz,
@@ -110,14 +109,15 @@ border=3mm
 %-----------------------------------
 \usepackage{tikz}
 \usepackage{tkz-graph}
-\usetikzlibrary{matrix}
-\usetikzlibrary{backgrounds}
-\usetikzlibrary{positioning}
-\usetikzlibrary{trees}
-\usetikzlibrary{shapes.geometric}
-\usetikzlibrary{calc}
-\usetikzlibrary{arrows}
-\usetikzlibrary{chains}
+\usetikzlibrary{matrix,
+                backgrounds,
+                positioning,
+                trees,
+                shapes.geometric,
+                calc,
+                arrows,
+                chains,
+}
 
 %-------------------------------------
 % Captions
@@ -150,7 +150,6 @@ border=3mm
 \usepackage{titling}
 \newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
 \newcommand{\TitleRule}{\color{codegreen} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
-%\newcommand{\TitleRule}{\color{Green} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt]}
 \newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
 
 \pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{Black}} % Horizontal rule before the title
@@ -206,14 +205,11 @@ border=3mm
 ]
 \tableofcontents
 \end{multicols*}
-
 \newpage
 
 \subfile{Sections/2 Was ist ein Algorithmus/2 Algorithmen.tex}
-
 \newpage
 \subfile{Sections/3 Laufzeitanalyse/3 Laufzeitanalyse.tex}
-
 \newpage 
 \subfile{Sections/4 Sortieren/4 Sortieren.tex}
 \newpage
@@ -226,4 +222,6 @@ border=3mm
 \subfile{Sections/8 Graphen Algorithmen/8 Graphen Algorithmen.tex}
 \newpage
 \subfile{Sections/9 Advanced Design/9 Advanced Design.tex}
+\newpage
+\subfile{Sections/10 Nichtdeterministische Polynomialzeit/10 Nichtdeterministische Polynomialzeit.tex}
 \end{document}

@@ -1773,7 +1773,6 @@ Dijkstras Algorithmus funktioniert zwar auch für zyklische Graphen, jedoch hat 
         }
     }
 \end{algorithm}
-
 \subsubsection{A* Algorithmus}
 Der A* Algorithmus ist eine abgewandelte Version des Dijkstra Algorithmus. Dabei geht der Algorithmus auf das Problem ein, dass der Dijkstra Algorithmus den lokal gesehenen günstigsten Schritt sucht, dabei aber die Zielrichtung ignoriert, was zu überflüssigen Operationen führen kann.\\
 Ist in der Praxis oft schneller als Dijkstra, hat aber den selben Nachteil, dass er nicht mit negativen Kanten klarkommt. Zusätzlich ist die Spacial complexity schlechter als Dijkstra, wegen der zusätzlichen heuristic.\\
@@ -1857,7 +1856,7 @@ Im Restkapazitätsgraph ist es nun also so, dass wenn eine Kante von einem Knote
             $c_{f}$(p) = min\{$c_f$(u,v) : (u,v) \in p\}; \tcp{Minimum of all flow values on the path}
             \tcp{Changes the flow values on the path}
             \ForEach{e in p}{
-                \tcp{If edge e in p \rightarrow total flow, else remaining capacity}
+                \tcp{If edge e in E \rightarrow total flow, else remaining capacity}
                 \If{e in E}{
                     e.flow += $c_{f}$(p); \tcp{Add minimal flow to edge}
                 }

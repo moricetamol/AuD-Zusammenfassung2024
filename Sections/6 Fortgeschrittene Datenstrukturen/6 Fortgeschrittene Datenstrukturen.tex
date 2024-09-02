@@ -21,7 +21,7 @@ Die Regeln sind:
 \begin{center}
     $\implies$ Hat ein Knoten nur ein Kind, so muss dieses Kind Rot sein, ansonsten ist die Anzahl an schwarzen Knoten auf dem Pfad unterschiedlich zu den anderen Pfaden.
 \end{center}
-Der Vorteil von RBT zu BST ist, dass während ein BST unausgewogen sein kann, was in einem Worst-Case von $h = n$ resultiert, im RBT durch die Regeln eine maximale Höhe von $h = \log n$ sichergestellt, was die Worst-Case Laufzeit der Algorithmen deutlich verbessert.
+Der Vorteil von RBT zu BST ist, dass während ein BST unausgewogen sein kann, was in einem Worst-Case von $h = n$ resultiert, im RBT durch die Regeln eine maximale Höhe von $h = 2\cdot \log (n + 1)$ sichergestellt, was die Worst-Case Laufzeit der Algorithmen deutlich verbessert.
 \lstinputlisting[language=Java, lastline=22]{Code/RBTree.java}
 \begin{minipage}[t]{0.5\textwidth}
     \centering
@@ -539,10 +539,9 @@ Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert w
 \lstinputlisting[language=Java, firstline=267]{Code/RBTree.java}
 
 \includepdf[pages={15,19-20,133-}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
-
 \subsection{AVL Trees}
 Ein \textbf{A}delson-\textbf{V}elsky \textbf{L}andis Tree ist ein BST, der sich selbst balanziert um eine Höhe von $h = \log n$ zu garantieren. Er wird so definiert, \textbf{dass die Höhendifferenz von zwei Teilbäumen unter einem Knoten jeweils maximal $1$ ist}.\\
-Im Vergleich zu RBT ist der AVLT in der Höhe strikter. So ist die maximale Höhe im AVL $h = 1.44 \cdot \log n$, während er im RBT nur $2 \cdot \log n$. So haben AVLTs zwar die bessere Effizienz in Suchvorgängen, jedoch benötigen sie beim Insert oder Delete meist mehr Rotationen. Demnach bieten sich AVLTs eher bei Fällen an, wo mehr Suchvorgänge stattfinden im Vergleich zu den Insert/Delete Vorgängen. Muss der Baum oft modifiziert werden so bietet sich ein RBT besser an.\\
+Im Vergleich zu RBT ist der AVLT in der Höhe strikter. So ist die maximale Höhe im AVL $h = 1.44 \cdot \log (n + 2)$, während er im RBT nur $2 \cdot \log n$. So haben AVLTs zwar die bessere Effizienz in Suchvorgängen, jedoch benötigen sie beim Insert oder Delete meist mehr Rotationen. Demnach bieten sich AVLTs eher bei Fällen an, wo mehr Suchvorgänge stattfinden im Vergleich zu den Insert/Delete Vorgängen. Muss der Baum oft modifiziert werden so bietet sich ein RBT besser an.\\ Die minimale Anzahl an Knoten in einem AVL-Tree mit Höhe h ergibt sich durch die rekursive Fibonaci-Gleichung: $N(h) = N(h - 1) + N(h - 2) + 1$ mit $N(0) = 1$ und $N(1) = 2$. (Root hat Maximalhöhe, Blätter sind h = 0)\\
 \lstinputlisting[language=Java, lastline=22]{Code/AVLTree.java}
 Visuell gleich zu einem Best-Case ausgewogenen BST. \\
 \begin{minipage}[t]{0.5\textwidth}
@@ -1259,7 +1258,6 @@ Für Min heap muss wieder das Gleichheitszeichen umgedreht werden.\\
 \end{minipage}
 \newpage
 \includepdf[pages={92,94,96,101}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
-
 \subsection{B-Tree}
 B-Trees (B hat keine festgelegte Bedeutung) unterscheiden sich sehr von den anderen Trees. Erstens sind sie keine Binary Trees. Ein B-Tree vom Grad $t$ wird so definiert, dass
 \begin{itemize}
@@ -1270,6 +1268,7 @@ B-Trees (B hat keine festgelegte Bedeutung) unterscheiden sich sehr von den ande
     \item Jeder innere Knoten mit m Werten hat m + 1 Kinder \\ $\implies$ für alle Werte $k_j$ in j-ten Kind gilt: $k_0 \leq key[0] \leq k_1 \leq key[1] \leq \ldots \leq key[m-1] \leq k_m $
 \end{itemize}
 Ein B-Tree kann somit in einem Knoten mehr als einen Wert und mehr als zwei Kinder besitzen. B-Trees balanzieren sich zudem auch selber, wodurch sie sehr effektiv Operationen in logarithmischer Laufzeit ausführen. Zudem ist durch die Anzahl der Werte die in einem Knoten gespeichert werden können und die Anzahl an Kinder die ein Knoten haben kann die Höhe des Baumes deutlich niedriger. B-Trees bieten sich so sehr für Disk-Based Operationen an, da sie die Anzahl an Disk-Access reduziert im Vergleich zu anderen Trees. Sie bieten sich also besonders für sehr große Datenbanken auf Festplatten an, sind aber im Vergleich zu den anderen Trees bei kleineren Eingaben weniger effizient.
+Die maximale Höhe von B Trees ist $ h = \leq \log_t(\frac{n + 1}{2})$.
 \lstinputlisting[language=Java, linerange={1-7, 189-195}]{Code/BTree.java}
 \begin{minipage}[t]{\textwidth}
     \centering
@@ -1646,5 +1645,4 @@ Prinzipiell folgt dieser Algorithmus einfach der Folge:
     Wenn beide Nodes, also die Wurzel des Unterbaumes und die Geschwisternode $t - 1$ Werte haben, verbinde sie.
 \end{minipage}
 \includepdf[pages={114,121,130}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/04AdvancedDataStructures.pdf}
-
 \end{document}
