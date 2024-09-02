@@ -99,7 +99,11 @@ Die Fourier-Transformation bei Polynomen geht nach dem folgenden Schema:\\
     \item Nun können wir Werte $x_j$ nutzen, so dass $x_j^2 = x_{j+n}^2$ für alle $j = 0, 1, \ldots, n - 1$ und $x_j \not= x_{j+n}$.\\
     Somit müssen $p_{odd}$ und $p_{even}$ vom Grad $\frac{n-2}{2} = \frac{n}{2} - 1$ nur an n Stellen $x_0^2, x_1^2, \ldots, x_{n-1}^2$ gewertet werten. Demnach ist die Problemgröße halbiert und das Divide and Conquer Prinzip kann angewendet werden.
 \end{enumerate}
-
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale = 0.49]{Pics/PolyMultGraph1.png}
+    \includegraphics[scale = 0.5]{Pics/PolyMultGraph2.png}
+\end{figure}
 \begin{algorithm}[H]
     \SetKwFunction{poly}{polyFFT}
     \tcp{Complexity: $\Theta(n \log n)$}
@@ -134,7 +138,8 @@ Die Fourier-Transformation bei Polynomen geht nach dem folgenden Schema:\\
     }
 \end{algorithm}
 Die Punkt/Wert Darstellung kann prinzipiell wie folgt dargestellt werden, wo x die Polynome für jedes $x_j$ beinhaltet, p die Koeffizenten und y die Werte. Dabei werden in dem Ergebnis des Algorithmus die Koeffizienten ausgelassen.
-\[\begin{pmatrix}
+\[
+\begin{pmatrix}
     1 & x_0 & \ldots & x_0^{n-1} \\
     1 & x_1 & \ldots & x_1^{n-1} \\
     \vdots & \vdots & \ddots & \vdots \\
@@ -179,7 +184,7 @@ Nun muss noch der letzte Schritt der Fourier Transformation auf Polynommultiplik
 \]\\
 Dies bedeutet also, dass wir um von der Punkt/Wert Darstellung in die Koeffizientendarstellung umzuwandeln lediglich die Inverse der Punkte mit den Werten multiplizieren müssen.
 
-\begin{algorithm}
+\begin{algorithm}[H]
     \SetKwFunction{pointkey}{pointKeyIFFT}
     \SetKwFunction{iwrap}{IFFTWrapper}
     \tcp{p: Array of coefficients, Wrapper for IFFT for initial call, also renorms the result}
@@ -222,13 +227,182 @@ Dies bedeutet also, dass wir um von der Punkt/Wert Darstellung in die Koeffizien
 \includepdf[pages={26-33}, pagecommand={},nup=2x4, frame=true, scale=0.95]{./VL Folien/07AdvancedDesigns.pdf}
 
 \subsection{Backtracking}
-
+Das grundlegende Prinzip vom Backtracking besteht darin für ein Problem zuerst die Lösung x = ($x_1, x_2, \ldots, x_n$) durch Trial-and-Error zu finden, indem die Teillösung ($x_1, x_2, \ldots, x_{i-1}$) von $x_i$ ergänzt wid, bis die Gesamtlösung erreicht wir, oder nicht erreichbar ist, wodurch $x_{i-1}$ aus der Teillösung entfernt wird.\\
+Als Beispiel hierfür kann man zum Beispiel einen Algorithmus zum lösen von Sodoku nehmen. Dieser geht eine mögliche Lösung durch, bis er einen Widerspruch gegen die Regeln endeckt, an welchem Punkt er einen Schritt zurückgeht und eine andere Lösung sucht.\\
+\begin{algorithm}[H]
+    \SetKwFunction{SolveSudoku}{SolveSudoku}
+    \SetKwFunction{isFull}{isFull}
+    \SetKwFunction{findEmpty}{findEmpty}
+    \SetKwFunction{isAdmiss}{isAdmissable}
+    \tcp{Assumes 9x9 board, but can be easily modified}
+    \Fn{\SolveSudoku{board}}{
+        \tcp{Base-Case - If board is full the solution is valid}
+        \If{\isFull{board}}{
+            \KwPrint{board}\;
+        }
+        \Else{
+            (i,j) = \findEmpty{board}; \tcp{Finds the next empty spot on the board}
+            \For{v = 1 \KwTo 9}{
+                \If{\isAdmiss{board, i, j, v}}{
+                    board[i][j] = v\;
+                    \SolveSudoku{board}\;
+                }
+            }
+            board[i][j] = 0; \tcp{Backtracks if no admissable value is found}
+        }
+    }
+\end{algorithm}
 
 \newpage
 \subsection{Dynamic Programming}
-
-
+Das Prinzip des dynamischen Programmierens ist im Grunde ähnlich zu Divide \& Conquer, indem es ein Problem in Teilprobleme aufteilt und diese dann rekursiv löst. Allerdings ist es hier möglich, dass die Teilprobleme überlappen. Dies führt dazu, dass in der Rekursion das selbe Probleme mehrmals behandelt werden kann. Dies wird oft durch Prozesse wie Memoization verbessert, bei der die Lösung des Problems gespeichert wird, sodass es falls es wieder auftritt schneller gelöst werden kann.\\
+Als Beispiel für dieses Konzept kann beispielsweise die Fibonacci-Folge verwendet werden.\\
+\subsubsection{Fibonacci}
+\begin{algorithm}[H]
+    \SetKwFunction{fib}{FibonacciRecursive}
+    \tcp{Complexity: $\Theta(2^n)$}
+    \tcp{Assumes n >= 1}
+    \Fn{\fib{n}}{
+        \If{n <= 2}{
+            \KwRet{1}\;
+        }
+        \Else{
+            \KwRet{\fib{n-1} + \fib{n-2}}\;
+        }
+    }
+\end{algorithm}
+Hier wird noch nicht Memoization verwendet, weshalb dieser Algorithmus relativ langsam ist.\\
+\begin{algorithm}[H]
+    \SetKwFunction{fibm}{FibonacciMemo}
+    \SetKwFunction{fibr}{FibRecMemo}
+    \tcp{Assumes n >= 1}
+    \Fn{\fibm{n}}{
+        F = new Array(n); \tcp{Creates new array that stores the results of the function for each n at i - 1}
+        \For{i = 0 \KwTo n - 1}{
+            F[i] = 0\;
+        }
+        \KwRet{\fibr{n - 1, F}}\;
+    }
+    \tcp{Complexity: $\Theta(n)$}
+    \tcp{Assumes i >= 0}
+    \Fn{\fibr{i, F}}{
+        \tcp{If i already has a result in F, return it}
+        \If{F[i] != 0}{
+            \KwRet{F[i]}\;
+        }
+        \tcp{If i is 0 or 1, return 1 - Base-Case}
+        \If{i <= 1}{
+            f = 1\;
+        }
+        \Else{
+            f = \fibr{i - 1, F} + \fibr{i - 2, F}; \tcp{Recursively call \fibr for i - 1 and i - 2}
+        }
+        F[i] = f; \tcp{Add result to F}
+        \KwRet{f}\;
+    }
+\end{algorithm}
+Durch die Nutzung von Memoization hat sich die Komplexität deutlich verbessert von $\Theta(2^n)$ auf $\Theta(n)$.
 \newpage
-\subsection{Greedy Algorithms}
+\subsubsection{Minimum Edit Distance}
+Ein anderes Beispiel ist der Minimum-Edit-Distance Algorithmus. Dieser misst die Ähnlichkeit von Texten auf, wie viele Operationen nötig sind um Texte ineinander überzuführen. Die Operationen sind dabei:
+\begin{itemize}
+    \item \textbf{Insertion:} \texttt{ins(S,i,b)} fügt an Position i den Buchstaben b in String s ein
+    \item \textbf{Deletion:} \texttt{del(S,i)} entfernt das Zeichen an Position i in String s
+    \item \textbf{Substitution:} \texttt{sub(S,i,b)} ersetzt das Zeichen an Position i in String s durch den Buchstaben b
+\end{itemize}
+Der Algorithmus funktioniert hierbei so, dass er den String X[1\dots m] von links nach rechts schrittweise in String Y[1\dots n] umwandelt. Demnach ist X[1\dots i] bereits in Y[1\dots j] umgewandelt.
 
+\begin{algorithm}
+    \SetKwFunction{edit}{MinEditDistance}
+    \SetKwFunction{minia}{min}
+    \tcp{Complexity: $\Theta(m \cdot n)$}
+    \tcp{X[1\dots m], Y[1\dots n]: Strings, m, n: length of strings}
+    \Fn{\edit{X, Y, m, n}}{
+        D = new 2DArray(m,n);\tcp{D[i][j]: minimal amount of operations to transform the first i chars of X to the first j chars of Y}
+        \For{i = 0 \KwTo m}{
+            D[i][0] = i; \tcp{First Row represents case that Y is empty: To transform the first i chars of X to an empty string, we need to delete them with i operatio ns}
+        }
+        \For{j = 0 \KwTo n}{
+            D[0][j] = j\; \tcp{First Column represents case that X is empty: To transform an empty string to the first j chars of Y, we need to insert them with j operations}
+        }
+        \For{i = 1 \KwTo m}{
+            \For{j = 1 \KwTo n}{
+                \tcp{If the chars are equal, no operations are needed}
+                \If{X[i] == Y[j]}{
+                    s = 0\;
+                }
+                \Else{
+                    s = 1\;
+                }
+                \tcp{There are now 3 possible operations: 1. Insertion, 2. Deletion, 3. Substitution. We now choose the option with the lowest cost and assign it}
+                \tcp{For Substitution, the cost is dependant on D[i - 1][j - 1] plus the cost s of the operation}
+                \tcp{For Deletion, the first i-1 chars of X need to be transformed to the first j chars of Y. Thus the cost is D[i - 1][j] + 1}
+                \tcp{For Insertion, the first i chars of X need to be transformed to the first j-1 chars of Y. Thus the cost is D[i][j - 1] + 1}
+                D[i][j] = \minia{D[i - 1][j - 1] + s, D[i - 1][j] + 1, D[i][j - 1] + 1}\;
+            }
+        }
+        \KwRet{D[m][n]}\;
+    }
+\end{algorithm}
+\includepdf[pages={60-67}, pagecommand={},nup=2x4, frame=true, scale=0.9]{./VL Folien/07AdvancedDesigns.pdf}
+\subsection{Greedy Algorithms}
+Das Prinzip des Greedy Algorithmus geht danach zuerst eine Lösung $x = (x_1,x_2,\ldots,x_n)$ zu finden indem man der Teillösung $(x_1,x_2,\ldots,x_{i-1})$ mit $x_i$ ergänzt. Hierbei ist $x_i$ der Teil, der Lokal am günstigsten erscheint.\\
+Hierzu gehören beispielsweise Dijkstras und Prims Algorithmus, die für jede Iteration immer den Knoten auswählt, der in dieser Iteration die kürzeste Distanz hat, oder Kruskals Algorithmus, der in jeder Iteration immer die leichteste Kante in dieser Iteration auswählt. Das Problem bei diesen Algorithmen ist aber, dass sie nicht immer die optimale Lösung finden, da sie lokal über global nehmen. 
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale = 0.6]{Pics/DijkstraWrong.png}
+\end{figure}
+\subsubsection{Traveling Salesperson Problem (TSP)}
+Im Folgenden wird nun ein Algorithmus zum Lösen des Traveling Salesperson Problems behandelt.\\
+Das Traveling Salesperson Problem ist wie folgt definiert:\\
+Gegeben sei ein vollständiger (Jeder Knoten hat Kante zu jedem anderen Knoten) ungerichter Graph G = (V,E) mit Kantengewichten w. Auf diesem Graphen soll nun einen Pfad mit minimalen Kantengewicht finden, der bis auf Start- und Endknoten ($v_0 = v_{i+1}$, Start = Ende) jeden Knoten genau einmal besucht, dieser Pfad wird \textbf{Tour} genannt.\\
+Der Ansatz für den Greedy Algorithmus hier ist es für den momentanen Knoten immer die leichteste Kante zu einem noch nicht besuchten Knoten zu nehmen. Dies wird dann solange wiederholt bis alle Knoten besucht sind, woraufhin dann zum Startknoten zurückgekehrt wird.\\
+\begin{algorithm}[H]
+    \SetKwFunction{grtsp}{greedyTSP}
+    \SetKwFunction{exmin}{extractMin}
+    \tcp{G: Graph with (V,E), s: startingnode, w: weight function}
+    \Fn{\grtsp{G,s,w}}{
+        \ForEach{v in V}{
+            v.color = WHITE; \tcp{Initialize all nodes to WHITE = not visited}
+        }
+        tour = new Array(n); tour[0] = s; tour[0].color = GREY; \tcp{Initialize tour array, add start and set start to visited}
+        \For{i = 1 \KwTo n - 1}{
+            tour[i] = \exmin{adj(tour[i-1])}; \tcp{Choose next node by smallest edge}
+            tour[i].color = GREY; \tcp{Set node to visited}
+        }
+        \KwRet{tour}\;
+    }
+\end{algorithm}
+Dieser Algorithmus ist leider nicht ideal. Zwar nimmt er jedenfalls immer den kleinsten Weg, jedoch ist die Rückkehr zum Startknoten somit fest. Wenn die Kante zwischen dem letzten Knoten und dem Startknoten n groß ist mit $n \geq \sum_{(u,v) \in E} w(u,v)$ ist dieser Pfad immer suboptimal.
+\begin{figure}[htp]
+    \centering
+    \includegraphics[scale = 0.5]{Pics/TSPBad.png}
+\end{figure}
+\newpage
+\subsection{Metaheuristiken}
+In der Informatik unterscheidet man oft zwischen Heuristischen und Metaheuristischen Algorithmen. Hierbei sind heuristische Algorithmen spezifische Algorithmen, die eine gute, aber eventuell nicht optimale Lösung für ein spezielles Problem findet. \\
+Die Metaheuristiken sind Algorithmen, die eher eine allgemeine Vorgehensweise anhand von abstrakten Problemen angeben um die Suche für beliebige Optimierungen zu leiten.\\
+
+So kann für das TSP der Algorithmus erweitert werden, indem er nach lokal optimalen Minima/ Maxima sucht.
+\begin{algorithm}[H]
+    \SetKwFunction{iniSol}{initialSolution}
+    \SetKwFunction{hillclimb}{HillClimbing}
+    \SetKwFunction{switchrand}{SwitchRandom}
+    \tcp{P: Problem}
+    \Fn{\hillclimb{P, maxTime}}{
+        sol = \iniSol{P}; \tcp{Searches for any solution (e.g. greedyTSP)}
+        time = 0\;
+        \While{time < maxTime}{
+            newSol = \switchrand{sol}; \tcp{Switches random nodes}
+            \If{newSol.cost < sol.cost}{
+                sol = newSol; \tcp{Updates solution if better}
+            }
+            time++\;
+        }
+        \KwRet{sol}\;
+    }
+\end{algorithm}
+Dieser Algorithmus gibt jetzt schon aus einer Auswahl an Lösungen die beste zurück, jedoch ist sie immer noch nicht ideal, da sie nur nach lokalen Minima/Maxima sucht und womöglich nicht die global beste Lösung findet. Ein Ansatz dies zu verbessern ist, den Algorithmus mehrmals laufen zu lassen, sodass er an unterschiedlichen Punkten anfängt und so optimalerweise verschiedene Maxima/Minima findet. Aber auch dies ist nicht garantiert.\\
+In jedem Fall ist aber die Suche nach lokalen Minima/Maxima ein Metaheuristischer Algorithmus, der es erlaubt, zu optimieren. \\
+\includepdf[pages={90-94}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/07AdvancedDesigns.pdf}
 \end{document}
