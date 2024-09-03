@@ -8,5 +8,78 @@
 \graphicspath{{../../}}
 
 \begin{document}
-\section{Nichtdeterministische Polynomialzeit}
+\section{NP}
+\subsection{Leichte Probleme}
+Ein Problem wird als \textit{leicht} bezeichnet, wenn es in Polynomialzeit lösbar ist. So gilt für die Laufzeit eines leichten Algorithmus $\Theta(\sum_{i=0}^{k} a_in^i) = poly(n)$, wobei $a_i$ und $k$ Konstant sind. Beispiele dafür wären beispielsweise Sortieren eines Arrays (z.B. Insertion Sort $\Theta(n^2)$ oder MergeSort $\Theta(n \log n)$), Breadth-First-Search im Graphen, Minimale Spannbäume berechnen etc. Dies sind leicht zu lösende Algorithmen, das sie immer eine korrekte Lösung in Polynomialzeit ergeben. \\
+Anders gibt es noch Algorithmen, bei denen die Lösung leicht zu prüfen ist, die Lösung selbst aber nicht unbedingt optimal, und in Polynomialzeit laufen. Dazu gehört auch Beispielsweise das Traveling Salesperson Problem.
+\subsection{Berechnung- \& Entscheidungsprobleme}
+Im Allgemeinen kann man Probleme in zwei Kategorien aufteilen. \\
+\textbf{Berechnungsprobleme:}\\
+Problem, bei dem der Algorithmus eine Ausgabe berechnet. Dazu gehören zum Beispiel Algorithmen, bei denen ein Pfad in einem Graph ausgegeben wird. \\
+\textbf{Entscheidungsprobleme:}\\
+Problem, bei dem der Algorithmus eine Entscheidung berechnet. Sie geben also lediglich zurück, ob die das Problem die spezifischen Eigenschaft besitzt oder nicht. Beispielsweise ist der Algorithmus zum überprüfen ob ein gerichteter Graph stark zusammenhängend ist ein Entscheidungsproblem.\\
+Man kann grundsätzlich jedes Berechnungsproblem in Entscheidungsproblem überführen. Wenn B in Polynomialzeit möglich ist, so ist auch E in Polynomialzeit möglich.\\
+
+Als Beispiel hierfür kann der folgende Algorithmus betrachtet werden, der alle Primfaktoren einer Zahl berechnet. Ein Primfaktor ist ein Faktor einer Zahl, der eine Primzahl ist. Also ist ein Primfaktor einer Zahl ein Teiler dieser Zahl, der eine Primzahl ist.\\
+Z.B. $12 = 2 \cdot 6 = 2 \cdot 2 \cdot 3$, 2 und 3 sind Primzahlen, dementsprechend Primfaktoren für 12. \\
+\begin{algorithm}[H]
+    \SetKwFunction{facto}{factorize}
+    \SetKwFunction{compf}{computeFactor}
+    \SetKwFunction{decid}{decideFactor}
+    \SetKwFunction{floor}{floor}
+
+    \tcp{n > 1}
+    \tcp{Calculates all prime factors of n and prints them out}
+    \Fn{\facto{n}}{
+        \While{n > 1}{
+            p = \compf{n}; \tcp{Computes the prime factor}
+            \KwPrint{p}\;
+            n = n / p;
+        }
+    }
+
+    \Fn{\compf{n}}{
+        L = 1; U = n; \tcp{L and U are the bounds for the search}
+        \While{L != U}{
+            M = L + \floor{(U - L) / 2}; \tcp{M is the middle of the search}
+            \tcp{If \decid == 1, then m is a divisor of n (or bigger than the smallest primefactor of n). Lower upper bound U to M}
+            \If{\decid{N,M} == 1}{
+                U = M;
+            }
+            \tcp{If \decid == 0, then m is not a divisor of n. Increase lower bound L to M + 1}
+            \Else{
+                L = M + 1;
+            }
+        }
+    }
+
+    \Fn{\decid{n,m}}{
+        \tcp{Decide whether m is a primefactor of n}
+        
+        \KwRet{d}; \tcp{d = 1 if m is a primefactor of n, d = 0 otherwise}
+    }
+\end{algorithm}
+Dieser Algorithmus stellt jetzt ein Berechnungsproblem dar, da er alle Primfaktoren einer Zahl berechnet. Die Lösung des Berechnungsproblems kann jetzt genuzt werden um das Entscheidungsproblem "Ist der kleinste Primfaktor von n maximal x?" zu lösen, indem man schaut ob der kleinste Primfaktor von n kleiner oder gleich x ist.\\
+
+\subsection{Komplexitätsklasse P}
+Ein Entscheidungsproblem $L_E$ ist genau dann in der Komplexitätsklasse P, wenn es einen Algorithmus in Polynomialzeit $A_{L_E}$ mit Ausgabe 0 / 1 gibt, der stets korrekt entscheidet ob P die Eigenschaft E erfüllt. Es gilt also: $\forall P: P \in L_E \Leftrightarrow A_{L_E}(P) = 1$.\\
+Anders: Alle Entscheidungsprobleme, dessen Lösung in Zeit ausgedrückt werden kann, die ein Polynom in der Größe des Eingabewerts ist.
+
+\subsection{Komplexitätsklasse NP}
+Ein Entscheidungsproblem $L_E$ ist genau dann in der Komplexitätsklasse NP, wenn es einen Algorithmus in Polynomialzeit $A_{L_E}$ mit Ausgabe 0 / 1 gibt, der bei Eingabe eines Zeugen $S_P$ für jede Eingabe $P \in L_E$ bzw. für jede Eingabe $S_P$ für Eingabe $P \notin L_E$ stets korrekt entscheidet ob P die Eigenschaft E erfüllt. Es gilt also: $\forall P: P \in \exists S_P: A_{L_E}(P, S_P) = 1 $ oder $\forall P: P \notin L_E \Leftrightarrow \forall S_P: A_{L_E}(P, S_P) = 0$ (Äquivalent).
+Hierbei steht NP für Nichtdeterministische Polynomialzeit.
+Anders: Ein Problem liegt in NP, wenn eine gegebene Lösung in polynomieller Zeit verifiziert werden kann, auch wenn man nicht sicher ist, ob die Lösung effizient in Polynomialzeit gefunden werden kann. (Bsp. Traveling Salesperson Problem: Kein Algorithmus bekannt, der in Polynomialzeit für alle Fälle optimale Lösung findet, jedoch kann für jede Lösung in polynomieller Zeit überprüfen ob diese korrekt ist.)
+
+Im Allgemeinen also:
+\begin{itemize}
+    \item P sind Probleme die effizient gelöst werden können
+    \item NP sind Probleme, bei denen eine Lösung effizient verifiziert werden kann, aber unklar ist, ob sie auch effizient gefunden werden kann.
+\end{itemize}
+
+\subsection{NP-Vollständigkeit}
+Ein Problem ist NP-Vollständig, wenn es in NP liegt und NP-schwer ist. NP-Schwer bedeutet, dass ein Problem mindestens so schwer ist wie jedes Problem in NP. Also kann jedes Problem in NP auf das NP-Schwere Problem reduziert werden. (Ein NP-schweres Problem muss nicht unbedingt in NP liegen.)\\
+Ein NP-Vollständiges Problem, dass sich in Polynomialzeit lösen lässt impliziert, dass alle Probleme in NP in Polynomialzeit lösbar sind.\\
+
+Hierbei spielt die Reduktion eine große Rolle. Nimmt man zum Beispiel einen Graphen und ein Problem P "Gibt es einen Pfad, der vom Start aus jeden Knoten besucht und zurück zum Start führt?" und Problem Q "Gibt es einen Pfad, der vom Start aus jeden Knoten besucht und zum Ziel zurück zum Start zurück mit Gewicht maximal x?". So ist das Problem P auch im Problem Q enthalten und man kann P reduzieren.
+\includepdf[pages={11, 12,33,52}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/08NP.pdf}
 \end{document}
