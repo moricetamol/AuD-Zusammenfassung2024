@@ -1453,11 +1453,12 @@ Ein Graph kann somit mehrere SCCs enthalten, diese können sich aber nicht über
     \node[scc1](1){1};
     \node[scc1, below =of 1](5){5};
     \node[scc1, below left =of 5](2){2};
-    \node[scc1, below right =of 5](3){3};
+    \node[scc1, below right =of 5](4){4};
+    
 
     \path[ar]
     (1) edge (5)
-    (5) edge (2) edge (3)
+    (5) edge (2) edge (4)
     ;
     \end{tikzpicture}
     \captionof*{figure}{SCC 1 output}
