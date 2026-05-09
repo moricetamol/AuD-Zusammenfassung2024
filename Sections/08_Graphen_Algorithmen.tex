@@ -1,11 +1,11 @@
 \documentclass[
-../../AuD-Zusammenfassung.tex,
+../AuD-Zusammenfassung.tex,
 ]
 {subfiles}
 
-\externaldocument[ext:]{../../AuD-Zusammenfassung}
+\externaldocument[ext:]{../AuD-Zusammenfassung}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Graphen Algorithmen}
@@ -727,7 +727,7 @@ Um alle Knoten auf dem kürzesten Pfad zwischen zwei Knoten auszugeben kann der 
         }
     }
 \end{algorithm}
-\includepdf[pages={20,29}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={20,29}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 \subsection{Depth-First Search (DFS)}
 Das Prinzip des Depth-First Search Algorithmus ist, dass im Gegensatz zu BFS nicht erst alle Nachbarn eines Knotens besucht werden, sondern immer erst ein Pfad zuende gebracht wird, bevor ein anderer besucht wird. Der Algorithmus geht also solange einen Pfad ab, bis er an einem Knoten keine neuen Knoten mehr findet, wodurch er dann einen Knoten zurück geht und von diesem den nächsten Pfad abgeht. Dies macht er solange, bis er alle Pfade abgelaufen ist.\\ Allgemein kann man als Unterschied zu BFS sagen, dass dieser Algorithmus mehr der Stack Datenstruktur ähnelt, da sie zuerst die Knoten merkt und dann den zuletzt hinzugefügten Knoten verarbeitet.\\
 \begin{algorithm}[H]
@@ -1306,14 +1306,15 @@ Man kann die Kantenarten auch schon während DFS klassifizieren. Sei (u,v) die g
 \end{itemize}
 Zusätzlich ist es wichtig zu wissen, dass es in ungerichteten Graphen nur Baum- und Rückwärtskanten gibt.
 
-\includepdf[pages={35,63}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={35,63}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 \subsection{Strongly Connected Components (SCC)}
 Eine starke Zusammenhangskomponente (Strongly Connected Components (SCC)) ist eine Knotenmenge $C \subseteq V$ für die gilt:
 \begin{itemize}
     \item Zwischen je zwei Knoten u,v $\in C$ gibt es einen Pfad von u nach v.
     \item $C$ ist maximal - Es gibt keine Menge $D \subseteq V$ mit $C \subseteq D$ für die ersteres gilt.
 \end{itemize}
-Ein Graph kann somit mehrere SCCs enthalten, diese können sich aber nicht überschneiden. Zwei SCCs $C,D$ mit $u,v \in C$ und $w,x \in D$ mit einem Pfad u \rightarrow w können also keinen Pfad x \rightarrow v besitzen, ansonsten wären sie gleich.
+Ein Graph kann somit mehrere SCCs enthalten, diese können sich aber nicht überschneiden. 
+Zwei SCCs $C,D$ mit $u,v \in C$ und $w,x \in D$ mit einem Pfad $u \rightarrow w$ können also keinen Pfad $x \rightarrow v$ besitzen, ansonsten wären sie gleich.
 
 \begin{minipage}[t]{.5\textwidth}
     \centering
@@ -1438,7 +1439,7 @@ Ein Graph kann somit mehrere SCCs enthalten, diese können sich aber nicht über
     ;
 
     \end{tikzpicture}
-    \captionof*{figure}{$G^T$ - Transposed Graph(V,$E^T$), SCCs bleiben gleich, aber Richtungen ändern sich \rightarrow Verschiedene SCCs nicht mehr miteinander verbunden}
+    \captionof*{figure}{$G^T$ - Transposed Graph$(V,E^T)$, SCCs bleiben gleich, aber Richtungen ändern sich $\rightarrow$ Verschiedene SCCs nicht mehr miteinander verbunden}
 \end{minipage}\\[10pt]
 \begin{minipage}[t]{.33\textwidth}
     \centering
@@ -1503,7 +1504,7 @@ Ein Graph kann somit mehrere SCCs enthalten, diese können sich aber nicht über
     \end{tikzpicture}
     \captionof*{figure}{SCC 3 output}
 \end{minipage}
-\includepdf[pages={73,78}, pagecommand={},nup=1x2, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={73,78}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 \newpage
 \subsection{Minimale Spannbäume (MST)}
 Für einen zusammenhängenden, ungerichteten, gewichteten Graph $G = (V,E)$ mit Gewichten $w$ ist ein Subgraph $T = (V, E_T)$ ein Spannbaum, wenn $T$ azyklisch ist und alle Knoten verbindet. \\
@@ -1567,11 +1568,11 @@ Eine sichere Kante ist eine Kante die in jedem Fall im minimalen Spannbaum entha
 Anders ausgedrückt: \textbf{Sei A Teilmenge eines MST, (S, V-S) Schnitt, der A respektiert und \{u,v\} die leichte Kante, die den Schnitt überbrückt. Dann ist \{u,v\} eine sichere Kante für A.} \\
 Hierbei gilt:
 \begin{itemize}
-    \item \{u,v\} sicher für A wenn A \cup \{u,v\} Teilmenge eines MST \\
-    (Sicher wenn Vereinigung von A und \{u,v\} eine Teilmenge des MST ist)
-    \item Schnitt (S, V-S) partioniert Knoten des Graphen in zwei Mengen. \\
-    (Schnitt teilt die Knotenmenge in S und V - S)
-    \item \{u,v\} überbrückt (S, V-S), wenn u $\in$ S und v $\in$ S. \\
+    \item $\{u,v\}$ sicher für $A$ wenn $A \cup \{u,v\}$ Teilmenge eines MST \\
+    (Sicher wenn Vereinigung von $A$ und $\{u,v\}$ eine Teilmenge des MST ist)
+    \item Schnitt $(S, V-S)$ partioniert Knoten des Graphen in zwei Mengen. \\
+    (Schnitt teilt die Knotenmenge in $S$ und $V - S$)
+    \item $\{u,v\}$ überbrückt $(S, V-S)$, wenn $u \in S$ und $v \in V-S$. \\
     (Kante überbrückt Schnitt, wenn die Knoten der Kante in unterschiedlichen Teilen des Schnitts sind)
     \item (S, V-S) respektiert A $\subseteq$ E, wenn keine Kante \{u,v\} aus A den Schnitt überbrückt. \\
     (Es existiert noch keine Kante in A, die den Schnitt überbrückt)
@@ -1586,17 +1587,17 @@ Kruskals Algorithmus funktioniert nach dem Prinzip, dass erstmal für alle Knote
     \SetKwFunction{mstk}{MSTKruskal}
     \SetKwFunction{union}{union}
     \Fn{\mstk{G,w}}{
-        A = $\emptyset$; \tcp{Empty Set of edges \rightarrow represents MST}
-        \ForEach{v in V}{
-            set(v) = \{v\}; \tcp{Creates a set for each node, containing only that node}
+        A = $\emptyset$; \tcp{Empty Set of edges $\rightarrow$ represents MST}
+        \ForEach{$v \in V$}{
+            $\text{set}(v) = \{v\}$; \tcp{Creates a set for each node, containing only that node}
         }
         sort edges according to weight in increasing order\;
         \tcp{Iterate through all edges in increasing order of weight}
-        \ForEach{\{u,v\} \in E}{
-            \tcp{if the sets are the same the nodes already belong to the same set, that means that an edge connecting the two nodes is already in the MST \rightarrow no new edge should be added to avoid cycles}
-            \If{set(u) != set(v)}{
-                A = A \cup \{u,v\}; \tcp{Add edge to MST}
-                \union{G,u,v}; \tcp{unite the two sets}
+        \ForEach{$\{u,v\} \in E$}{
+            \tcp{if the sets are the same the nodes already belong to the same set, that means that an edge connecting the two nodes is already in the MST $\rightarrow$ no new edge should be added to avoid cycles}
+            \If{$\text{set}(u) \neq \text{set}(v)$}{
+                $A = A \cup \{u,v\}$; \tcp{Add edge to MST}
+                $\text{union}(G,u,v)$; \tcp{unite the two sets}
             }
         }
         \KwRet A; \tcp{Return MST}
@@ -1604,13 +1605,13 @@ Kruskals Algorithmus funktioniert nach dem Prinzip, dass erstmal für alle Knote
 \end{algorithm}
 \subsubsection{Prims Algorithmus}
 Der Prim Algorithmus funktioniert nach dem Prinzip, dass es für jeden Knoten alle Kanten zu seinen Nachbarn durchgeht um die Kante mit dem kleinsten Gewicht zu finden. Der MST wird durch die \texttt{pred} Referenz der Knoten gebildet.\\
-\begin{algorithm} [H]
+\begin{algorithm}[H]
     \SetKwFunction{mstp}{MSTPrim}
     \tcp{Complexity: $O(|E| + |V| \cdot \log|V|)$}
-    \tcp{r is the starting node \rightarrow works with any node in the graph}
+    \tcp{r is the starting node $\rightarrow$ works with any node in the graph}
     \Fn{\mstp{G,w,r}}{
-        \ForEach{v in V}{
-            v.key = $\infty$; v.pred = \KwNil; \tcp{key represents lightest weight of an edge to v in the MST. MST not created yet \rightarrow start with biggest value.}
+        \ForEach{$v \in V$}{
+            v.key = $\infty$; v.pred = \KwNil; \tcp{key represents lightest weight of an edge to v in the MST. MST not created yet $\implies$ start with biggest value.}
         }
         r.key = $-\infty$; \tcp{Starting nodes key is set to $-\infty$ as its supposed to be worked on first. }
         Q = V; \tcp{Q is a queue containing all nodes.}
@@ -1618,8 +1619,8 @@ Der Prim Algorithmus funktioniert nach dem Prinzip, dass es für jeden Knoten al
         \While{!isEmpty(Q)}{
             u = extractMin(Q); \tcp{Extract the node with the smallest key}
             \tcp{For all nodes adjacent to u:}
-            \ForEach{v in Adj(u)}{
-                \tcp{If v has not been visited yet and the weight of the edge is smaller than the current lightest edge to v:}
+            \ForEach{$v \in Adj(u)$}{
+                \tcp{If v has not been visited yet and the weight of the edge is smaller than the current lightest edge to v, then:}
                 \If{v $\in$ Q \KwAnd w(u,v) < v.key}{
                     v.key = w(u,v); \tcp{Update the key of v}
                     v.pred = u; \tcp{Update the predecessor of v}
@@ -1629,7 +1630,7 @@ Der Prim Algorithmus funktioniert nach dem Prinzip, dass es für jeden Knoten al
     }
 \end{algorithm}
 Sowohl Kruskals als auch Prims Algorithmus funktionieren nicht für gerichtete Graphen. Sie finden zwar beide \textbf{einen} Spannbaum, aber nicht immer den \textbf{minimalen} Spannbaum.
-\includepdf[pages={84,92,107}, pagecommand={},nup=2x2, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={84,92,107}, pagecommand={},nup=2x2, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 
 \newpage
 \subsection{Kürzesten Pfade}
@@ -1677,11 +1678,11 @@ Bei den SSSP Algorithmen geht es darum, den Pfad mit dem geringsten Gewicht von 
     \draw[ar, min] (2) to node[midway, right, invis]{5} (3);
     \draw[ar, min] (3) to node[midway, below, invis]{5} (4);
     \end{tikzpicture}
-    \captionof*{figure}{\color{magenta}MST\color{black}\\ Spiegelt nicht den leichtesten Pfad 1 \rightarrow 4 wieder.}
+    \captionof*{figure}{\color{magenta}MST\color{black}\\ Spiegelt nicht den leichtesten Pfad $1 \rightarrow 4$ wieder.}
 \end{minipage}
 
 Ein paar Regeln für SSSP Algorithmen sind, dass Zyklen nicht Teil des leichtesten Pfades sein können. Positiv gewichtete Zyklen würden nur Gewicht hinzufügen, was nicht gewollt ist. Negative könnten beliebig oft durchlaufen werden für einen beliebig leichten Pfad, was praktisch keinen Sinn ergibt. Negative Kanten sind okay, Negative Zyklen nicht.\\
-Ein Teilpfad s \rightarrow x des kürzesten Pfads s \rightarrow x \rightarrow z ist auch immer der kürzeste Pfad von s \rightarrow x.\\
+Ein Teilpfad $ s \rightarrow x $ des kürzesten Pfads $ s \rightarrow x \rightarrow z $ ist auch immer der kürzeste Pfad von $ s \rightarrow x $.\\
 Alle Algorithmen für SSSP funktionieren über das Konzept von \textbf{Relaxation}. Hierbei wird die Distanz eines Knotens v verringert, wenn durch eine anliegende Kante (u,v) eine kürzere Distanz möglich ist. \\
 \begin{algorithm}[H]
     \SetKwFunction{srelax}{relax}
@@ -1716,7 +1717,7 @@ Die Initialisierung bleibt auch gleich:\\
     \tcp{G: graph with (V,E), s startnode, w weight function}
     \Fn{\BellmanFord{G, s, w}}{
         \init{G, s, w}; \tcp{Set all distances (except s) to $\infty$ and the predecessor to \KwNil}
-        \tcp{Runs once for every Vertices - s since the predecessor of s is \KwNil \rightarrow Shortest path has at most |V|-1 edges}
+        \tcp{Runs once for every Vertices - s since the predecessor of s is \KwNil $\rightarrow$ Shortest path has at most |V|-1 edges}
         \For{i = 1 \KwTo |V|-1}{
             \tcp{for every edge in the graph}
             \ForEach{(u,v) in E}{
@@ -1729,10 +1730,10 @@ Die Initialisierung bleibt auch gleich:\\
         \ForEach{(u,v) in E}{
             \tcp{if the edge after relaxation can still be improved, that implies a negative cycle}
             \If {v.dist > u.dist + w(u, v)}{
-                \KwRet{\KwFalse}; \tcp{Negative cycle \rightarrow return false}
+                \KwRet{\KwFalse}; \tcp{Negative cycle $\rightarrow$ return false}
             }
         }
-        \KwRet{\KwTrue}; \tcp{No negative cycle \rightarrow return true}
+        \KwRet{\KwTrue}; \tcp{No negative cycle $\rightarrow$ return true}
     }
 \end{algorithm}
 \subsubsection{DAG (Directed Acyclic Graph) Algorithmus}
@@ -1803,20 +1804,20 @@ Ist in der Praxis oft schneller als Dijkstra, hat aber den selben Nachteil, dass
 Bei Ungerichteten Graphen können zwar Bellman-Ford und Dijkstra ausgeführt werden, jedoch muss für Bellman-Ford beachtet werden, dass keine Kante ein negatives Gewicht haben kann, da diese direkt einen negativen Zyklus impliziert. Wenn man aber bei Dijkstra die Gewichte direkt alle positiv macht kann dieser bedenkenslos ausgeführt werden. \\
 Nimmt man an, dass die Kanten nicht negativ sind, ist es besser direkt Dijkstra zu nutzen. \\
 Die Kanten \{u,v\} entsprechen sogesehen den Kanten (u,v) und (v,u). (Alle gleiches Gewicht.)
-\includepdf[pages={129,130,174}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
-\includepdf[pages={137-141}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
-\includepdf[pages={144-149}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
-\includepdf[pages={154-159}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={129,130,174}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={137-141}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={144-149}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={154-159}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 
 \newpage
 \subsection{Maximaler Fluss}
 Das grundsätzliche Konzept von Flüssen ist, dass Graphen sogesehen nicht nur ein Gewicht haben, sondern zwei. Dabei repräsentiert eines den aktuellen Fluss und das andere den maximalen. Bei Flussgraphen gilt dann, dass alle Knoten außer Start s und Target t gleichen eingehenden und ausgehenden Fluss haben. Formal:\\
 \textit{Ein Flussnetzwerk ist ein gewichteter, gerichteter Graph G = (V,E) mit Kapazitätsgewicht c, so dass c(u,v) $\geq 0$ für (u,v) $\in$ E und c(u,v) = 0 für (u,v) $\notin$ E, mit zwei Knoten s,t $\in$ V (Quelle, Senke), sodass jeder Knoten von s aus erreichbar ist und t von jedem Knoten aus erreichbar ist.}\\
 Zusätzlich ist der Fluss einer Kante minimal 0 sein kann und maximal der Kapazität der Kante entsprechen kann. Zusätzlich ist der Gesamt\textbf{ein}fluss gleich dem Gesamt\textbf{aus}fluss eines Knoten. (Input = Output) Formal:\\
-\textit{Ein Fluss f: V$ \times $V \rightarrow $\mathbb{R}$ für ein Flussnetzwerk G = (V,E) mit Kapazitätsgewicht c und Quelle s und Senke t erfüllt $0 \leq f(u,v) \leq c(u,v)$ für (u,v) $\in$ E. Zusätzlich gilt für u $\in$ V - \{s,t\}: $\sum_{v \in V} f(u,v) = \sum_{v \in V} f(v,u)$}\\
+\textit{Ein Fluss f: V $\times$ V $\rightarrow \mathbb{R}$ für ein Flussnetzwerk G = (V,E) mit Kapazitätsgewicht c und Quelle s und Senke t erfüllt $0 \leq f(u,v) \leq c(u,v)$ für (u,v) $\in$ E. Zusätzlich gilt für u $\in$ V - \{s,t\}: $\sum_{v \in V} f(u,v) = \sum_{v \in V} f(v,u)$}\\
 
 Außerdem gibt es noch den Wert eines Flusses. dieser spiegelt wieder, wie viel Fluss insgesamt von der Quelle zur Senke transportiert wird (Prinzipiell Fluss der Quelle: Ausfluss der Quelle - Einfluss der Quelle). Formal:\\
-\textit{Der Wert |f| eine Flusses f:V$\times$V \rightarrow $\mathbb{R}$ für ein Flussnetzwerk G = (V,E) mit Kapazität c und Quelle s und Senke t ist |f| = $\sum_{v \in V} f(s,v) - \sum_{v \in V} f(v,s)$ (Ausfluss der Quelle - Einfluss der Quelle)}\\
+\textit{Der Wert |f| eine Flusses f:V$\times$V $\rightarrow \mathbb{R}$ für ein Flussnetzwerk G = (V,E) mit Kapazität c und Quelle s und Senke t ist |f| = $\sum_{v \in V} f(s,v) - \sum_{v \in V} f(v,s)$ (Ausfluss der Quelle - Einfluss der Quelle)}\\
 Der maximale Fluss beschreibt den maximaler Ausfluss der Quelle, der, unter der Beachtung der Kapazitäten in die Senke fließen kann.
 \begin{figure}[htp]
     \centering
@@ -1849,16 +1850,16 @@ Im Restkapazitätsgraph ist es nun also so, dass wenn eine Kante von einem Knote
     \tcp{Complexity: $O(|E|\cdot u \cdot |f^*|)$, u = max capacity, $|f^*|$ = max flow}
     \tcp{s start, t target, c capacity function}
     \Fn{\fofuls{G, s, t, c}}{
-        \ForEach{e in E}{
+        \ForEach{e $\in$ E}{
             e.flow = 0; \tcp{Initializes all flow values to 0}
         }
         \tcp{goes through every possible path with free capacity}
         \While{path p from s to t exists in $G_f$}{
-            $c_{f}$(p) = min\{$c_f$(u,v) : (u,v) \in p\}; \tcp{Minimum of all flow values on the path}
+            $c_{f}$(p) = min\{$c_f$(u,v) : (u,v) $\in$ p\}; \tcp{Minimum of all flow values on the path}
             \tcp{Changes the flow values on the path}
-            \ForEach{e in p}{
-                \tcp{If edge e in E \rightarrow total flow, else remaining capacity}
-                \If{e in E}{
+            \ForEach{e $\in$ p}{
+                \tcp{If edge e in E $\rightarrow$ total flow, else remaining capacity}
+                \If{e $\in$ E}{
                     e.flow += $c_{f}$(p); \tcp{Add minimal flow to edge}
                 }
                 \Else{
@@ -1868,6 +1869,6 @@ Im Restkapazitätsgraph ist es nun also so, dass wenn eine Kante von einem Knote
         }
     }
 \end{algorithm}
-\includepdf[pages={187-191}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/06GraphAlgorithms.pdf}
+\includepdf[pages={187-191}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/06GraphAlgorithms.pdf}
 
 \end{document}

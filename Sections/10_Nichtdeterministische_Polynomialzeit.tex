@@ -1,11 +1,11 @@
 \documentclass[
-../../AuD-Zusammenfassung.tex,
+../AuD-Zusammenfassung.tex,
 ]
 {subfiles}
 
-\externaldocument[ext:]{../../AuD-Zusammenfassung}
+\externaldocument[ext:]{../AuD-Zusammenfassung}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{NP}
@@ -81,5 +81,5 @@ Ein Problem ist NP-Vollständig, wenn es in NP liegt und NP-schwer ist. NP-Schwe
 Ein NP-Vollständiges Problem, dass sich in Polynomialzeit lösen lässt impliziert, dass alle Probleme in NP in Polynomialzeit lösbar sind.\\
 
 Hierbei spielt die Reduktion eine große Rolle. Nimmt man zum Beispiel einen Graphen und ein Problem P "Gibt es einen Pfad, der vom Start aus jeden Knoten besucht und zurück zum Start führt?" und Problem Q "Gibt es einen Pfad, der vom Start aus jeden Knoten besucht und zum Ziel zurück zum Start zurück mit Gewicht maximal x?". So ist das Problem P auch im Problem Q enthalten und man kann P reduzieren.
-\includepdf[pages={11, 12,33,52}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/08NP.pdf}
+\includepdf[pages={11, 12,33,52}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/08NP.pdf}
 \end{document}

@@ -1,11 +1,11 @@
 \documentclass[
-../../AuD-Zusammenfassung.tex,
+../AuD-Zusammenfassung.tex,
 ]
 {subfiles}
 
-\externaldocument[ext:]{../../AuD-Zusammenfassung}
+\externaldocument[ext:]{../AuD-Zusammenfassung}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Advanced Design}
@@ -224,8 +224,8 @@ Dies bedeutet also, dass wir um von der Punkt/Wert Darstellung in die Koeffizien
         \KwRet{result}\;
     }
 \end{algorithm}
-\includepdf[pages={16-21}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/07AdvancedDesigns.pdf}
-\includepdf[pages={26-33}, pagecommand={},nup=2x4, frame=true, scale=0.95]{./VL Folien/07AdvancedDesigns.pdf}
+\includepdf[pages={16-21}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/07AdvancedDesigns.pdf}
+\includepdf[pages={26-33}, pagecommand={},nup=2x4, frame=true, scale=0.95]{../VL_Folien/07AdvancedDesigns.pdf}
 
 \subsection{Backtracking}
 Das grundlegende Prinzip vom Backtracking besteht darin für ein Problem zuerst die Lösung x = ($x_1, x_2, \ldots, x_n$) durch Trial-and-Error zu finden, indem die Teillösung ($x_1, x_2, \ldots, x_{i-1}$) von $x_i$ ergänzt wid, bis die Gesamtlösung erreicht wir, oder nicht erreichbar ist, wodurch $x_{i-1}$ aus der Teillösung entfernt wird.\\
@@ -345,7 +345,7 @@ Der Algorithmus funktioniert hierbei so, dass er den String X[1\dots m] von link
         \KwRet{D[m][n]}\;
     }
 \end{algorithm}
-\includepdf[pages={60-67}, pagecommand={},nup=2x4, frame=true, scale=0.9]{./VL Folien/07AdvancedDesigns.pdf}
+\includepdf[pages={60-67}, pagecommand={},nup=2x4, frame=true, scale=0.9]{../VL_Folien/07AdvancedDesigns.pdf}
 \subsection{Greedy Algorithms}
 Das Prinzip des Greedy Algorithmus geht danach zuerst eine Lösung $x = (x_1,x_2,\ldots,x_n)$ zu finden indem man der Teillösung $(x_1,x_2,\ldots,x_{i-1})$ mit $x_i$ ergänzt. Hierbei ist $x_i$ der Teil, der Lokal am günstigsten erscheint.\\
 Hierzu gehören beispielsweise Dijkstras und Prims Algorithmus, die für jede Iteration immer den Knoten auswählt, der in dieser Iteration die kürzeste Distanz hat, oder Kruskals Algorithmus, der in jeder Iteration immer die leichteste Kante in dieser Iteration auswählt. Das Problem bei diesen Algorithmen ist aber, dass sie nicht immer die optimale Lösung finden, da sie lokal über global nehmen. 
@@ -405,5 +405,5 @@ So kann für das TSP der Algorithmus erweitert werden, indem er nach lokal optim
 \end{algorithm}
 Dieser Algorithmus gibt jetzt schon aus einer Auswahl an Lösungen die beste zurück, jedoch ist sie immer noch nicht ideal, da sie nur nach lokalen Minima/Maxima sucht und womöglich nicht die global beste Lösung findet. Ein Ansatz dies zu verbessern ist, den Algorithmus mehrmals laufen zu lassen, sodass er an unterschiedlichen Punkten anfängt und so optimalerweise verschiedene Maxima/Minima findet. Aber auch dies ist nicht garantiert.\\
 In jedem Fall ist aber die Suche nach lokalen Minima/Maxima ein Metaheuristischer Algorithmus, der es erlaubt, zu optimieren. \\
-\includepdf[pages={90-94}, pagecommand={},nup=2x3, frame=true, scale=0.9]{./VL Folien/07AdvancedDesigns.pdf}
+\includepdf[pages={90-94}, pagecommand={},nup=2x3, frame=true, scale=0.9]{../VL_Folien/07AdvancedDesigns.pdf}
 \end{document}

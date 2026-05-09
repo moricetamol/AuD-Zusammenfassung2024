@@ -14,17 +14,21 @@ border=3mm
 \usepackage{lmodern}
 \usepackage{multicol} % To make multiple columns on one page
 
+% Ensure xcolor gets the options it needs before any package auto-loads it
+\PassOptionsToPackage{table,xcdraw,dvipsnames,svgnames}{xcolor}
 \usepackage{tcolorbox}
+\usepackage{colortbl} % For \rowcolor command
 \usepackage{graphicx}
 \usepackage[margin=2cm]{geometry}
 \usepackage[utf8]{inputenc}
-\usepackage[table,xcdraw,dvipsnames,svgnames]{xcolor} % More colours
+\usepackage{xcolor} % More colours (options passed earlier)
 \usepackage{amsmath,amsfonts,amsthm,amssymb} % Math & symbols
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref} % For hyperlinks, automatically created for table of contents
 \usepackage{longtable}
 
-\usepackage[protrusion=true,expansion=true]{microtype}
+% microtype: disable font expansion under XeTeX (Tectonic uses XeTeX engine)
+\usepackage[protrusion=true]{microtype}
 
 %-----------------------------------
 % Table of Contents
@@ -148,17 +152,17 @@ border=3mm
 % Title
 %----------------------------------------------
 \usepackage{titling}
-\newcommand{\HorRule}{\color{Black} \rule{\linewidth}{2pt}}
+\newcommand{\HorRule}{\color{black} \rule{\linewidth}{2pt}}
 \newcommand{\TitleRule}{\color{codegreen} \rule{\linewidth}{15pt} \vspace{-90pt}\linebreak \HorRule \linebreak}
-\newcommand{\SectionHorRule}{\color{Black} \rule{\linewidth}{1pt}}
+\newcommand{\SectionHorRule}{\color{black} \rule{\linewidth}{1pt}}
 
-\pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{Black}} % Horizontal rule before the title
+\pretitle{\vspace{-80pt} \fontsize{30}{50} \usefont{OT1}{phv}{b}{n} \TitleRule \color{black}} % Horizontal rule before the title
 	
 	\title{AuD - Zusammenfassung} % The title
 	
 	\posttitle{\vskip 0.5em} % Whitespace under the title
 
-\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{n} \color{Black}} % Author font configuration
+\preauthor{\begin{flushleft}\large \lineskip 0.5em \fontsize{15}{0} \usefont{T1}{phv}{b}{n} \color{black}} % Author font configuration
 	
 	\author{Moritz Gerhardt } % Name
 	
@@ -174,7 +178,7 @@ border=3mm
 \newcommand{\SectionFont}{\LARGE\bfseries}
 \titleformat{\section} % Type of heading to format
 %[] % Shape
-{\color{codegreen} \titlerule[15pt] \color{White} \titlerule[7pt] \color{Black} \titlerule[2pt] \SectionFont} % Format
+{\color{codegreen} \titlerule[15pt] \color{white} \titlerule[7pt] \color{black} \titlerule[2pt] \SectionFont} % Format
 {\thesection} % Label
 {1em} % Seperator
 {\SectionFont} % Before-Code
@@ -207,21 +211,21 @@ border=3mm
 \end{multicols*}
 \newpage
 
-\subfile{Sections/2 Was ist ein Algorithmus/2 Algorithmen.tex}
+\subfile{Sections/02_Algorithmen.tex}
 \newpage
-\subfile{Sections/3 Laufzeitanalyse/3 Laufzeitanalyse.tex}
+\subfile{Sections/03_Laufzeitanalyse.tex}
 \newpage 
-\subfile{Sections/4 Sortieren/4 Sortieren.tex}
+\subfile{Sections/04_Sortieren.tex}
 \newpage
-\subfile{Sections/5 Grundlegende Datenstrukturen/5 Grundlegende Datenstrukturen.tex}
+\subfile{Sections/05_Grundlegende_Datenstrukturen.tex}
 \newpage
-\subfile{Sections/6 Fortgeschrittene Datenstrukturen/6 Fortgeschrittene Datenstrukturen.tex}
+\subfile{Sections/06_Fortgeschrittene_Datenstrukturen.tex}
 \newpage
-\subfile{Sections/7 Probabilistische Datenstrukturen/7 Probabilistische Datenstrukturen.tex}
+\subfile{Sections/07_Probabilistische_Datenstrukturen.tex}
 \newpage
-\subfile{Sections/8 Graphen Algorithmen/8 Graphen Algorithmen.tex}
+\subfile{Sections/08_Graphen_Algorithmen.tex}
 \newpage
-\subfile{Sections/9 Advanced Design/9 Advanced Design.tex}
+\subfile{Sections/09_Advanced_Design.tex}
 \newpage
-\subfile{Sections/10 Nichtdeterministische Polynomialzeit/10 Nichtdeterministische Polynomialzeit.tex}
+\subfile{Sections/10_Nichtdeterministische_Polynomialzeit.tex}
 \end{document}

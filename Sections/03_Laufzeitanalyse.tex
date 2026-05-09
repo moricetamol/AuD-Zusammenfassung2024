@@ -1,11 +1,11 @@
 \documentclass[
-../../AuD-Zusammenfassung.tex,
+../AuD-Zusammenfassung.tex,
 ]
 {subfiles}
 
-\externaldocument[ext:]{../../AuD-Zusammenfassung}
+\externaldocument[ext:]{../AuD-Zusammenfassung}
 % Set Graphics Path, so pictures load correctly
-\graphicspath{{../../}}
+\graphicspath{{../}}
 
 \begin{document}
 \section{Laufzeitanalyse}
@@ -232,7 +232,7 @@ So gibt es im Mastertheorem grundsätzlich drei verschiedene Fälle:
     \begin{itemize}
         \item Hier sind die anderen Operationen dominanter.
         \item (Unter der Bedingung: $a\cdot f(\frac{n}{b})\leq c \cdot f(n)$ für ein $c < 1$)\\
-        (Anders: Der rekursive Teil der Funktion $a\cdot f(\frac{n}{b})$ ist proportional, aber kleiner als der nicht-rekursive Teil $f(n)$. Skalar von c < 1 impliziert ähnlichen, aber kleineren Wachstum für n \rightarrow $\infty$)
+        (Anders: Der rekursive Teil der Funktion $a\cdot f(\frac{n}{b})$ ist proportional, aber kleiner als der nicht-rekursive Teil $f(n)$. Skalar von $c<1$ impliziert ähnliches, aber kleineres Wachstum für $n \rightarrow \infty$)
         \item Demnach: $T(n) = \Theta(f(n))$
     \end{itemize}
 \end{enumerate}
