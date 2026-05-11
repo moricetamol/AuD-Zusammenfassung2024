@@ -10,8 +10,7 @@
 \begin{document}
 \section{Probabilistische Datenstrukturen}
 \subsection{Deterministisch und Probabilistisch}
-Bisher waren alle Datenstrukturen deterministisch, d.h., dass für die selben Eingaben das Verhalten immer gleich sein wird.\\
-Bei probabilistischen Datenstrukturen ist das Verhalten nicht nur von Eingaben abhängig, sondern auch von zufälligen Faktoren. 
+Bisher waren alle Datenstrukturen deterministisch, d.h., dass für die selben Eingaben das Verhalten immer gleich sein wird. Bei probabilistischen Datenstrukturen ist das Verhalten nicht nur von Eingaben abhängig, sondern auch von zufälligen Faktoren. 
 \begin{longtable}{| p{4cm} | p{6cm} | p{6cm} |}
     \hline
     \rowcolor{backcolour}\textbf{Aspekt} & \textbf{Deterministische Datenstrukturen} & \textbf{Probabilistische (Randomisierte) Datenstrukturen} \\
@@ -46,7 +45,7 @@ Bei probabilistischen Datenstrukturen ist das Verhalten nicht nur von Eingaben a
     \hline
     \textbf{Verhalten unter adversen Bedingungen} & Kann unter adversen Bedingungen erheblich nachlassen (z.B. bestimmte Hashing-Methoden). & Robuster gegenüber adversen Bedingungen aufgrund von Zufälligkeit. \\
     \hline
-    \textbf{Implementierungskomplexität} & Kann mehr Aufwand erfordern, um eine optimale Leistung zu gewährleisten (z.B. Ausbalancierung von Bäumen). & Typischerweise einfacher zu implementieren mit guter durchschnittlicher Leistung. \\
+    \textbf{Implementierungs-komplexität} & Kann mehr Aufwand erfordern, um eine optimale Leistung zu gewährleisten (z.B. Ausbalancierung von Bäumen). & Typischerweise einfacher zu implementieren mit guter durchschnittlicher Leistung. \\
     \hline
     \textbf{Anwendungsfälle} & Geeignet für Anwendungen, bei denen Worst-Case-Leistung entscheidend ist. & Ideal für Anwendungen, bei denen die durchschnittliche Leistung wichtiger ist. \\
     \hline
@@ -55,7 +54,33 @@ Bei probabilistischen Datenstrukturen ist das Verhalten nicht nur von Eingaben a
 Skip-Lists sind eine Datenstruktur, die einer Linked-List sehr ähnelt. Sie baut auf der selben grundlegenden Struktur auf, erweitert diese jedoch noch zusätzlich. So haben Elemente in einer Skip-List nicht nur \texttt{next} (und eventuell \texttt{prev}) sondern auch noch \texttt{up} und \texttt{down}. \\
 Die Struktur einer Skip-List ähnelt sogesehen mehreren aufeinandergestapelten Linked-Lists. Beim Aufbau der Skip-List wird für jedes Element zufällig ausgesucht, auf wie vielen Ebenen es abgebildet ist. Dies ergibt den Vorteil, dass diese Struktur beim \texttt{insert}, \texttt{delete} und \texttt{search} eine average time complexity von $O(\log n)$ besitzt, was sie mit balanzierten Bäumen (AVLT, RBT...) vergleichbar macht. Der Vorteil von Skip-Lists über Bäume sind unter anderem, dass sie einfacherer zu implementieren sind und weniger Speicher brauchen. Die Nachteile bilden hierbei die schlechte Worst-Case Performance von $O(n)$.\\
 Skip-Lists werden oft in Datenbanken genutzt um Daten nach einer spezifierten Ordnung zu speichern, aber auch für Datensätze, die oft modifiziert werden müssen, da das anwenden von anderen Algorithmen auf Skip-Lists oft relativ einfach ist.\\
-\lstinputlisting[language=java, linerange={1-18}]{Code/SkipList.java}
+
+\textbf{Definition:}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwSkipNode}{SkipNode}
+    \SetKwFunction{KwSkipList}{SkipList}
+    \Cl{\KwSkipNode{}}{
+        key\;
+        next\;
+        prev\;
+        down\;
+        up\;
+        \Con{\KwSkipNode{k}}{
+            key = k\;
+        }
+    }
+    \Cl{\KwSkipList{}}{
+        head; \tcp{First node in highest level}
+        height; \tcp{starts at 0 $\rightarrow$ biggest list at height = 0}
+        P = $0.5$; \tcp{Probability of inserted node being added to express list}
+        \Con{\KwSkipList{}}{
+            head = \text{new } SkipNode($-\infty$)\;
+            height = $0$\;
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -120,8 +145,33 @@ Skip-Lists werden oft in Datenbanken genutzt um Daten nach einer spezifierten Or
     Die Anzahl der Elemente auf einer Ebene nimmt ungefähr nach dem Schema $p^h\cdot n$ ab, wobei $p$ die Wahrscheinlichkeit und $h$ die Höhe ist. 
 \end{center}
 \newpage
+
+\textbf{Search:}
+
 Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten des Starts) und durchläuft jedes Level in order, bis der nächste Knoten größer ist als der gesuchte Knoten / \texttt{null} ist. Dann geht er an dem Knoten nach unten und durchsucht diese Liste weiter. Dies geschieht, bis er entweder den Wert gefunden hat, in welchem Fall er den gefundenen Knoten zurück gibt, oder bis er null erreicht, was bedeutet, dass der Wert nicht in der Liste ist. 
-\lstinputlisting[language=java, linerange={19-30}]{Code/SkipList.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwSkipList}{SkipList}
+    \SetKwFunction{Kwsearch}{search}
+    \Cl{\KwSkipList{} \textnormal{(continued)}}{
+        \Fn{\Kwsearch{k}}{
+            curr = head\;
+            \While{curr $\neq$ \KwNil}{
+                \If{curr.key $==$ k}{
+                    \KwRet curr; \tcp{key found}
+                }
+                \ElseIf{curr.next $\neq$ \KwNil \KwAnd curr.next.key $\leq$ k}{
+                    curr = curr.next; \tcp{move along the list}
+                }
+                \Else{
+                    curr = curr.down; \tcp{move down the list}
+                }
+            }
+            \KwRet \KwNil; \tcp{key not found}
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -293,10 +343,70 @@ Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten d
     \captionof*{figure}{Search 40}
 \end{minipage}\\[20pt]
 \newpage
+
+\textbf{Insert:}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwrandomLevel}{randomLevel}
+    \SetKwFunction{Kwinsert}{insert}
+    \Cl{SkipList \textnormal{(continued)}}{
+        \Fn{\KwrandomLevel{}}{
+            \tcp{Used to determine in how many lists a node will be added}
+            r = Math.random()\;
+            lvl = $0$\;
+            \While{r $<$ P}{
+                lvl = $lvl + 1$\;
+                r = Math.random()\;
+            }
+            \KwRet lvl\;
+        }
+        \Fn{\Kwinsert{k}}{
+            lvl = \KwrandomLevel{}\;
+            \While{lvl $>$ height}{
+                \tcp{If needed increase list height and add required heads}
+                head.up = \text{new } SkipNode($-\infty$)\;
+                head.up.down = head\;
+                head = head.up\;
+                height = $height + 1$\;
+            }
+            prevs = \text{new array of size } $height + 1$; \tcp{Holds previous nodes in each list}
+            curr = head\;
+            \For{i = height \KwDownTo $0$}{
+                \While{curr.next $\neq$ \KwNil \KwAnd curr.next.key $<$ k}{
+                    curr = curr.next; \tcp{Loops until next key is $\geq$ k}
+                }
+                \If{curr.next $\neq$ \KwNil \KwAnd curr.next.key $==$ k}{
+                    \KwRet; \tcp{key already in list}
+                }
+                prevs[$i$] = curr; \tcp{Adds current node as predecessor}
+                curr = curr.down; \tcp{Moves down in the list}
+            }
+            count = $0$; \tcp{counter for number of lists in which new node has been added}
+            dwn = \KwNil; \tcp{Holds the node that is the down node of the node in a level}
+            \While{count $\leq$ lvl}{
+                \tcp{Add new nodes to lists in lvl}
+                newNode = \text{new } SkipNode(k)\;
+                newNode.next = prevs[$count$].next; \tcp{Includes new node in list}
+                newNode.prev = prevs[$count$]\;
+                \If{prevs[$count$].next $\neq$ \KwNil}{
+                    prevs[$count$].next.prev = newNode; \tcp{change previous to new node}
+                }
+                prevs[$count$].next = newNode; \tcp{change next to new node}
+                newNode.down = dwn; \tcp{connect newNode to itself on a lower level}
+                \If{dwn $\neq$ \KwNil}{
+                    dwn.up = newNode; \tcp{connect lower level to newNode}
+                }
+                dwn = newNode; \tcp{Update dwn}
+                count = $count + 1$; \tcp{Update counter}
+            }
+        }
+    }
+\end{algorithm}
+
 Einfügen in die Skip-List ist ein wenig komplizierter, aber auch grundlegend simpel. Erst einmal muss ermittelt werden auf wie viele Ebenen der Wert hinzugefügt werden muss. Dies kann über eine vom Element abhängige Formel oder auch andere Methoden zum erzeugen einer zufälligen Zahl geschehen. Nachdem dieses Level ermittelt wurde, muss, falls notwendig die Liste um die noch nicht vorhandenen Ebenen ergänzt werden. Dies geschieht dadurch, dass man die \texttt{Head} Node nach oben erweitert, den \texttt{height}-Counter erhöht und den Head auf den neuen Head aktualisiert.\\
 Nachdem dies geschehen ist wird nun die Liste wie beim \texttt{search}-Algorithmus durchgangen um die Einfügestelle zu ermitteln. Beim Durchlauf werden zusätzlich noch die zukünftigen Vorgängerknoten in einem Array vermerkt.\\
 Nachdem werden nun die Knoten auf den bestimmten Ebenen eingefügt.
-\lstinputlisting[language=java, linerange={31-73}]{Code/SkipList.java}
+
 \begin{minipage}{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -357,9 +467,36 @@ Nachdem werden nun die Knoten auf den bestimmten Ebenen eingefügt.
     \end{tikzpicture}
     \captionof*{figure}{Insert 45 with randomLevel = 3}
 \end{minipage}\\[20pt]
-\newpage
+%\newpage
+
+\textbf{Delete:}
+
 Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht. Nachdem muss lediglich die Referenzen von den Vor- und Nachgängern abgeändert werden, sodass das Element selbst nichtmehr in der Liste ist. Dies muss nun lediglich nur für jede Ebene wiederholt werden.
-\lstinputlisting[language=java, linerange={74-91,105}]{Code/SkipList.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{Kwdelete}{delete}
+    \SetKwFunction{Kwsearch}{search}
+    \Cl{SkipList \textnormal{(continued)}}{
+        \Fn{\Kwdelete{k}}{
+            node = \Kwsearch{k}; \tcp{Find first node in list that has k}
+            \While{node $\neq$ \KwNil}{
+                \tcp{Remove node from list by removing its references}
+                node.prev.next = node.next\;
+                \If{node.next $\neq$ \KwNil}{
+                    node.next.prev = node.prev\;
+                }
+                \If{node.next $==$ \KwNil \KwAnd node.prev.key $==$ $-\infty$ \KwAnd node.prev.down $\neq$ \KwNil}{
+                    \tcp{If deleted node is last in list, reduce height and update head}
+                    node.prev.down.up = \KwNil\;
+                    head = node.prev.down\;
+                    height = $height - 1$\;
+                }
+                node = node.down; \tcp{Moves down from the found node}
+            }
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -454,6 +591,8 @@ Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht
     \captionof*{figure}{Delete 37}
 \end{minipage}\\[20pt]
 
+Eine schöne interaktive Visualisierung von Skip-Lists kann man \href{https://cmps-people.ok.ubc.ca/ylucet/DS/SkipList.html}{hier} finden.
+
 \includepdf[pages={10}, pagecommand={},nup=1x2, frame=true]{../VL_Folien/05RandomizedDataStructures.pdf}
 \newpage
 \subsection{Hash Tables}
@@ -461,7 +600,43 @@ Hash Tables sind eine sehr effiziente Datenstruktur, die Einfügen, Löschen und
 Zwar sind die Hash-Funktionen meist so groß, dass es sehr unwahrscheinlich ist, dass zwei Objekte den gleichen Hash-Code haben, jedoch wird dieses mit der Komprimierung schwierig. Deshalb werden bei der Implementation von Hash Tables oft verschiedene Taktiken genutzt um Double Hashing einzubinden. Die wohl bekannteste ist es den Hash Table mit einer Linked List zu implementieren. \\
 Normal sind die Aufrufe in konstanter Zeit, durch die Implementation mit Linked List verschlechtert sich dies aber im Worst-Case zu $O(n)$.
 
-\lstinputlisting[language=java, linerange={1-26}]{Code/HashTable.java}
+\textbf{Definition:}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwHashTable}{HashTable}
+    \SetKwFunction{KwHashNode}{HashNode}
+    \SetKwFunction{KwhashCode}{hashCode}
+    \SetKwFunction{KwgetBucketIndex}{getBucketIndex}
+    \Cl{\KwHashNode{}}{
+        key\;
+        value\;
+        hashCode\;
+        next\;
+        \Con{\KwHashNode{k, v, hc}}{
+            key = k\;
+            value = v\;
+            hashCode = hc\;
+            next = \KwNil\;
+        }
+    }
+    \Cl{\KwHashTable{}}{
+        numBuckets\;
+        buckets\;
+        \Con{\KwHashTable{num}}{
+            numBuckets = num\;
+            buckets = \text{new array of size } numBuckets\;
+        }
+        \tcp{Complexity: O(1)}
+        \Fn{\KwhashCode{key}}{
+            \KwRet \text{hash of } key\;
+        }
+        \tcp{Complexity: O(1)}
+        \Fn{\KwgetBucketIndex{key}}{
+            \KwRet $|\KwhashCode{key} \mod numBuckets |$; \tcp{Hashcode can be negative, index cant}
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}[t]{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -525,8 +700,74 @@ Normal sind die Aufrufe in konstanter Zeit, durch die Implementation mit Linked 
     \captionof*{figure}{Example structure}
 \end{minipage}
 \newpage
+\textbf{Insert, Search, Delete:}
+
 Einfügen, Suchen und Löschen funktionieren Prinzipiell gleich zu dem in LinkedLists, nachdem der korrekte Hash Bucket gefunden wurde.
-\lstinputlisting[language=java, firstline=27]{Code/HashTable.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwHashTable}{HashTable}
+    \SetKwFunction{Kwput}{put}
+    \SetKwFunction{Kwget}{get}
+    \SetKwFunction{Kwremove}{remove}
+    \SetKwFunction{KwgetBucketIndex}{getBucketIndex}
+    \SetKwFunction{KwhashCode}{hashCode}
+    \Cl{\KwHashTable{} \textnormal{(continued)}}{
+        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case due to duplicate check}
+        \Fn{\Kwput{key, value}}{
+            bucketIndex = \KwgetBucketIndex{key}; \tcp{search index of bucket}
+            head = buckets[$bucketIndex$]; \tcp{search head of bucket}
+            
+            curr = head\;
+            \While{curr $\neq$ \KwNil}{
+                \If{curr.key $==$ key \KwAnd curr.hashCode $==$ \KwhashCode{key}}{
+                    curr.value = value\;
+                    \KwRet\;
+                }
+                curr = curr.next\;
+            }
+            
+            \tcp{If key not found, insert at the front of the chain}
+            newNode = \text{new } HashNode(key, value, \KwhashCode{key})\;
+            newNode.next = head\;
+            buckets[$bucketIndex$] = newNode\;
+        }
+        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case}
+        \Fn{\Kwget{key}}{
+            bucketIndex = \KwgetBucketIndex{key}\;
+            head = buckets[$bucketIndex$]\;
+            \While{head $\neq$ \KwNil}{
+                \tcp{goes through the buckets list}
+                \If{head.key $==$ key \KwAnd head.hashCode $==$ \KwhashCode{key}}{
+                    \KwRet head.value; \tcp{if key is found, return value}
+                }
+                head = head.next; \tcp{move head to next}
+            }
+            \KwRet \KwNil; \tcp{If key not found -> return null}
+        }
+        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case}
+        \Fn{\Kwremove{key}}{
+            bucketIndex = \KwgetBucketIndex{key}\;
+            head = buckets[$bucketIndex$]\;
+            prev = \KwNil\;
+            \While{head $\neq$ \KwNil}{
+                \If{head.key $==$ key \KwAnd head.hashCode $==$ \KwhashCode{key}}{
+                    \If{prev $==$ \KwNil}{
+                        buckets[$bucketIndex$] = head.next; \tcp{if key is the head}
+                    }
+                    \Else{
+                        prev.next = head.next; \tcp{change references}
+                    }
+                    \KwRet head.value; \tcp{return removed value}
+                }
+                prev = head\;
+                head = head.next\;
+            }
+            \KwRet \KwNil\;
+        }
+    }
+\end{algorithm}
+
+Eine schöne interaktive Visualisierung von Hash Tables kann man \href{https://dsavisualization.com/hash}{hier} finden.
 
 \newpage
 \subsection{Bloom Filter}
@@ -534,11 +775,50 @@ Ein Bloom-Filter ist eine Datenstruktur, die benutzt wird um schnell herauszufin
 Bloom Filter sind sehr effizient, da sie zum einem nicht die Elemente selbst speichern, sondern nur ihre Anwesenheit, zum anderen, da das Einfügen und Auslesen auch sehr schnell ist mit $O(k)$ mit $k$ die Anzahl der Funktionen.\\
 Nachteile von Bloom Filtern sind die \textit{false-positives}, die sehr komplizierte deletion (Ein Element rauslöschen kann auch anderes rauslöschen, was \textit{false-negatives} erzeugt) und die festgelegte Größe. \\
 Sie werden häufig genutzt um Caches und Spam zu filtern, aber auch um bspw. zu schauen, ob ein Passwort häufig verwendet wird.
-\lstinputlisting[language=java, linerange={1-16}]{Code/BloomFilter.java}
+
+\textbf{Definition:}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwBloomFilter}{BloomFilter}
+    \SetKwFunction{KwexampleFunctions}{exampleFunctions}
+    \Cl{\KwBloomFilter{}}{
+        functions\;
+        bloomFilter\;
+        bloomSize\;
+        \Con{\KwBloomFilter{size, funcs}}{
+            functions = funcs\;
+            bloomSize = size\;
+            bloomFilter = \text{new boolean array of size } bloomSize \text{ (defaults to \KwFalse)}\;
+        }
+        \Fn{\KwexampleFunctions{}}{
+            functions = \text{new array of size } $3$\;
+            functions[$0$] = (s) $\rightarrow$ s.length() $\mod bloomSize$\;
+            functions[$1$] = (s) $\rightarrow$ s.charAt($0$) $\mod bloomSize$\;
+            functions[$2$] = (s) $\rightarrow$ s.charAt(s.length() - $1$) $\mod bloomSize$\;
+        }
+    }
+\end{algorithm}
+
 Bei diesen Beispielfunktionen, könnte man z.B. \textbf{Dance} einfügen, was aber die gleichen bits wie \textbf{Dodge} belegt. Demnach würde bei der Suche für \textbf{Dodge} ein \textit{false-positive} erzeugt werden. False-Positives werden immer wahrscheinlicher je mehr Elemente eingefügt werden und je kleiner der Bloom Filter ist. Natürlich sind sie aber auch grundlegend von den Functions, bezüglich der Komplexität, Probabilistik und Anzahl, abhängig. Diese Beispielfunktionen sind relativ schlecht, da sie simpel sind, was im Endeffekt in mehr \textit{false-positives} resultiert. Abstraktere, komplexere Funktionen funktionieren hierbei meist besser, da sie nicht an Adjezenz der Eingaben festhalten.
 \newpage
+
+\textbf{Insert:}
+
 Einfügen ist sehr simpel. Es müssen lediglich die Funktionen auf die Eingabe angewendet werden und die entsprechenden Bits danach umgestellt werden.
-\lstinputlisting[language=java, linerange={17-21}]{Code/BloomFilter.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwBloomFilter}{BloomFilter}
+    \SetKwFunction{KwaddToBloom}{addToBloom}
+    \Cl{\KwBloomFilter{} \textnormal{(continued)}}{
+        \tcp{Complexity: O(k), k = number of functions}
+        \Fn{\KwaddToBloom{x}}{
+            \ForEach{function $\in$ functions}{
+                bloomFilter[function(x)] = \KwTrue; \tcp{add to bloom}
+            }
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}[t]{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -614,9 +894,29 @@ Einfügen ist sehr simpel. Es müssen lediglich die Funktionen auf die Eingabe a
     
     \end{tikzpicture}
 \end{minipage}
-\newpage
-Das Durchsuchen des Bloom-Filters läuft fast identisch zum Einfügen ab. Es müssen wieder mittels der Funktionen die passenden Werte der Eingabe gefunden werden. Diese werden dann verwendet um zu schauen, ob alle benötigten Bits im Bloom-Filter vorhanden sind. Wenn alle da sind ist das Element im Bloom-Filter enthalten, allerdings kann dies auch wahr für Werte sein, die nicht explizit eingefügt wurden (false-positive).
-\lstinputlisting[language=java, linerange={22-29}]{Code/BloomFilter.java}
+
+\vspace{2em}
+\textbf{Search:}
+
+Das Durchsuchen des Bloom-Filters läuft ähnlich zum Einfügen ab. Es müssen mittels der Funktionen die Werte der Eingabe gefunden werden. Diese werden verwendet um zu schauen, ob alle benötigten Bits im Bloom-Filter sind. Wenn alle da sind ist das Element im Bloom-Filter enthalten, dies kann aber auch wahr für Werte sein, die nicht eingefügt wurden (false-positive).
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwBloomFilter}{BloomFilter}
+    \SetKwFunction{KwisInBloom}{isInBloom}
+    \Cl{\KwBloomFilter{} \textnormal{(continued)}}{
+        \tcp{Complexity: O(k), k = number of functions}
+        \Fn{\KwisInBloom{x}}{
+            \ForEach{function $\in$ functions}{
+                \If{\KwNot bloomFilter[function(x)]}{
+                    \KwRet \KwFalse; \tcp{One function is not in bloom $\rightarrow$ false}
+                }
+            }
+            \KwRet \KwTrue; \tcp{If all functions are present $\rightarrow$ true (possible false positive)}
+        }
+    }
+\end{algorithm}
+
+
 \textbf{Check if "hello" exists: (true-positive)}\\
 \begin{minipage}[t]{\textwidth}
     \centering
@@ -702,6 +1002,8 @@ $\implies$ Existenz im Bloom Filter obwohl nicht spezifisch eingefügt\\[20pt]
     \end{tikzpicture}
 \end{minipage}
 $\implies$ keine Existenz im Bloom Filter\\
+
+Eine schöne interaktive Visualisierung von Bloom-Filtern kann man \href{https://gallery.selfboot.cn/en/algorithms/bloomfilter}{hier} finden.
 
 \includepdf[pages={41-42}, pagecommand={},nup=1x2, frame=true]{../VL_Folien/05RandomizedDataStructures.pdf}
 

@@ -11,7 +11,7 @@
 \begin{document}
 \section{Sortieren}
 \subsection{Sortierproblem}
-Sortieralgorithmen sind die wohl am häufigsten verwendeten Algorithmen. Hierbei wird als Eingabe eine Folge von Objekten gegeben, die nach einer bestimmten Eigenschaft sortiert werden. Der Algorithmus soll die Eingabe in der richtigen Reihenfolge (nach einer bestimmten Eigenschaft) zur Ausgabe umwandeln. Es wird hierbei meist von einer total geordneten Menge ausgegangen. (Alle Elemente sind miteinander vergleichbar). \\
+Sortieralgorithmen sind die wohl bekanntesten Algorithmen. Hierbei wird als Eingabe eine Folge von Objekten gegeben, die nach einer bestimmten Eigenschaft sortiert werden. Der Algorithmus soll die Eingabe in der richtigen Reihenfolge (nach einer bestimmten Eigenschaft) zur Ausgabe umwandeln. Es wird hierbei meist von einer total geordneten Menge ausgegangen. (Alle Elemente sind miteinander vergleichbar). \\
 Eine Totale Ordnung wird wie folgt definiert:
 \begin{center}
     Eine Relation $\leq$ auf $M$ ist eine totale Ordnung, wenn:
@@ -28,7 +28,21 @@ Eine Totale Ordnung wird wie folgt definiert:
 \end{center}
 \newpage
 \subsection{Insertion Sort}
-\lstinputlisting[language=Java]{Code/InsertionSort.java}
+\begin{algorithm}[H]
+    \SetKwFunction{inssort}{InsertionSort}
+    \Fn{\inssort{arr}}{
+        \For{i = 1 \KwTo n - 1}{
+            key = arr[i]\;
+            j = i - 1\;
+            \tcp{Loops backwards through the array starting at i - 1 until it finds an element that is greater than the key or the beginning of the array}
+            \While{j $\geq$ 0 \KwAnd arr[j] $>$ key}{
+                arr[j + 1] = arr[j]; \tcp{Shifts the element to the right}
+                j = j - 1;
+            }
+            arr[j + 1] = key; \tcp{Assigns the key to the correct position}
+        }
+    }
+\end{algorithm}
 
 \subsubsection{Vorgehensweise}
 Die Eingabe wird von links nach rechts durchlaufen startend bei $i = 1$. Das Element $i$ wird dann mit allen Element verglichen, die links von $i$ stehen, bis es 0 erreicht oder das die Einfügestelle gefunden wurde (Vor einem Element, das kleiner als das Element $i$ ist). Die Elemente, die im betrachteten Bereich liegen und größer sind werden während dem Durchlauf eins nach rechts verschoben.
@@ -210,6 +224,8 @@ Die Eingabe wird von links nach rechts durchlaufen startend bei $i = 1$. Das Ele
 \end{minipage}
 Grün ist das momentan betrachte Element/Bereich. Magenta der Einfügepunkt des Elements.
 
+\href{https://www.hackerearth.com/practice/algorithms/sorting/insertion-sort/visualize/}{Hier} gibt es eine interaktive Visualisierung von InsertionSort.
+
 \newpage
 \subsubsection{Komplexität}
 \begin{itemize}
@@ -232,11 +248,27 @@ Grün ist das momentan betrachte Element/Bereich. Magenta der Einfügepunkt des 
         \item Nach der quadratischen Steigerung für große Zahlen ist die Hälfte aber irrelevant, weswegen $\Theta(n^2)$ ist.
     \end{itemize}
 \end{itemize}
-% TODO: Fix path resolution for Tectonic compilations
 \includepdf[pages={10}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/02Sorting.pdf}
 
 \subsection{Bubble Sort}
-\lstinputlisting[language=Java]{Code/BubbleSort.java}
+\begin{algorithm}[H]
+    \SetKwFunction{bubsort}{BubbleSort}
+    \Fn{\bubsort{arr}}{
+        \For{i = n - 1 \KwDownTo 1}{
+            sorted = \KwTrue\;
+            \For{j = 0 \KwTo i - 1}{
+                \If{arr[j] > arr[j + 1]}{
+                    Swap arr[j] and arr[j + 1]\;
+                    sorted = \KwFalse\;
+                }
+            }
+            \If{sorted}{
+                \KwBreak;
+            }
+        }
+    }
+\end{algorithm}
+
 \subsubsection{Vorgehensweise}
 BubbleSort durchläuft die Eingabe umgekehrt zu InsertionSort: Während bei InsertionSort erst ein Element in einem Teil der Eingabe sortiert wird und der Bereich pro Iteration größer wird, wird bei BubbleSort zuerst der komplette array1 durchlaufen und beieinander liegende Elemente getauscht, wenn sie größer/kleiner sind und der Bereich mit Iteration weiter eingeschränkt. D.h., dass nach der ersten Iteration bereits das größte Elemente an richtiger Stelle steht, nach der zweiten das zweitgrößte etc.\\
 Hier in dem Beispiel handelt es sich schon um einen optimierten BubbleSort. Dafür wird zusätzlich der Boolean sorted erstellt, der angibt, ob die Eingabe nach dem ersten durchlauf schon sortiert ist, was der Fall ist, wenn kein Element vertauscht wurde. Ist dies der Fall müssen keine weitern Iteration mehr durchgeführt werden und der Algorithmus kann vorzeitig abgebrochen werden. Dies führt zu einem besseren Best-Case. \\
@@ -418,6 +450,9 @@ Im Vergleich zu InsertionSort ist BubbleSort meist inefektiver als InsertionSort
     \captionof*{figure}{Endzustand}
 \end{minipage}
 Pfeile repräsentieren Bewegung über eine Iteration, nicht einzelne Schritte. Grün repräsentiert den bearbeiteten Bereich.
+
+\href{https://www.hackerearth.com/practice/algorithms/sorting/bubble-sort/visualize/}{Hier} gibt es eine interaktive Visualisierung von BubbleSort.
+
 \subsubsection{Komplexität}
 \begin{itemize}
     \item \textbf{Worst-Case:}
@@ -442,7 +477,49 @@ Pfeile repräsentieren Bewegung über eine Iteration, nicht einzelne Schritte. G
 \end{itemize}
 \includepdf[pages={50}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/02Sorting.pdf}
 \subsection{Merge Sort}
-\lstinputlisting[language=Java]{Code/MergeSort.java}
+\begin{algorithm}[H]
+    \SetKwFunction{msort}{MergeSort}
+    \SetKwFunction{merge}{Merge}
+    
+    \Fn{\msort{arr, left, right}}{
+        \If{left < right}{
+            \tcp{left < right, otherwise the region has no elements}
+            mid = $\lfloor$ (left + right) / 2 $\rfloor$; \tcp{Integer division $\rightarrow$ round down}
+            
+            \tcp{Split the region into two halves and do the recursive calls}
+            \msort{arr, left, mid}\;
+            \msort{arr, mid + 1, right}\;
+            
+            \tcp{Merge the two (now sorted) halves}
+            \merge{arr, left, mid, right}\;
+        }
+    }
+        
+    \Fn{\merge{arr, left, mid, right}}{
+        temp = new array of size (right - left + 1)\;
+        p = left\;
+        q = mid + 1\;
+        \tcp{For each element in the region}
+        \For{i = 0 \KwTo right - left}{
+            \tcp{If p $>$ mid the left half is finished $\rightarrow$ element goes to right half}
+            \tcp{Otherwise p $\leq$ mid and the element at p needs to be $\leq$ the element at q}
+            \If{q $>$ right \KwOr (p $\leq$ mid \KwAnd arr[p] $\leq$ arr[q])}{
+                temp[i] = arr[p];
+                p = p + 1; \tcp{Add the element at p to the temp array and increase p}
+            }
+            \Else{
+                temp[i] = arr[q];
+                q = q + 1; \tcp{Add the element at q to the temp array and increase q}
+            }
+        }
+        
+        \tcp{Copy the merged elements from the temporary array back to the original array}
+        \For{i = 0 \KwTo right - left}{
+            arr[left + i] = temp[i]; \tcp{left + 0 is the start of the region}
+        }
+    }
+\end{algorithm}
+
 \subsubsection{Vorgehensweise}
 Die Eingabe wird jeweils immer in der Mitte in zwei Teile aufgeteilt, die jeweils wieder aufgeteilt werden. Dies passiert so lange, bis alle Elemente einzeln vorhanden sind. Danach werden immer zwei dieser enstandenen Teillisten so zusammengeführt, dass sie geordnet sind. Dies wird dann wieder durchgeführt, bis alle Elemente in der Eingabe vorhanden sind und nun auch sortiert.
 Dieses Prinzip wird auch \textit{Divide-and-Conquer} genannt. Bei \textit{Divide} wird die Eingabe in zwei Teile aufgeteilt. Bei \textit{Conquer} werden diese Teile sortiert. Dies geschieht durch die Zusammenführung von den einelementigen Teillisten, die trivial sortiert sind.
@@ -705,6 +782,9 @@ Dieses Prinzip wird auch \textit{Divide-and-Conquer} genannt. Bei \textit{Divide
 
     \end{tikzpicture}
 \end{minipage}
+
+\href{https://www.hackerearth.com/practice/algorithms/sorting/merge-sort/visualize/}{Hier} gibt es eine interaktive Visualisierung von MergeSort.
+
 \subsubsection{Komplexität}
 \begin{itemize}
     \item \textbf{Worst-Case:}
@@ -725,7 +805,48 @@ Dieses Prinzip wird auch \textit{Divide-and-Conquer} genannt. Bei \textit{Divide
 \end{itemize}
 \includepdf[pages={53,55}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/02Sorting.pdf}
 \subsection{Quicksort}
-\lstinputlisting[language=Java]{Code/Quicksort.java}
+\begin{algorithm}[H]
+    \SetKwFunction{qsort}{QuickSort}
+    \SetKwFunction{partition}{Partition}
+    
+    \Fn{\qsort{arr, left, right}}{
+        \tcp{If region contains more than one element}
+        \If{left < right}{
+            part = \partition{arr, left, right}\;
+            \qsort{arr, left, part}\;
+            \qsort{arr, part + 1, right}\;
+        }
+    }
+        
+    \Fn{\partition{arr, left, right}}{
+        pivot = arr[left]; \tcp{Pivot is the first element in the region}
+        
+        p = left - 1\;
+        q = right + 1\;
+        \While{p < q}{
+            \tcp{Increase p until an element $\geq$ pivot is found}
+            p = p + 1\;
+            \While{arr[p] < pivot}{
+                p = p + 1\;
+            }
+            
+            \tcp{Decrease q until an element $\leq$ pivot is found}
+            q = q - 1\;
+            \While{arr[q] > pivot}{
+                q = q - 1\;
+            }
+            
+            \If{p < q}{
+                Swap arr[p] and arr[q];
+            }
+        }
+        
+        \tcp{Loop runs until p and q cross. Returns partition index q.}
+        \tcp{Indices $\leq$ q contain elements $\leq$ pivot, indices > q contain elements $\geq$ pivot.}
+        \KwRet q;
+    }
+\end{algorithm}
+
 Quicksort funktioniert vom Prinzip ähnlich zu Mergesort. Auch hier wird die Eingabe in zwei Teillisten aufgeteilt und der rekursiv wiederholt. Hier findet die Sortierung allerdings anders statt. Anstatt die Sortierung durch die Zusammenführung zweier Listen zu realisieren, werden hier die einzelnen Elemente anhand des Vergleiches an einem anderen Elementes links oder rechts von diesem eingeordnet. Dies führt durch das \textit{Divide-and-Conquer} Prinzip dazu, dass die Eingabe die Element in die zwei Teile, größer und kleiner des Pivots einordnet. Diese beiden Teile werden dann wiederum genauso behandelt, bis schließlich der gesamte array1 geordnet ist.\\
 Bei der Implementation wird häufig anstatt den Pivot als erstes Element des Bereiches zu definieren, dieser zufällig gewählt, was zu einem besseren average-case führt, wenn die Eingabe bereits einigermaßen sortiert ist. 
 Quicksort ist zwar in der Theorie in den meisten Situationen nicht unbedingt besser als Merge sort auf die Komplexität bezogen, in der Praxis aber oft schneller, durch die Ineffizienz von Kopieroperationen, die für Quicksort wegfallen.
@@ -949,6 +1070,9 @@ Quicksort ist zwar in der Theorie in den meisten Situationen nicht unbedingt bes
         \draw[color=codegray, thick] (pos1.north west) rectangle (pos1.south east);
     \end{tikzpicture}
 \end{minipage}
+
+\href{https://www.hackerearth.com/practice/algorithms/sorting/quick-sort/visualize/}{Hier} gibt es eine interaktive Visualisierung von QuickSort.
+
 \subsubsection{Komplexität}
 \begin{itemize}
     \item \textbf{Worst-Case:}
@@ -976,7 +1100,53 @@ Quicksort ist zwar in der Theorie in den meisten Situationen nicht unbedingt bes
 \includepdf[pages={89}, pagecommand={},nup=1x2, frame=true, scale=0.9]{../VL_Folien/02Sorting.pdf}
 \subsection{Radix Sort}
 
-\lstinputlisting[language=Java]{Code/RadixSort.java}
+\begin{algorithm}[H]
+    \SetKwFunction{rsort}{RadixSort}
+    \SetKwFunction{putbucket}{PutBucket}
+    \SetKwFunction{amountdigits}{AmountDigits}
+    
+    \tcp{D = 10, possible unique digits (e.g. 0-9 for decimal system)}
+    
+    \Fn{\rsort{arr}}{
+        d = \amountdigits{arr}\;
+        buckets = new array of empty lists of size D\;
+        
+        \For{i = 0 \KwTo d - 1}{
+            \tcp{For each digit in the array, 0 is least significant}
+            \For{j = 0 \KwTo n - 1}{
+                \putbucket{arr, i, j, buckets}; \tcp{Sorts the numbers into their buckets}
+            }
+            
+            a = 0\;
+            \tcp{Reads out the buckets in order}
+            \For{k = 0 \KwTo D - 1}{
+                \For{b = 0 \KwTo buckets[k].size() - 1}{
+                    arr[a] = buckets[k].get(b)\;
+                    a = a + 1\;
+                }
+                buckets[k].clear()\; \tcp{Clears the bucket for the next iteration}
+            }
+        }
+    }
+        
+    \Fn{\putbucket{arr, i, j, buckets}}{
+        z = $\lfloor \text{arr}[j] / D^i \rfloor \mod D$; \tcp{Gets the ith digit of the number}
+        buckets[z].append(arr[j]); \tcp{Appends the number to bucket z}
+    }
+        
+    \Fn{\amountdigits{arr}}{
+        max = arr[0];
+        \For{i = 1 \KwTo arr.length - 1}{
+            \If{arr[i] > max}{
+                max = arr[i];
+            }
+        }
+        
+        \tcp{Get the amount of digits of the largest number}
+        \KwRet $\lfloor \log_D($max$)$ $\rfloor + 1$;
+    }
+\end{algorithm}
+
 \subsubsection{Vorgehensweise}
 Bei RadixSort wird die Eingabe für jede Dezimalstelle sortiert. D.h., dass die Eingabe zuerst anhand von der 1er-Stelle sortiert wird, dann der 10er-Stelle, und so weiter. \\
 Dies geschieht durch die Einordnung der Elemente in "Buckets", die jeweils einen möglichen Wert für die Dezimalstelle darstellen(z.B. \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}). Nachdem alle Werte in Buckets eingeordnet wurden, werden diese Buckets nun nach Signifikanz ausgelesen (0 ist kleiner als 9, also werden 0 zuerst ausgelesen) und nach der bearbeiteten Ziffer sortiert in die Eingabe zurückgefügt. Dadurch liegt der array1 für die Ziffer nun sortiert da.\\
@@ -1110,6 +1280,7 @@ Dies wird nun für die nächste Dezimalstelle wiederholt, wodurch die Eingabe je
     \end{tikzpicture}
 \end{minipage}
 Die Farben haben keine spezielle Bedeutung und dienen nur der Visualisierung.
+
 \subsubsection{Komplexität}
 \begin{itemize}
     \item Da bei RadixSort die Eingabe nur von der Anzahl der möglichen Ziffernvariationen $D$, der Eingabelänge $n$ und die maximale Anzahl der Ziffern $d$ abhängig ist, ist der Algorithmus für \textbf{Best-, Worst- und Average-case} gleich.

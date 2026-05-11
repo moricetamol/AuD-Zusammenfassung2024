@@ -19,16 +19,52 @@ Stacks werden normalerweise mit den folgenden Funktionen erstellt:
     \item \texttt{push(k)}: Fügt \texttt{k} auf den Stack hinzu
 \end{itemize}
 Eine mögliche Implementation auf Grundlage eines Arrays wäre:
-\lstinputlisting[language=Java]{Code/Stack.java}
 
-Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Stack underflow und Stack overflow benannt. Hier wär es automatisch IndexOutOfBounds.\\ Oft werden Stacks auch mit variabler Größer implementiert. Dies kann über verschiedene Wege passieren, zum Beispiel Kopieren des arrays in einen größeren Array oder implementation über mehrere Arrays (z.B. über Linked List). Häufig wird das erstere so implementiert, dass der Array in einen Array mit doppelter Größe kopiert wird.\\
+\begin{algorithm}[H]
+    \SetKwFunction{KwStack}{Stack}
+    \SetKwFunction{KwIsEmpty}{isEmpty}
+    \SetKwFunction{KwPop}{pop}
+    \SetKwFunction{KwPush}{push}
+    \Cl{\KwStack}{
+        arr\;
+        top\;
+                
+        \Con{\KwStack{size}}{
+            arr = new array of size size\;
+            top = -1; \tcp{Creates a new array with size}
+        }
+                
+        \Fn{\KwIsEmpty{}}{
+            \KwRet top < 0; \tcp{Returns true if empty}
+        }
+                
+        \Fn{\KwPop{}}{
+            \If{\KwIsEmpty{}}{
+                \KwRet \KwError; \tcp{Underflow check}
+            }
+            element = arr[top]\;
+            top = top - 1\;
+            \KwRet element; \tcp{Removes and returns the top element}
+        }
+                
+        \Fn{push(k)}{
+            \If{top $\geq$ size - 1}{
+                \KwRet \KwError; \tcp{Overflow check}
+            }
+            top = top + 1;
+            arr[top] = k; \tcp{Adds an element}
+        }
+    }
+\end{algorithm}
+
+Oft werden Stacks auch mit variabler Größer implementiert. Dies kann über verschiedene Wege passieren, zum Beispiel Kopieren des arrays in einen größeren Array oder implementation über mehrere Arrays (z.B. über Linked List). Häufig wird das erstere so implementiert, dass der Array in einen Array mit doppelter Größe kopiert wird.\\
 \vspace{20pt}\\
 \begin{minipage}[t]{0.33\textwidth}
     \centering
     \begin{tikzpicture}[
-        every node/.style={draw,minimum width=30pt, minimum height=20pt, rectangle, rounded corners, text centered},
+        every node/.style={draw,minimum width=30pt, minimum height=15pt, rectangle, rounded corners, text centered},
         invis/.style={draw=none},
-        node distance = 10pt,
+        node distance = 6.5pt,
     ]
         \node[invis](bottom){};
         \node[invis, above =of bottom](mid){};
@@ -49,9 +85,9 @@ Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Sta
 \begin{minipage}[t]{0.33\textwidth}
     \centering
     \begin{tikzpicture}[
-        every node/.style={draw,minimum width=30pt, minimum height=20pt, rectangle, rounded corners, text centered},
+        every node/.style={draw,minimum width=30pt, minimum height=15pt, rectangle, rounded corners, text centered},
         invis/.style={draw=none},
-        node distance = 10pt,
+        node distance = 6.5pt,
     ]
         \node[invis](bottom){};
         \node[invis, above =of bottom](mid){};
@@ -73,9 +109,9 @@ Push und Pop schmeißen Fehlermeldung wenn Stack leer bzw. voll ist. Oft als Sta
 \begin{minipage}[t]{0.33\textwidth}
     \centering
     \begin{tikzpicture}[
-        every node/.style={draw,minimum width=30pt, minimum height=20pt, rectangle, rounded corners, text centered},
+        every node/.style={draw,minimum width=30pt, minimum height=15pt, rectangle, rounded corners, text centered},
         invis/.style={draw=none},
-        node distance = 10pt,
+        node distance = 6.5pt,
     ]
         \node[invis](bottom){};
         \node[invis, above =of bottom](mid){};
@@ -106,7 +142,63 @@ Queues werden normalerweise mit den folgenden Funktionen erstellt:
 \end{itemize}
 Hier ist die Implementation für Queues wie folgt:
 
-\lstinputlisting[language=Java]{Code/Queue.java}
+\begin{algorithm}[H]
+    \SetKwFunction{KwQueue}{Queue}
+    \SetKwFunction{KwEnqueue}{enqueue}
+    \SetKwFunction{KwDequeue}{dequeue}
+    \SetKwFunction{KwIsEmpty}{isEmpty}
+    \SetKwFunction{KwIsFull}{isFull}
+    \Cl{\KwQueue}{
+        arr\;
+        front\;
+        back\;
+                
+        \Con{\KwQueue{size}}{
+            arr = new array of size size\;
+            front = -1\;
+            back = -1\;
+        }
+                
+        \Fn{\KwIsEmpty{}}{
+            \KwRet back $==$ -1\;
+        }
+                
+        \Fn{\KwIsFull{}}{
+            \KwRet (back + 1) $\mod$ size $==$ front; \tcp{Modulo makes this usable for cyclic arrays}
+        }
+                
+        \Fn{\KwEnqueue{k}}{
+            \If{\KwIsFull{}}{
+                \KwRet \KwError; \tcp{Queue is full}
+            }
+            \Else{
+                \If{\KwIsEmpty{}}{
+                    front = 0\;
+                }
+                back = (back + 1) $\mod$ size; \tcp{Modulo so that cyclic arrays work}
+                arr[back] = k\;
+            }
+        }
+                
+        \Fn{\KwDequeue{}}{
+            \If{\KwIsEmpty{}}{
+                \KwRet \KwError; \tcp{Queue is empty}
+            }
+            \Else{
+                temp = arr[front]\;
+                \If{front == back}{
+                    front = -1\;
+                    back = -1\;
+                }
+                \Else{
+                    front = (front + 1) $\mod$ size; \tcp{Modulo so that cyclic arrays work}
+                }
+                \KwRet temp\;
+            }
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}[t]{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -210,9 +302,83 @@ Hier ist die Implementation für Queues wie folgt:
 \subsection{Linked List}
 Eine einfache Linked List besteht aus mehreren Elementen, die jeweils immer einen Wert und eine Referenz auf das nächste Element in der Liste haben. Diese Struktur hat den Vorteil, dass sie keine festgelegte Größe hat, das Einfügen in $O(1)$ stattfindet, einfach zu implementieren ist und im Speicher nicht als Block, sondern einzelne Referenzen steht. Eine einfache Linked List kann wie folgt implementiert werden:
 
-\lstinputlisting[language=Java]{Code/LinkedList.java}
+\begin{algorithm}[H]
+    \SetKwFunction{KwLinkedList}{LinkedList}
+    \SetKwFunction{KwInsert}{insert}
+    \SetKwFunction{KwDelete}{delete}
+    \SetKwFunction{KwSearch}{search}
+    \SetKwFunction{KwLinkedElement}{LinkedElement}
+    \Cl{\KwLinkedElement}{
+        key\;
+        next\;
+                
+        \Con{\KwLinkedElement{k}}{
+            key = k\;
+            next = \KwNil\;
+        }
+    }
+        
+    \Cl{\KwLinkedList}{
+        head = \KwNil; \tcp{First element in list}
+        tail = \KwNil; \tcp{Last element in list}
+                
+        \Fn{\KwInsert{k}}{
+            elem = \texttt{new } \KwLinkedElement{k}\;
+            \If{head == \KwNil}{
+                head = elem\;
+                tail = elem\;
+            }
+            \Else{
+                tail.next = elem\;
+                tail = elem\;
+            }
+        }
+                
+        \tcp{Complexity: O(n)}
+        \Fn{\KwDelete{k}}{
+            prev = \KwNil\;
+            curr = head\;
+            \While{curr $\neq$ \KwNil \KwAnd curr.key $\neq$ k}{
+                prev = curr\;
+                curr = curr.next\;
+            }
+            
+            \If{curr == \KwNil}{
+                \KwRet \KwError; \tcp{Element not found}
+            }
+            
+            \If{prev $\neq$ \KwNil}{
+                prev.next = curr.next\;
+                \If{curr == tail}{
+                    tail = prev\;
+                }
+            }
+            \Else{
+                head = curr.next\;
+                \If{head == \KwNil}{
+                    tail = \KwNil\;
+                }
+            }
+        }
+                
+        \tcp{Complexity: O(n)}
+        \Fn{\KwSearch{k}}{
+            curr = head\;
+            \While{curr $\neq$ \KwNil \KwAnd curr.key $\neq$ k}{
+                curr = curr.next\;
+            }
+            
+            \If{curr == \KwNil}{
+                \KwRet \KwError; \tcp{Element not found}
+            }
+            
+            \KwRet curr\;
+        }
+    }
+\end{algorithm}
+
 Diese Implementation benutzt einen Head und Tail, hat aber nur Referenz für das nächste Element in der Liste. Eine alternative Implementation wäre Tail wegzulassen und den Nodes eine previous-Referenz zu geben. Damit könnte man beim Einfügen das Element vorne an den Head anzuhängen und die neue Node als Head zuzuweisen. \texttt{search} bleibt gleich, bei \texttt{delete} muss lediglich die previous Referenz angepasst werden.
-\newpage
+
 \begin{minipage}[t]{\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -320,7 +486,55 @@ Hierbei repräsentiert Left und Right die Nodes, die unter der current Node steh
 Dies erlaubt es Elemente in dem Tree schnell zu finden, da nicht alle Elemente durchlaufen werden müssen, sondern immer nur ein Pfad, bei dem das Element größer/kleiner ist. \\
 Ein idealer Binary Search Tree ist so balanziert, dass beide Seiten des Baumes die selbe Anzahl an Knoten besitzen. Dies wäre eine ideale Höhe von $h = \log n$.
 Ein schlechter Binary Search Tree allerdings ist unbalanziert, so dass der Worst-Case so aussieht, dass alle Nodes jeweils maximal ein Kind haben. Dies wäre effektiv gleich einer LinkedList.
-\lstinputlisting[language=Java, lastline = 30]{Code/BSTree.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwBSTNode}{BSTNode}
+    \SetKwFunction{KwBSTree}{BSTree}
+    \SetKwFunction{KwInsert}{insert}
+    \Cl{\KwBSTNode}{
+        key\;
+        left = \KwNil\;
+        right = \KwNil\;
+        parent = \KwNil\;
+                
+        \Con{\KwBSTNode{k}}{
+            key = k\;
+        }
+    }
+        
+    \Cl{\KwBSTree}{
+        root = \KwNil\;        
+        \tcp{Complexity: $\Omega(1)$, $O(h)$, $\Theta(h)$}
+        \Fn{\KwInsert{z}}{
+            x = root; \tcp{Traversal starting from the root}
+            px = \KwNil; \tcp{Parent of x, initially null}
+            
+            \While{x $\neq$ \KwNil}{
+                px = x\;
+                \If{z.key < x.key}{
+                    x = x.left\;
+                }
+                \Else{
+                    x = x.right\;
+                }
+            } \tcp{Traversing the tree until finding the insertion point}
+            
+            z.parent = px; \tcp{Sets the parent of the node to be inserted}
+            
+            \tcp{px is only null if the tree is empty $\rightarrow$ z is root}
+            \If{px == \KwNil}{
+                root = z\;
+            }
+            \ElseIf{z.key < px.key}{
+                px.left = z; \tcp{Key smaller $\rightarrow$ left child}
+            }
+            \Else{
+                px.right = z; \tcp{Key bigger $\rightarrow$ right child}
+            }
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}[t]{0.5\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -381,7 +595,62 @@ Ein schlechter Binary Search Tree allerdings ist unbalanziert, so dass der Worst
     \captionof*{figure}{Insert 5}
 \end{minipage}
 \newpage
-\lstinputlisting[language=Java, firstline = 31, lastline = 61]{Code/BSTree.java}
+
+\begin{algorithm}[H]
+    \SetKwFunction{KwBSTNode}{BSTNode}
+    \SetKwFunction{KwBSTree}{BSTree}
+    \SetKwFunction{KwInsert}{insert}
+    \SetKwFunction{KwDelete}{delete}
+    \SetKwFunction{KwTransplant}{transplant}
+
+    \Cl{\KwBSTree \textnormal{(continued)}}{
+        \Fn{\KwTransplant{u, v}}{
+            \tcp{Transplants v to the parent of u}
+            \If{u.parent == \KwNil}{
+                root = v; \tcp{If u is the root, v becomes the new root}
+            }
+            \ElseIf{u == u.parent.left}{
+                u.parent.left = v; \tcp{If u is a left child, v becomes a left child}
+            }
+            \Else{
+                u.parent.right = v; \tcp{If u is a right child, v becomes a right child}
+            }
+            
+            \If{v $\neq$ \KwNil}{
+                v.parent = u.parent; \tcp{If v is not null, v becomes a child of u's parent}
+            }
+        }
+                
+        \tcp{Complexity: $\Omega(1)$, $O(h)$, $\Theta(\log n)$}
+        \Fn{\KwDelete{z}}{
+            \If{z.left == \KwNil}{
+                \KwTransplant{z, z.right}; \tcp{If z has no left, transplants the right to z's position}
+            }
+            \ElseIf{z.right == \KwNil}{
+                \KwTransplant{z, z.left}; \tcp{If z has no right, transplants the left to z's position}
+            }
+            \Else{
+                \tcp{If z has both left and right children}
+                y = z.right\;
+                \tcp{Finds the next biggest element of z = smallest in right subtree of z}
+                \While{y.left $\neq$ \KwNil}{
+                    y = y.left\;
+                }
+                
+                \If{y.parent $\neq$ z}{
+                    \tcp{If the next biggest element y is not child of z}
+                    \KwTransplant{y, y.right}; \tcp{Transplants right child of y to y's position}
+                    y.right = z.right; \tcp{Right child of y becomes right child of z}
+                    y.right.parent = y; \tcp{Parent of the right child of y becomes y}
+                }
+                \KwTransplant{z, y}; \tcp{Transplants y to z's position}
+                y.left = z.left; \tcp{Left child of y becomes left child of z}
+                y.left.parent = y; \tcp{Parent of left child of y becomes y}
+            }
+        }
+    }
+\end{algorithm}
+
 \begin{minipage}[t]{0.33\textwidth}
     \centering
     \begin{tikzpicture}[
@@ -617,8 +886,63 @@ Ein schlechter Binary Search Tree allerdings ist unbalanziert, so dass der Worst
 \end{minipage}
 Leaves werden gelöscht, Half-Leaves durch Kind ersetzt, Complete Node durch Nachfolger (nächstgrößtes Element, kleinstes Element im rechten Teilbaum der Node) ersetzt.
 \newpage
-\lstinputlisting[language=Java, firstline = 62, lastline = 80]{Code/BSTree.java}
-\lstinputlisting[language=Java, firstline = 81]{Code/BSTree.java}
+\begin{algorithm}[H]
+    \SetKwFunction{KwBSTNode}{BSTNode}
+    \SetKwFunction{KwBSTree}{BSTree}
+    \SetKwFunction{KwTraverse}{traverse}
+    \SetKwFunction{KwIterativeSearch}{iterativeSearch}
+    \SetKwFunction{KwRecursiveSearch}{recursiveSearch}
+    \SetKwFunction{KwTraversal}{traversal}
+
+    \Cl{\KwBSTree \textnormal{(continued)}}{
+        \tcp{Complexity: $\Omega(1)$, $O(h)$, $\Theta(\log n)$}
+        \Fn{\KwIterativeSearch{k}}{
+            curr = root\;
+            \While{curr $\neq$ \KwNil \KwAnd curr.key $\neq$ k}{
+                \If{k < curr.key}{
+                    curr = curr.left\;
+                }
+                \Else{
+                    curr = curr.right\;
+                }
+            }
+            \KwRet curr; \tcp{Returns null if element not found}
+        }
+                
+        \tcp{Complexity: $\Omega(1)$, $O(h)$, $\Theta(\log n)$}
+        \Fn{\KwRecursiveSearch{k, curr}}{
+            \If{curr == \KwNil}{
+                \KwRet \KwNil\;
+            }
+            \If{k < curr.key}{
+                \KwRet \KwRecursiveSearch{k, curr.left}\;
+            }
+            \ElseIf{k > curr.key}{
+                \KwRet \KwRecursiveSearch{k, curr.right}\;
+            }
+            \KwRet curr; \tcp{Returns null if element not found}
+        }
+                
+        \tcp{Complexity: $O(n)$}
+        \Fn{\KwTraversal{curr}}{
+            \If{curr == \KwNil}{
+                \KwRet\;
+            }
+            
+            \tcp{Any actions that should be done in a specific order can be done}
+            \tcp{Here for preorder traversal}
+            
+            \KwTraversal{curr.left}\;
+            
+            \tcp{Here for inorder traversal}
+            
+            \KwTraversal{curr.right}\;
+            
+            \tcp{Here for postorder traversal}
+            \tcp{Left and right can also be exchanged to traverse in reverse order}
+        }
+    }
+\end{algorithm}
 
 \begin{minipage}[t]{0.5\textwidth}
     \centering

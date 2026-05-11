@@ -7,6 +7,9 @@ tikz,
 border=3mm
 ]{article}
 
+% Increase TeX capacities (helps with deep macro nesting in some packages)
+\usepackage{etex}
+
 \usepackage[]{pdfpages} % To include pdf files
 \usepackage{subfiles} % To split big projects into smaller files for faster compilation
 \usepackage{xr-hyper} 
@@ -24,7 +27,7 @@ border=3mm
 \usepackage{xcolor} % More colours (options passed earlier)
 \usepackage{amsmath,amsfonts,amsthm,amssymb} % Math & symbols
 \usepackage{booktabs}
-\usepackage[hidelinks]{hyperref} % For hyperlinks, automatically created for table of contents
+\usepackage[colorlinks]{hyperref} % For hyperlinks, automatically created for table of contents
 \usepackage{longtable}
 
 % microtype: disable font expansion under XeTeX (Tectonic uses XeTeX engine)
@@ -75,7 +78,7 @@ border=3mm
 \usepackage[
     linesnumbered,
     lined,
-    ruled,
+    tworuled,
     vlined,
     %boxed,
     commentsnumbered,
@@ -101,12 +104,14 @@ border=3mm
 \SetKw{KwError}{\color{red}error}
 \SetKw{KwNil}{\color{magenta}NIL}
 \SetKw{KwPrint}{\color{magenta}print}
+\SetKw{KwNot}{\color{magenta}not}
 \SetKwFor{For}{\color{magenta}For}{\color{magenta}do}{\color{magenta}end}
 \SetKwFor{ForEach}{\color{magenta}ForEach}{\color{magenta}do}{\color{magenta}end}
 \SetKwFor{While}{\color{magenta}While}{\color{magenta}do}{\color{magenta}end}
 \SetKwIF{If}{ElseIf}{Else}{\color{magenta}If}{\color{magenta}then}{\color{magenta}Else If}{\color{magenta}Else}{\color{magenta}end}
 \SetKwProg{Fn}{\color{magenta}Function}{:}{}
 \SetKwProg{Cl}{\color{magenta}Class}{:}{}
+\SetKwProg{Con}{\color{magenta}Constructor}{:}{}
 
 %-----------------------------------
 % Trees, Skip-Lists etc.
