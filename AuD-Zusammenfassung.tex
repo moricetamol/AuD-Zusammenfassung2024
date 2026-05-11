@@ -37,6 +37,12 @@ border=3mm
 % microtype: disable font expansion under XeTeX (Tectonic uses XeTeX engine)
 \usepackage[protrusion=true]{microtype}
 
+\newcommand{\vcentered}[1]{
+    \begingroup
+    \setbox0=\hbox{#1}
+    \parbox{\wd0}{\box0}\endgroup
+}
+
 %-----------------------------------
 % Table of Contents
 %-----------------------------------
@@ -175,7 +181,8 @@ border=3mm
 	
 	\author{Moritz Gerhardt } % Name
 	
-	\postauthor{% Anything you might want to add
+    \postauthor{% Anything you might want to add
+        \\ \large LaTeX version: \href{https://github.com/moricetamol/AuD-Zusammenfassung2024}{\vcentered{\includegraphics[height=15pt]{GitHub_logo.png}} \large \texttt{moricetamol}}
 		\par\end{flushleft}} % Horizontal rule after the title
 
 \date{} % Add date or leave empty to not show any date !!!\today
