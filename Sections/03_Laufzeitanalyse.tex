@@ -10,7 +10,7 @@
 \begin{document}
 \section{Laufzeitanalyse}
 \subsection{O Notation}
-Die O-Notation wird grundsätzlich für \textit{Worst-Case} Laufzeiten verwerdendet. Sie gibt also eine obere Schranke an, die der Algorithmus im schlechtesten Fall erreicht. Dabei wird oft zwischen Big O-Notation und Little o-Notation unterschieden. 
+Die O-Notation zeigt grundsätzlich an, wie groß der Wachstumsfaktor einer Funktion \textit{maximal} ist. Sie gibt also eine obere Schranke an, die ein Algorithmus erreichen kann. Dabei wird oft zwischen Big O-Notation und Little o-Notation unterschieden. 
 Ein Graph zur Repräsentation der O-Notation ist hier zu sehen:
 \begin{center}
     \includegraphics[scale=0.8]{Pics/ONotation.png}
@@ -99,10 +99,26 @@ Sind sowohl für $Big-O$ als auch $Little-o$ gültig
     Die Komplexität des Produkts zweier Funktionen ist das Produkt der Komplexität der beiden Funktionen.
 \end{itemize}
 
+\subsubsection{Algorithmische Anwendung}
+Oftmals haben wir natürlich keine Funktion, sondern einen Algorithmus, dessen Laufzeit wir analysieren wollen. In diesem Fall muss die Funktion $f(n)$ durch die Anzahl der Schritte ersetzt werden, die der Algorithmus für eine Eingabe der Größe $n$ benötigt. \\
+Beispielsweise:
+
+\begin{algorithm}[H]
+    \SetKwFunction{Example}{Example}
+    \Fn{\Example{$n$}}{
+        \For{$i = 1$ \KwTo $n$}{
+            \For{$j = 1$ \KwTo $n$}{
+                \KwPrint{Hello World!}
+            }
+        }
+    }
+\end{algorithm}
+
+Dieser Algorithmus hat eine Laufzeit von $O(n^2)$, da die äußere Schleife $n$ mal durchlaufen wird und für jede Iteration der äußeren Schleife die innere Schleife ebenfalls $n$ mal durchlaufen wird. Somit ergibt sich insgesamt $n \cdot n = n^2$ Schritte, was zu einer Laufzeit von $O(n^2)$ führt.
 
 \newpage
 \subsection{$\Omega$\space Notation}
-Ähnlich zur O Notation, allerdings geht es hier um den \textit{Best-Case} also minimale Anzahl der Schritten, die ein Algorithmus ausführt.
+Analog zur O-Notation, zeigt die $\Omega$ Notation grundsätzlich an, wie groß der Wachstumsfaktor einer Funktion \textit{minimal} ist. Sie gibt also eine untere Schranke an, die ein Algorithmus erreichen kann. Dabei wird oft zwischen Big $\Omega$-Notation und Little $\omega$-Notation unterschieden.
 \begin{center}
     \includegraphics[scale=0.8]{Pics/OmegaNotation.png}
 
@@ -176,9 +192,30 @@ Sind sowohl für $Big-\Omega$ als auch $Little-\omega$ gültig
     Die Komplexität des Produkts zweier Funktionen ist das Produkt der Komplexität der beiden Funktionen.
 \end{itemize}
 
+\subsubsection{Algorithmische Anwendung}
+Die Anwendung von $\Omega$ auf Algorithmen ist ähnlich zu der Anwendung von $O$. Nur betrachten wir hier die minimale Anzahl von Schritten. D.h. falls ein Algorithmus unter bestimmten Bedingungen früher abgeschlossen wird, so senkt das womöglich die minimale Anzahl von Schritten, was dann die $\Omega$ Notation beeinflusst.
+
+Beispielsweise:
+
+\begin{algorithm}[H]
+    \SetKwFunction{Example}{Example}
+    \Fn{\Example{$n$}}{
+        \For{$i = 1$ \KwTo $n$}{
+            \For{$j = 1$ \KwTo $n$}{
+                 \If{$n == 2$}{
+                    \KwRet
+                 }
+                \KwPrint{Hello World!}
+            }
+        }
+    }
+\end{algorithm}
+
+Dieser Algorithmus hat eine Laufzeit von $\Omega(1)$, da, wenn $n == 2$ ist, der Algorithmus sofort mit einem Rückgabewert von 0 Schritten abgeschlossen wird. Das bedeutet, dass die minimale Anzahl von Schritten 0 ist, was zu einer Laufzeit von $\Omega(1)$ führt. Ohne das vorzeitige Abbrechen würde der Algorithmus wie geplant $O(n^2)$ und $\Omega(n^2)$ sein, da die Anzahl der Schritte sowohl maximal als auch minimal $n^2$ ist. 
+
 \newpage 
 \subsection{$\Theta$\space Notation}
-$\Theta$ Notation kombiniert $O$ und $\Omega$ Notation. Das heißt sie stellt  Durchschnittswachstum (Average-Case) einer Funktion dar und liegt somit zwischen $O$ und $\Omega$. 
+$\Theta$ Notation kombiniert $O$ und $\Omega$ Notation. Das heißt, dass der Wachstumsfaktor einer Funktion genau dem Faktor der $\Theta$ Notation entspricht. Damit liegt die $\Theta$ Notation zwischen $O$ und $\Omega$, da sie sowohl eine obere als auch eine untere Schranke angibt.
 \begin{center}
     \includegraphics[scale=0.8]{Pics/LandauNotation.png}
 
@@ -203,8 +240,43 @@ Die Berechnung der Konstanten ist allerding ein klein wenig komplizierter, da es
 \begin{itemize}
     \item Simplifiziere die Gleichung: $c_1 \cdot n^2 \leq 5n^2 + 2n \leq c_2 \cdot n^2 = c_1 \leq 5 + \frac{2}{n} \leq c_2$
     \item Da hier für alle $n > 0$ der mittlere Term positiv ist, kann man $n_0 = 1$ wählen. 
-    \item Dadurch erhalten wir $c_1 \leq 5 + \frac{2}{1} = 7 \leq c_2$, wodurch man hier die Konstanten dann z.B. $c_1 = 7$ und $c_2 = 7$ für $n_0 = 1$ auswählen kann.
+    \item Da sich $5 + \frac{2}{n}$ für $n \to \infty$ 5 annähert, müssen wir somit somit $c_1 \leq 5$ wählen.
+    \item Da sich $5 + \frac{2}{n}$ für $n \to 1$ 7 annähert, müssen wir somit somit $c_2 \geq 7$ wählen.
 \end{itemize}
+
+\subsubsection{Algorithmische Anwendung}
+Die Anwendung von $\Theta$ auf Algorithmen ist ein wenig Unterschiedlich zu der Anwendung von $O$ und $\Omega$. Während bei $O$ und $\Omega$ die Laufzeit eines Algorithmus durch die obere bzw. untere Schranke definiert wird, definiert $\Theta$ die Laufzeit eines Algorithmus durch die genaue Wachstumsrate. 
+Das bedeutet für uns, dass wir $\Theta$ nur dann verwenden können, wenn die obere und untere Schranke des Algorithmus gleich sind. Das ist zum Beispiel bei einem Algorithmus der Fall, der immer $n^2$ Schritte benötigt, unabhängig von der Eingabegröße. In diesem Fall wäre die Laufzeit des Algorithmus $\Theta(n^2)$, da sowohl die obere als auch die untere Schranke $n^2$ ist.
+
+Beispielsweise:
+
+\begin{algorithm}[H]
+    \SetKwFunction{Example}{Example}
+    \Fn{\Example{$n$}}{
+        \For{$i = 1$ \KwTo $n$}{
+            \For{$j = 1$ \KwTo $n$}{
+                \KwPrint{Hello World!}
+            }
+        }
+    }
+\end{algorithm}
+
+Hier können wir sagen, dass die Laufzeit des Algorithmus $\Theta(n^2)$ ist, da sowohl die obere als auch die untere Schranke $n^2$ ist. Das bedeutet, dass der Algorithmus immer $n^2$ Schritte benötigt, unabhängig von der Eingabegröße.
+
+\begin{algorithm}[H]
+    \SetKwFunction{Example}{Example}
+    \Fn{\Example{$n$}}{
+        \For{$i = 1$ \KwTo $n$}{
+            \For{$j = 1$ \KwTo $n$}{
+                \If{$n == 2$}{
+                    \KwPrint{Hello World!}
+                }
+            }
+        }
+    }
+\end{algorithm}
+
+Hier können wir $\Theta$ nicht verwenden, da die obere Schranke $O(n^2)$ ist, aber die untere Schranke $\Omega(1)$ ist. 
 
 \newpage
 \subsection{Rekursiongleichungen}
@@ -219,6 +291,7 @@ Demnach benötigt das Lösen jedes Teilproblems immer $T(\frac{n}{b})$ Zeit\\
 Die Funktion f(n) umfasst hierbei dann die Kosten der anderen Operation wie Aufteilen und Zusammenfügen.
 \subsubsection{Mastertheorem}
 Das Mastertheorem bietet eine einfache Weise an die Laufzeit von verschiedene Rekursionsgleichungen abzuschätzen. Dabei wird die oben genannte Form vorrausgesetzt. \\
+
 So gibt es im Mastertheorem grundsätzlich drei verschiedene Fälle:
 \begin{enumerate}
     \item $f(n) = O(n^{log_b a-\epsilon})$ für ein $\epsilon > 0$\\
@@ -226,12 +299,16 @@ So gibt es im Mastertheorem grundsätzlich drei verschiedene Fälle:
     \begin{itemize}
         \item Hier ist die Rekursion wichtiger als die sonstigen Operationen. 
         \item Demnach: $T(n) = \Theta(n^{log_b a})$
+        \item Beispiel: $T(n) = 4 T(\frac{n}{2}) + n \implies n^{\log_2 4} = n^2$\\
+        $n^{2}$ ist polynomiell größer als $n$ (um Faktor $n^{\epsilon}$, $\epsilon = 1$) $\implies$ $T(n) = \Theta(n^2)$
     \end{itemize}
     \item $f(n) = \Theta(n^{log_b a})$\\
     Wenn f(n) und $n^{\log_b a}$ gleiche Größenordnung haben
     \begin{itemize}
         \item Hier tragen Rekursion und sonstige Operationen die selbe Signifikanz 
         \item Demnach: $T(n) = \Theta(n^{log_b a}\cdot \log n)$
+        \item Beispiel: $T(n) = 2 T(\frac{n}{2}) + n \implies n^{\log_2 2} = n$\\
+        $n$ und $n$ haben die gleiche Größenordnung $\implies$ $T(n) = \Theta(n \cdot \log n)$
     \end{itemize}
     \item $f(n) = \Omega(n^{log_b a+\epsilon})$ für ein $\epsilon > 0$\\
     Wenn f(n) polynomiell größer ist als $n^{\log_b a}$
@@ -240,6 +317,22 @@ So gibt es im Mastertheorem grundsätzlich drei verschiedene Fälle:
         \item (Unter der Bedingung: $a\cdot f(\frac{n}{b})\leq c \cdot f(n)$ für ein $c < 1$)\\
         (Anders: Der rekursive Teil der Funktion $a\cdot f(\frac{n}{b})$ ist proportional, aber kleiner als der nicht-rekursive Teil $f(n)$. Skalar von $c<1$ impliziert ähnliches, aber kleineres Wachstum für $n \rightarrow \infty$)
         \item Demnach: $T(n) = \Theta(f(n))$
+        \item Beispiel: $T(n) = 2 T(\frac{n}{2}) + n^2 \implies n^{\log_2 2} = n$\\
+        $n$ ist polynomiell kleiner als $n^2$ (um Faktor $n^{1 - \epsilon}$, $\epsilon = 1$) $\implies$ $T(n) = \Theta(n^2)$
     \end{itemize}
 \end{enumerate}
+
+\textbf{Anwendbarkeit:}\\
+Das Mastertheorem kann nicht immer angewendet werden. Die Vorraussetzungen für Anwendung sind:
+\begin{itemize}
+    \item Rekursionsgleichung muss die Form $T(n) = a\cdot T(\frac{n}{b}) + f(n)$ haben
+    \begin{itemize}
+        \item \textbf{Anzahl der Teilprobleme} $a \geq 1$: Es muss mindestens einen rekursiven Aufruf geben. Zudem muss $a$ eine Konstante sein, damit die Anzahl der Teilprobleme nicht von der Eingabegröße abhängt.
+        \item \textbf{Reduktion der Problemgröße} $b > 1$:  Die Größe des Problems muss bei jedem rekursiven Aufruf reduziert werden
+        \item \textbf{Kosten der anderen Operationen} $f(n) > 0$:  Die Kosten der anderen Operationen müssen positiv sein, damit sie die Laufzeit beeinflussen können.
+    \end{itemize}
+    \item \textbf{Polynomielle Distanz:} Bei Fall 1 und Fall 3 müssen die Funktionen $f(n)$ und die Funktion des Falls sich um einen Faktor $n^{\epsilon}, \epsilon > 0$ unterscheiden.\\
+    Z.B. $T(n) = 2\cdot T(\frac{n}{2}) + \frac{n}{\log n} \implies n^{\log_2 2} = n$. Zwar ist $\frac{n}{\log n}$ asymptotisch kleiner als $n$, aber nicht polynomiell kleiner, da $\frac{n}{\log n} = O(n^{1-\epsilon})$ für kein $\epsilon > 0$ gilt. Deshalb kann hier das Mastertheorem nicht angewendet werden.
+\end{itemize}
 \end{document}
+
