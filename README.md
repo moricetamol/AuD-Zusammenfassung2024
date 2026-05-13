@@ -8,3 +8,5 @@ Dies ist lediglich um (hoffentlich) die Grundlagen dieser besser verständlich z
 Das heißt natürlich aber auch, dass ihr nicht unbedingt alles komplett verstehen oder auswendig kennen müsst um erfolgreich zu sein. 
 
 Ihr packt das alle :)
+
+P.S. Falls ihr Verbesserungsvorschläge habt könnt ihr die mir gerne geben oder auch gerne PRs schreiben :)
