@@ -118,7 +118,7 @@ Der Vorteil von RBT zu BST ist, dass während ein BST unausgewogen sein kann, wa
     \SetKwFunction{Kwinsert}{insert}
     \SetKwFunction{fixColorsAfterInsertion}{fixColorsAfterInsertion}
     \Cl{\KwRBTree{} \textnormal{(continued)}}{
-        \tcp{Complexity: $\Omega(1)$, $O(\log n)$, $\Theta(\log n)$}
+        \tcp{Complexity: $O(\log n)$}
         \Fn{\Kwinsert{z}}{
             z.left = sent\;
             z.right = sent\;
@@ -293,7 +293,7 @@ Einfügen funktioniert grundlegend gleich zu BST, allerdings wird am Ende die Fa
     \SetKwFunction{rotateRight}{rotateRight}
     \SetKwFunction{KwfixColorsAfterInsertion}{fixColorsAfterInsertion}
     \Cl{\KwRBTree{} \textnormal{(continued)}}{
-        \tcp{Complexity: $\Omega(1)$, $O(\log n)$, $\Theta(\log n)$}
+        \tcp{Complexity: $O(\log n)$}
         \Fn{\KwfixColorsAfterInsertion{z}}{
             \While{z.parent.color == RED}{
                 \If{z.parent == z.parent.parent.left}{
@@ -600,7 +600,7 @@ Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert w
     \SetKwFunction{fixColorsAfterDeletion}{fixColorsAfterDeletion}
     \SetKwFunction{transplant}{transplant}
     \Cl{\KwRBTree{} \textnormal{(continued)}}{
-        \tcp{Complexity: $\Omega(1)$, $O(\log n)$, $\Theta(\log n)$}
+        \tcp{Complexity: $O(\log n)$}
         \Fn{\Kwdelete{z}}{
             a = z.parent; \tcp{a represent node with black depth imbalance}
             dbh = 0; \tcp{delta black height, -1 for right, 1 for left leaning}
@@ -756,7 +756,7 @@ Zum Wiederherstellen der RBT-Regeln muss der Baum an bestimmten Knoten rotiert w
     \SetKwFunction{rotateRight}{rotateRight}
     \SetKwFunction{transplant}{transplant}
     \Cl{\KwRBTree{} \textnormal{(continued)}}{
-        \tcp{Complexity: $\Omega(1)$, $O(\log n)$, $\Theta(\log n)$}
+        \tcp{Complexity: $O(\log n)$}
         \Fn{\fixColorsAfterDeletion{a, dbh}}{
             \If{dbh == -1}{
                 \tcp{Extra black node on the right}
