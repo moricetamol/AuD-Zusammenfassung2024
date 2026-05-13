@@ -153,6 +153,7 @@ Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten d
 \begin{algorithm}[H]
     \SetKwFunction{KwSkipList}{SkipList}
     \SetKwFunction{Kwsearch}{search}
+    \tcp{Complexity: $O(n)$}
     \Cl{\KwSkipList{} \textnormal{(continued)}}{
         \Fn{\Kwsearch{k}}{
             curr = head\;
@@ -360,6 +361,7 @@ Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten d
             }
             \KwRet lvl\;
         }
+        \tcp{Complexity: $O(n)$}
         \Fn{\Kwinsert{k}}{
             lvl = \KwrandomLevel{}\;
             \While{lvl $>$ height}{
@@ -404,7 +406,7 @@ Der Suchalgorithmus ist relativ simpel. Er startet beim Head (Höchster Knoten d
 \end{algorithm}
 
 Einfügen in die Skip-List ist ein wenig komplizierter, aber auch grundlegend simpel. Erst einmal muss ermittelt werden auf wie viele Ebenen der Wert hinzugefügt werden muss. Dies kann über eine vom Element abhängige Formel oder auch andere Methoden zum erzeugen einer zufälligen Zahl geschehen. Nachdem dieses Level ermittelt wurde, muss, falls notwendig die Liste um die noch nicht vorhandenen Ebenen ergänzt werden. Dies geschieht dadurch, dass man die \texttt{Head} Node nach oben erweitert, den \texttt{height}-Counter erhöht und den Head auf den neuen Head aktualisiert.\\
-Nachdem dies geschehen ist wird nun die Liste wie beim \texttt{search}-Algorithmus durchgangen um die Einfügestelle zu ermitteln. Beim Durchlauf werden zusätzlich noch die zukünftigen Vorgängerknoten in einem Array vermerkt.\\
+Nachdem dies geschehen ist wird nun die Liste wie beim \texttt{search}-Algorithmus durchgangen um die Einfügestelle zu ermitteln. Beim Durchlauf werden zusätzlich noch die zukünftigen Vorgängerknoten in einem Array vermerkt.
 Nachdem werden nun die Knoten auf den bestimmten Ebenen eingefügt.
 
 \begin{minipage}{\textwidth}
@@ -476,6 +478,7 @@ Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht
 \begin{algorithm}[H]
     \SetKwFunction{Kwdelete}{delete}
     \SetKwFunction{Kwsearch}{search}
+    \tcp{Complexity: $O(n)$}
     \Cl{SkipList \textnormal{(continued)}}{
         \Fn{\Kwdelete{k}}{
             node = \Kwsearch{k}; \tcp{Find first node in list that has k}
@@ -502,7 +505,7 @@ Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht
     \begin{tikzpicture}[
         box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
         c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
-        node distance=1.5em,
+        node distance=1.35em,
         abc/.style={<->, thick},
         ]
         
@@ -552,7 +555,7 @@ Delete ist wieder relativ simpel. Es wird erstmal die zu löschende Node gesucht
     \begin{tikzpicture}[
         box/.style={rounded corners,on chain,draw,minimum width=20pt, minimum height = 15pt, text=black,join=by abc, thick},
         c/.style={rounded corners, on chain,rectangle,draw, minimum size = 15pt, thick},
-        node distance=1.5em,
+        node distance=1.35em,
         abc/.style={<->, thick},
         ]
         
@@ -712,7 +715,7 @@ Einfügen, Suchen und Löschen funktionieren Prinzipiell gleich zu dem in Linked
     \SetKwFunction{KwgetBucketIndex}{getBucketIndex}
     \SetKwFunction{KwhashCode}{hashCode}
     \Cl{\KwHashTable{} \textnormal{(continued)}}{
-        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case due to duplicate check}
+        \tcp{Complexity: $O(n)$}
         \Fn{\Kwput{key, value}}{
             bucketIndex = \KwgetBucketIndex{key}; \tcp{search index of bucket}
             head = buckets[$bucketIndex$]; \tcp{search head of bucket}
@@ -731,7 +734,7 @@ Einfügen, Suchen und Löschen funktionieren Prinzipiell gleich zu dem in Linked
             newNode.next = head\;
             buckets[$bucketIndex$] = newNode\;
         }
-        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case}
+        \tcp{Complexity: $O(n)$}
         \Fn{\Kwget{key}}{
             bucketIndex = \KwgetBucketIndex{key}\;
             head = buckets[$bucketIndex$]\;
@@ -744,7 +747,7 @@ Einfügen, Suchen und Löschen funktionieren Prinzipiell gleich zu dem in Linked
             }
             \KwRet \KwNil; \tcp{If key not found -> return null}
         }
-        \tcp{Complexity: $\Theta(1)$ average, $O(n)$ worst-case}
+        \tcp{Complexity: $O(n)$}
         \Fn{\Kwremove{key}}{
             bucketIndex = \KwgetBucketIndex{key}\;
             head = buckets[$bucketIndex$]\;
@@ -810,7 +813,7 @@ Einfügen ist sehr simpel. Es müssen lediglich die Funktionen auf die Eingabe a
     \SetKwFunction{KwBloomFilter}{BloomFilter}
     \SetKwFunction{KwaddToBloom}{addToBloom}
     \Cl{\KwBloomFilter{} \textnormal{(continued)}}{
-        \tcp{Complexity: O(k), k = number of functions}
+        \tcp{Complexity: O(k), k = number of functions (Usually seen as a constant, so O(1))}
         \Fn{\KwaddToBloom{x}}{
             \ForEach{function $\in$ functions}{
                 bloomFilter[function(x)] = \KwTrue; \tcp{add to bloom}
@@ -904,7 +907,7 @@ Das Durchsuchen des Bloom-Filters läuft ähnlich zum Einfügen ab. Es müssen m
     \SetKwFunction{KwBloomFilter}{BloomFilter}
     \SetKwFunction{KwisInBloom}{isInBloom}
     \Cl{\KwBloomFilter{} \textnormal{(continued)}}{
-        \tcp{Complexity: O(k), k = number of functions}
+        \tcp{Complexity: O(k), k = number of functions (Usually seen as a constant, so O(1))}
         \Fn{\KwisInBloom{x}}{
             \ForEach{function $\in$ functions}{
                 \If{\KwNot bloomFilter[function(x)]}{
