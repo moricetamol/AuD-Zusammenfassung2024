@@ -115,6 +115,7 @@ Beispielsweise:
 \end{algorithm}
 
 Dieser Algorithmus hat eine Laufzeit von $O(n^2)$, da die äußere Schleife $n$ mal durchlaufen wird und für jede Iteration der äußeren Schleife die innere Schleife ebenfalls $n$ mal durchlaufen wird. Somit ergibt sich insgesamt $n \cdot n = n^2$ Schritte, was zu einer Laufzeit von $O(n^2)$ führt.
+Dies bedeutet auch, dass er nach Little-o Notation eine Laufzeit von $o(n^3)$ hat, da $n^2$ asymptotisch kleiner ist als $n^3$.
 
 \newpage
 \subsection{$\Omega$\space Notation}
@@ -198,20 +199,20 @@ Die Anwendung von $\Omega$ auf Algorithmen ist ähnlich zu der Anwendung von $O$
 Beispielsweise:
 
 \begin{algorithm}[H]
-    \SetKwFunction{Example}{Example}
-    \Fn{\Example{$n$}}{
-        \For{$i = 1$ \KwTo $n$}{
-            \For{$j = 1$ \KwTo $n$}{
-                 \If{$n == 2$}{
-                    \KwRet
-                 }
-                \KwPrint{Hello World!}
+    \SetKwFunction{Example}{LinearSearch}
+    \Fn{\Example{array, target}}{
+        n = array.length\;
+        \For{$i = 1$ \KwTo n}{
+            \If{array[i] == target}{
+                \KwRet i\;
             }
         }
+        \KwRet -1\;
     }
 \end{algorithm}
 
-Dieser Algorithmus hat eine Laufzeit von $\Omega(1)$, da, wenn $n == 2$ ist, der Algorithmus sofort mit einem Rückgabewert von 0 Schritten abgeschlossen wird. Das bedeutet, dass die minimale Anzahl von Schritten 0 ist, was zu einer Laufzeit von $\Omega(1)$ führt. Ohne das vorzeitige Abbrechen würde der Algorithmus wie geplant $O(n^2)$ und $\Omega(n^2)$ sein, da die Anzahl der Schritte sowohl maximal als auch minimal $n^2$ ist. 
+Dieser Algorithmus hat eine Laufzeit von $\Omega(1)$, da, wenn das gesuchte Element an erster Stelle steht, der Algorithmus sofort mit einem Treffer endet. Das bedeutet, dass die minimale Anzahl von Schritten 1 ist, was zu einer Laufzeit von $\Omega(1)$ führt. Allerdings hat er auch eine Laufzeit von $O(n)$, da, wenn das gesuchte Element an letzter Stelle steht oder nicht vorhanden ist, alle Eingaben durchlaufen werden müssen.
+Da dieser Algorithmus einen konstanten Best-Case hat, ist die $\omega$ Notation hier nicht anwendbar, da $\omega < 1$ sinnlos ist, da per Definition die Komplexität nicht kleiner als 1 sein kann und so der Best-Case schon durch $\Omega$ definiert ist.
 
 \newpage 
 \subsection{$\Theta$\space Notation}
@@ -264,19 +265,19 @@ Beispielsweise:
 Hier können wir sagen, dass die Laufzeit des Algorithmus $\Theta(n^2)$ ist, da sowohl die obere als auch die untere Schranke $n^2$ ist. Das bedeutet, dass der Algorithmus immer $n^2$ Schritte benötigt, unabhängig von der Eingabegröße.
 
 \begin{algorithm}[H]
-    \SetKwFunction{Example}{Example}
-    \Fn{\Example{$n$}}{
-        \For{$i = 1$ \KwTo $n$}{
-            \For{$j = 1$ \KwTo $n$}{
-                \If{$n == 2$}{
-                    \KwPrint{Hello World!}
-                }
+    \SetKwFunction{Example}{LinearSearch}
+    \Fn{\Example{array, target}}{
+        n = array.length\;
+        \For{$i = 1$ \KwTo n}{
+            \If{array[i] == target}{
+                \KwRet i\;
             }
         }
+        \KwRet -1\;
     }
 \end{algorithm}
 
-Hier können wir $\Theta$ nicht verwenden, da die obere Schranke $O(n^2)$ ist, aber die untere Schranke $\Omega(1)$ ist. 
+Hier können wir $\Theta$ nicht verwenden, da die obere Schranke $O(n)$ ist, aber die untere Schranke $\Omega(1)$ ist. 
 
 \newpage
 \subsection{Rekursiongleichungen}
